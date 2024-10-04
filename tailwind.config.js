@@ -14,6 +14,14 @@ module.exports = {
         foreground: "var(--foreground)",
       },
     },
+    fontFamily: {
+      gilBold: ['Gilroy-Bold', 'Gilroy-Bold'],
+      gilLight: ['Gilroy-Light', 'Gilroy-Light'],
+      gilMedium: ['Gilroy-Medium', 'Gilroy-Medium'],
+      gilReg: ['Gilroy-Regular', 'Gilroy-Regular'],
+      gilSemiBold: ['Gilroy-SemiBold', 'Gilroy-SemiBold'],
+      gilThin: ['Gilroy-Thin', 'Gilroy-Thin'],
+    },
   },
   plugins: [],
 };

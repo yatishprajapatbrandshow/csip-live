@@ -12,6 +12,9 @@
       ],
       "@styles/*": [
         "./src/styles/*"
+      ],
+      "@fonts/*": [
+        "./src/fonts/*"
       ]
     }
   }
