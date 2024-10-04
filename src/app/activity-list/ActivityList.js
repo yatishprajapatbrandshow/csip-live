@@ -34,7 +34,7 @@ function ActivityList() {
     fetchActivities();
   }, []);
 
-  if (loading) return <div className="text-center">Loading...</div>; // Loading state
+  if (loading) return <div className="text-center w-full ">Loading...</div>; // Loading state
 
   return (
     <div className="gap-4 lg:flex-row min-h-[80vh] bg-gray-100 p-10 w-full flex items-start justify-center ">
@@ -43,7 +43,7 @@ function ActivityList() {
         {error && <p className="text-red-500 text-center">{error}</p>} {/* Display error message */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((item, index) => (
-            <div key={index} className="bg-white shadow-md rounded-lg p-4 transition-transform transform hover:scale-105">
+            <div key={index} className="bg-white shadow-md rounded-lg p-4 transition-transform transform hover:shadow-xl">
               <img src={item.image_assc} alt={item.name} className="w-full h-32 object-cover rounded-md mb-4" />
               <h2 className="text-xl font-semibold text-gray-800">{item.name}</h2>
               <p className="text-gray-600 mb-2">{item.shortdesc}</p>

@@ -4,7 +4,7 @@ import Header from "../Components/Header";
 import SignUp from "../Components/SignUp";
 import { CircleCheck } from 'lucide-react';
 import Footer from '../Components/Footer';
-function Home() {
+function HomePage() {
     return (
         <div>
             <Header />
@@ -78,4 +78,4 @@ function Home() {
     )
 }
 
-export default Home
+export default HomePage
