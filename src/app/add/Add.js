@@ -42,36 +42,6 @@ const inputFields = [
 
 const data = ['Basic Information', 'Scenario and Description', 'Corporate Information', 'Media and Resources', 'Activity Details', 'Participant and Approval', 'Activity and Submission Dates'];
 
-// Define validation schema for each field
-// const validationSchema = Yup.object().shape({
-//   name: Yup.string().required('Required'),
-//   objective: Yup.string().required('Required'),
-//   case_scenario: Yup.string().required('Required'),
-//   case_scenario_title: Yup.string().required('Required'),
-//   corporate_hierarchy_overview: Yup.string().required('Required'),
-//   tools_used: Yup.string().required('Required'),
-//   job_roles_and_description: Yup.string().required('Required'),
-//   short_name: Yup.string().required('Required'),
-//   note: Yup.string().required('Required'),
-//   short_desc: Yup.string().required('Required'),
-//   description: Yup.string().required('Required'),
-//   image_assc: Yup.string().required('Required'),
-//   amount: Yup.number().required('Required').min(0, 'Must be greater than or equal to 0'),
-//   corporate_id: Yup.string().required('Required'),
-//   topic_id: Yup.string().required('Required'),
-//   tag: Yup.string().required('Required'),
-//   entry_type: Yup.string().required('Required'),
-//   activity_category: Yup.string().required('Required'),
-//   participant_quantity: Yup.number().required('Required').min(1, 'Must be at least 1'),
-//   activity_start_date: Yup.date().required('Required'),
-//   activity_end_date: Yup.date().required('Required'),
-//   submission_start_date: Yup.date().required('Required'),
-//   submission_end_date: Yup.date().required('Required'),
-//   activity_type: Yup.string().required('Required'),
-//   youtube_video_link: Yup.string().required('Required'),
-//   snap_shot: Yup.string().required('Required'),
-//   need_approval: Yup.boolean().required('Required'),
-// });
 
 const steps = {
   2: ["case_scenario", "case_scenario_title", "description", "note"],
@@ -92,7 +62,6 @@ const Add = () => {
   const nextStep = async (values) => {
     setFormData({ ...formData, ...values });
     
-    // Check if we are on step 1 (index 0)
     if (step === 0) {
       try {
         const response = await fetch("https://csip-backend.onrender.com/activity/add", {
@@ -188,118 +157,120 @@ const Add = () => {
 
 
   return (
-    <section className="flex items-start max-w-7xl mx-auto w-full pt-20">
-      <div className="">
-        <ol className="h-fit overflow-hidden space-y-8">
-          {data?.map((label, index) => (
-            <li
-              key={index}
-              className={`relative flex-1 after:content-[''] after:w-0.5 after:h-full ${step > index ? 'after:bg-blue-500' : 'after:bg-gray-300'
-                } after:inline-block after:absolute after:-bottom-12 after:left-4 lg:after:left-5`}
-            >
-              <a className="flex items-center font-gilMedium w-full">
-                <span
-                  className={`w-8 h-8 ${step > index ? 'bg-blue-500' : 'bg-gray-100'
-                    } border-2 border-gray-300 rounded-full flex justify-center items-center mr-3 text-sm ${step > index ? 'text-white' : 'text-gray-900'
-                    } lg:w-10 lg:h-10`}
-                >
-                  {step > index ? (
-                    <svg
-                      className="w-5 h-5 stroke-white"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M5 12L9.287 16.292C9.62 16.626 9.787 16.793 9.994 16.793C10.201 16.793 10.368 16.626 10.702 16.293L20 7"
-                        stroke="stroke-current"
-                        strokeWidth="1.6"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="my-path"
-                      ></path>
-                    </svg>
-                  ) : (
-                    index + 1
-                  )}
-                </span>
-                <div className="block">
-                  <h4 className="text-lg font-gilBold text-gray-800">{`Step ${index + 1}`}</h4>
-                  <span className="text-sm text-gray-600">{label}</span>
-                </div>
-              </a>
-            </li>
-          ))}
-        </ol>
-      </div>
-      <div className="max-w-xl w-full mx-auto p-6 h-fit bg-[#e7e7e7] shadow-lg rounded-md">
-        <h2 className="text-3xl font-gilMedium text-gray-800 mb-4">{data[step]}</h2>
-        <Formik
-          initialValues={initialValues}
-          // validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          {({ values, isSubmitting }) => (
-            <Form>
-              {fieldsToShow.map((field) => (
-                <div key={field.name} className="mb-4">
-                  <div>
-                    <label
-                      htmlFor={field.name}
-                      className="block text-sm font-gilMedium text-gray-700"
-                    >
-                      {field.label}
-                    </label>
+    <section className="max-w-5xl mx-auto pt-10">
+      <div className='grid grid-cols-3 bg-white shadow-lg p-10'>
+        <div className="col-span-1">
+          <ol className="h-fit overflow-hidden space-y-8">
+            {data?.map((label, index) => (
+              <li
+                key={index}
+                className={`relative flex-1 after:content-[''] after:w-0.5 after:h-full ${step > index ? 'after:bg-blue-500' : 'after:bg-gray-300'
+                  } after:inline-block after:absolute after:-bottom-12 after:left-4 lg:after:left-5`}
+              >
+                <a className="flex items-center font-gilMedium w-full">
+                  <span
+                    className={`w-8 h-8 ${step > index ? 'bg-blue-500' : 'bg-gray-100'
+                      } border-2 border-gray-300 rounded-full flex justify-center items-center mr-3 text-sm ${step > index ? 'text-white' : 'text-gray-900'
+                      } lg:w-10 lg:h-10`}
+                  >
+                    {step > index ? (
+                      <svg
+                        className="w-5 h-5 stroke-white"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M5 12L9.287 16.292C9.62 16.626 9.787 16.793 9.994 16.793C10.201 16.793 10.368 16.626 10.702 16.293L20 7"
+                          stroke="stroke-current"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="my-path"
+                        ></path>
+                      </svg>
+                    ) : (
+                      index + 1
+                    )}
+                  </span>
+                  <div className="block">
+                    <h4 className="text-base font-gilBold text-gray-800"> {label} </h4>
+                    <span className="text-sm text-gray-600">{`Step ${index + 1}`}</span>
                   </div>
-                  {field.type === 'checkbox' ? (
-                    <div className="flex items-center mt-1">
-                      <Field
-                        type="checkbox"
-                        name={field.name}
-                        className="h-4 w-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
-                      />
+                </a>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="col-span-2 w-full mx-auto p-6 h-fit bg-white shadow-inner rounded-md">
+          <h2 className="text-3xl font-gilMedium text-gray-800 mb-4">{data[step]}</h2>
+          <Formik
+            initialValues={initialValues}
+            // validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ values, isSubmitting }) => (
+              <Form>
+                {fieldsToShow.map((field) => (
+                  <div key={field.name} className="mb-4">
+                    <div>
                       <label
                         htmlFor={field.name}
-                        className="ml-2 text-gray-700"
+                        className="block text-sm font-gilMedium text-gray-700"
                       >
                         {field.label}
                       </label>
                     </div>
-                  ) : (
-                    <Field
-                      type={field.type || 'text'}
+                    {field.type === 'checkbox' ? (
+                      <div className="flex items-center mt-1">
+                        <Field
+                          type="checkbox"
+                          name={field.name}
+                          className="h-4 w-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
+                        />
+                        <label
+                          htmlFor={field.name}
+                          className="ml-2 text-gray-700"
+                        >
+                          {field.label}
+                        </label>
+                      </div>
+                    ) : (
+                      <Field
+                        type={field.type || 'text'}
+                        name={field.name}
+                        className="mt-1 font-gilMedium block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    )}
+                    <ErrorMessage
                       name={field.name}
-                      className="mt-1 font-gilMedium block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
+                      component="div"
+                      className="text-red-600 text-sm"
                     />
-                  )}
-                  <ErrorMessage
-                    name={field.name}
-                    component="div"
-                    className="text-red-600 text-sm"
-                  />
-                </div>
-              ))}
-              {errorMessage && <div className="text-red-600 text-sm mb-4">{errorMessage}</div>}
+                  </div>
+                ))}
+                {errorMessage && <div className="text-red-600 text-sm mb-4">{errorMessage}</div>}
 
-              <div className="flex justify-between">
-                {step > 0 && (
-                  <button type="button" onClick={prevStep} className="font-gilSemiBold inline-flex py-2 px-4 bg-gray-500 text-white rounded-md">
-                    Previous
+                <div className="flex justify-between">
+                  {step > 0 && (
+                    <button type="button" onClick={prevStep} className="font-gilSemiBold inline-flex py-2 px-4 bg-gray-500 text-white rounded-md">
+                      Previous
+                    </button>
+                  )}
+                  {step === Object.keys(steps).length ? (
+                  <button type="submit" disabled={isSubmitting} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
+                    Submit
+                  </button>
+                ) : (
+                  <button type="button" onClick={() => nextStep(values)} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
+                    Next
                   </button>
                 )}
-                {step === Object.keys(steps).length ? (
-                <button type="submit" disabled={isSubmitting} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
-                  Submit
-                </button>
-              ) : (
-                <button type="button" onClick={() => nextStep(values)} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
-                  Next
-                </button>
-              )}
-              </div>
-            </Form>
-          )}
-        </Formik>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
     </section>
   );

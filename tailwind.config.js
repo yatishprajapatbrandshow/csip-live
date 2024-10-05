@@ -13,6 +13,9 @@ module.exports = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      backgroundImage: {
+        'bgForm': "url('/image/845.jpg')",
+      }
     },
     fontFamily: {
       gilBold: ['Gilroy-Bold', 'Gilroy-Bold'],
