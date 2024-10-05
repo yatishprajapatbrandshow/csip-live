@@ -42,7 +42,7 @@ const Header = ({ session = false }) => {
                         {/* Logo */}
                         <div className="flex items-center md:mb-0 gap-2">
                             <img
-                                src="https://csip.fieindia.org/img/logo.jpg"
+                                src="/images/logo.jpg"
                                 alt="CSIP Logo"
                                 className="h-14 " // Adjust logo height for responsiveness
                             />
@@ -76,7 +76,7 @@ const Header = ({ session = false }) => {
                                 </div>
                                 <div className="profile">
                                     <img
-                                        src="https://csip.fieindia.org/images/profile/default.jpg"
+                                        src="/images/default.jpg"
                                         alt="profile image"
                                         className="h-16 rounded-full" // Adjust logo height for responsiveness
                                     />
@@ -124,7 +124,7 @@ const Header = ({ session = false }) => {
                         {/* Logo */}
                         <div className="flex items-center mb-4 md:mb-0">
                             <img
-                                src="https://csip.fieindia.org/img/logo.jpg"
+                                src="/images/logo.jpg"
                                 alt="CSIP Logo"
                                 className="h-18 sm:h-22 md:h-24" // Adjust logo height for responsiveness
                             />

@@ -17,7 +17,7 @@ function HomePage() {
                         </p>
                     </div>
                     <div className="flex justify-center">
-                        <img src='https://csip.fieindia.org/img/home1.jpg' alt="CSIP Illustration" className="max-w-full h-auto" />
+                        <img src='/images/home1.jpg' alt="CSIP Illustration" className="max-w-full h-auto" />
                     </div>
                 </div>
 
@@ -65,7 +65,7 @@ function HomePage() {
                             ))}
                         </ul>
                         <div className="flex justify-center">
-                            <img src='https://csip.fieindia.org/img/home.jpg' alt="CSIP Illustration" className="max-w-full h-auto" />
+                            <img src='/images/home.jpg' alt="CSIP Illustration" className="max-w-full h-auto" />
                         </div>
                     </div>
                 </section>
