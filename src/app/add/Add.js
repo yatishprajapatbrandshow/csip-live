@@ -62,11 +62,6 @@ const Add = () => {
   const nextStep = async (values) => {
     setErrorMessage('')
     setFormData({ ...formData, ...values });
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 1851993b5b544d33729e13dcc8b4069ed54050fb
     if (step === 0) {
       const { name, short_name, objective, short_desc } = values
 
@@ -299,13 +294,6 @@ const Add = () => {
                     Next
                   </button>
                 )}
-<<<<<<< HEAD
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
-=======
                 {step === Object.keys(steps).length ? (
                   <button type="submit" onClick={() => nextStep(values)} disabled={isSubmitting} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
                     Submit
@@ -319,7 +307,7 @@ const Add = () => {
             </Form>
           )}
         </Formik>
->>>>>>> 1851993b5b544d33729e13dcc8b4069ed54050fb
+      </div>
       </div>
     </section>
   );
