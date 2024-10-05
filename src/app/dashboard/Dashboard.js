@@ -1,4 +1,4 @@
-import SideBar from "@/Components/Sidebar"
+
 import { CircularProgressBar } from "@/Components/CircularProgressBar";
 import Link from "next/link";
 import ReviewSlider from "@/Components/ReviewSlider";
@@ -29,10 +29,7 @@ const reviews = [
 export default function Dashboard() {
     return (
         <div className="relative">
-            <div className="absolute top-0 left-0 z-20">
-                <SideBar />
-            </div>
-            <div className="ml-20 p-6 bg-white space-y-6 font-sans">
+            <div className="p-6 bg-white space-y-6 font-sans">
                 <div className="grid grid-cols-12 gap-4">
                     <div className="bg-pink-200 p-4 rounded-lg col-span-4">
                         <div className="flex items-center justify-between">

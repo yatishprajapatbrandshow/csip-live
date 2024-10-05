@@ -3,14 +3,14 @@ import Header from "@/Components/Header";
 import AppliedActivity from "./AppliedActivity";
 export default function Home() {
   return (
-    <section className="bg-[#e9e9e9] min-h-screen">
+    <>
       <Header session={true} />
-      <div className='flex '>
-      <div className="">
-                <SideBar />
-            </div>
-        <AppliedActivity />
+      <div>
+          <SideBar />
+          <div className="pl-52">
+            <AppliedActivity />
+          </div>
       </div>
-    </section>
+    </>
   );
 }

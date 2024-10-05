@@ -1,10 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { AlignJustify, ChevronRight } from "lucide-react";
-import { getLocalStorageItem } from "@/Config/localstorage";
+import { useRouter } from "next/navigation";
 const Header = ({ session = false }) => {
-    const userData = getLocalStorageItem('userData');
-    
+    const router = useRouter()
     const [isSession, setIsSession] = useState(session);
     const [ShowQuickLink, setShowQuickLink] = useState(false);
     const [time, setTime] = useState("");
@@ -39,7 +38,7 @@ const Header = ({ session = false }) => {
     return (
         <>
             {isSession ? (
-                <header className="bg-white shadow-md py-4 px-1 relative ">
+                <header className="bg-white shadow-md py-4 px-1 sticky top-0 z-50">
                     <div className="flex justify-between items-center w-full">
                         {/* Logo */}
                         <div className="flex items-center md:mb-0 gap-2">
@@ -135,6 +134,7 @@ const Header = ({ session = false }) => {
                         {/* Login and Register Links */}
                         <div className="flex space-x-4">
                             <button
+                            onClick={()=> router.push("/dashboard")}
                                 className="text-[#3455CE] text-sm sm:text-base md:text-lg font-medium hover:underline"
                             >
                                 Login

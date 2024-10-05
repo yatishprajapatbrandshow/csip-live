@@ -11,7 +11,7 @@ export default function SideBar() {
   function SidebarItem({ path, icon, title }) {
     return (
       <button
-        // onClick={() => { router.push(path) }}
+        onClick={() => { router.push(path) }}
         className="flex items-start justify-start w-full gap-2"
       >
         {icon} <span className=" whitespace-nowrap text-sm"> {title} </span>
@@ -21,13 +21,13 @@ export default function SideBar() {
 
   return (
     <>
-    <div className="pl-5 bg-white">
-      <div className="pb-20  overflow-y-auto text-gray-700 w-64 flex flex-col items-center py-4 transition-all duration-300 ease-in-out group">
+    <div className="pl-5 bg-white fixed top-20 left-0 z-50 w-52">
+      <div className="pb-20 overflow-y-auto text-gray-700 flex flex-col items-center py-4 transition-all duration-300 ease-in-out group">
 
         <p className="text-xl w-full text-left"> Main </p>
 
         <nav className="flex flex-col w-full mt-3 mb-5">
-          <SidebarItem path="/" icon={<ChartPie className="w-4 h-4" />} title="Dashboard" />
+          <SidebarItem path="/dashboard" icon={<ChartPie className="w-4 h-4" />} title="Dashboard" />
           <SidebarItem icon={<User className="w-4 h-4" />} title="Edit Profile" />
           <SidebarItem icon={<ShoppingCart className="w-4 h-4" />} title="Payment Reciepts" />
           <SidebarItem icon={<LockKeyhole className="w-4 h-4" />} title="Logout" />
