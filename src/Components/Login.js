@@ -2,7 +2,10 @@
 import { setLocalStorageItem } from "@/Config/localstorage";
 import { RedoDot } from "lucide-react";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+
 function Login() {
+    const router = useRouter()
     const [isChecked, setIsChecked] = useState(false);
     const [isEmailLogin, setIsEmailLogin] = useState(true);
     const [isOtpSent, setIsOtpSent] = useState(false);
@@ -56,9 +59,11 @@ function Login() {
                 body: JSON.stringify(payload),
             });
             const result = await response.json();
+            console.log(result);
             if (result.status === true) {
                 alert("Logged in successfully")
                 setLocalStorageItem('userData', result?.data);
+                router.push('/dashboard')
             } else {
                 alert(result?.message)
             }

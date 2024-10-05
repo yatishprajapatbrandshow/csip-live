@@ -2,17 +2,28 @@
 import { useState, useEffect } from "react";
 import { AlignJustify, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { getLocalStorageItem } from "@/Config/localstorage";
+import { useSelector } from 'react-redux';
+import { toggleStartSession } from '@/redux/actions/sessionSlice';
+
+
 const Header = ({ session = false }) => {
     const router = useRouter()
     const [isSession, setIsSession] = useState(session);
     const [ShowQuickLink, setShowQuickLink] = useState(false);
     const [time, setTime] = useState("");
     const [date, setDate] = useState("");
+    const startSessionTrigger = useSelector((state) => state.session.startSessionTrigger);
+    console.log(startSessionTrigger);
+    
+    useEffect(() => {
+        const userData =  getLocalStorageItem("userData")
+
+    }, []);
 
     useEffect(() => {
         const timer = setInterval(() => {
             const now = new Date();
-
             // Format time as HH : MM : SS
             const formattedTime = now
                 .toLocaleTimeString("en-US", {
@@ -21,8 +32,7 @@ const Header = ({ session = false }) => {
                     second: "2-digit",
                     hour12: false, // 24-hour format
                 })
-                .replace(/:/g, " : "); // Replace ':' with ' : '
-
+                .replace(/:/g, " : ");
             // Format date as Mon, 30 September 2024
             const options = { weekday: "short", year: "numeric", month: "long", day: "numeric" };
             const formattedDate = now.toLocaleDateString("en-US", options);
