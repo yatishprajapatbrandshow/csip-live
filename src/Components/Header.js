@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { AlignJustify, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 const Header = ({ session = false }) => {
-
+    const router = useRouter()
     const [isSession, setIsSession] = useState(session);
     const [ShowQuickLink, setShowQuickLink] = useState(false);
     const [time, setTime] = useState("");
@@ -133,6 +134,7 @@ const Header = ({ session = false }) => {
                         {/* Login and Register Links */}
                         <div className="flex space-x-4">
                             <button
+                            onClick={()=> router.push("/dashboard")}
                                 className="text-[#3455CE] text-sm sm:text-base md:text-lg font-medium hover:underline"
                             >
                                 Login
