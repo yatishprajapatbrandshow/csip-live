@@ -5,11 +5,12 @@ export default function Home() {
   return (
     <>
       <Header session={true} />
-      <div className='flex'>
-        <SideBar />
-        <AddActivity />
+      <div>
+          <SideBar />
+          <div className="pl-52">
+            <AddActivity />
+          </div>
       </div>
-
     </>
   );
 }

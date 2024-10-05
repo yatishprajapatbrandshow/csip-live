@@ -6,10 +6,10 @@ export default function Home() {
     <>
       <Header session={true} />
       <div>
-        <SideBar />
-        <div className="pl-52">
-          <AppliedActivity />
-        </div>
+          <SideBar />
+          <div className="pl-52">
+            <AppliedActivity />
+          </div>
       </div>
     </>
   );
