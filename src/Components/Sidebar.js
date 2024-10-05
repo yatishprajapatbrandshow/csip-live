@@ -21,8 +21,8 @@ export default function SideBar() {
 
   return (
     <>
-    <div className="pl-5 bg-white">
-      <div className="pb-20  overflow-y-auto text-gray-700 w-64 flex flex-col items-center py-4 transition-all duration-300 ease-in-out group">
+    <div className="pl-5 bg-white fixed top-20 left-0 z-50 w-52">
+      <div className="pb-20 overflow-y-auto text-gray-700 flex flex-col items-center py-4 transition-all duration-300 ease-in-out group">
 
         <p className="text-xl w-full text-left"> Main </p>
 
