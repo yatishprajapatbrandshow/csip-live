@@ -13,7 +13,6 @@ export default function Home() {
             <div>
                 <SideBar />
                 <div className="pl-52">
-
                     <Dashboard />
                     <Activities title="Favorite Activity" cardData={favoriteData} />
                     <Activities title="Recommended Activity" cardData={recommendedData} />
