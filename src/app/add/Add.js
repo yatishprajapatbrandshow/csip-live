@@ -16,7 +16,7 @@ const inputFields = [
   { name: 'note', label: 'Note' },
 
   { name: 'corporate_hierarchy_overview', label: 'Corporate Hierarchy Overview' },
-  { name: 'corporate_id', label: 'Corporate ID' },
+  { name: 'corporate_id', label: 'Corporate ID', },
   { name: 'tag', label: 'Tag' },
   { name: 'topic_id', label: 'Topic ID' },
 
@@ -60,48 +60,61 @@ const Add = () => {
   const [id, setId] = useState('');   // Store id from step-1
 
   const nextStep = async (values) => {
+    setErrorMessage('')
     setFormData({ ...formData, ...values });
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 1851993b5b544d33729e13dcc8b4069ed54050fb
     if (step === 0) {
+      const { name, short_name, objective, short_desc } = values
+
+      if (!name || name == "", !short_desc || short_desc == "", !short_name || short_name == "", !objective || objective == "") {
+        setErrorMessage("Fill the all Required Fields *")
+        return;
+      }
+
+      // Step 1 logic (POST to activity/add API)
       try {
-        const response = await fetch("https://csip-backend.onrender.com/activity/add", {
+        const response = await fetch("http://localhost:3000/activity/add", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(values), // Send the current step's values
+          body: JSON.stringify(values),
         });
-  
+
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-  
-        const data = await response.json(); // Assuming the API returns JSON
-        console.log("API Response:", data); // Log the response data
-        setId(data?.data?.id); // Store the id for future steps
-        setSid(data?.data?.sid); // Store the sid for future steps
-  
-        // Optionally handle success response here, like showing a message
-  
+
+        const data = await response.json();
+        console.log("API Response:", data);
+        setId(data?.data?.id);
+        setSid(data?.data?.sid);
+
+        // Move to the next step
+        setStep((prevStep) => prevStep + 1);
+
       } catch (error) {
         console.error("Error submitting step 1:", error);
         setErrorMessage("There was an error submitting your data. Please try again.");
       }
-    } 
-    if (step > 0 && step <= 6) {
-      const keysToSubmit = steps[step + 1]; // Get keys for the current step
-      const dataToSubmit = { ...values}; // Include sid and id in the request
+    } else if (step > 0 && step <= 6) {
+      // Other steps logic (POST to activity/step API)
+      const keysToSubmit = steps[step + 1];
+      const dataToSubmit = { ...values };
 
-      const payload = {sid, step, _id:id};
+      const payload = { sid, step: step + 1, _id: id };
       keysToSubmit.forEach(key => {
-        payload[key] = dataToSubmit[key]; // Collect only the necessary fields for the API
+        payload[key] = dataToSubmit[key];
       });
 
       console.log("Submitting data for step", step + 1, ":", payload);
-      
 
       try {
-        const response = await fetch("https://csip-backend.onrender.com/activity/step", {
+        const response = await fetch("http://localhost:3000/activity/step", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -114,28 +127,48 @@ const Add = () => {
         }
 
         const responseData = await response.json();
-        console.log(responseData); // Handle the response data if needed
+        console.log(responseData);
 
-        // Move to the next step
-        nextStep(values);
+        // Move to the next step without invoking nextStep recursively
+        setStep((prevStep) => Math.min(prevStep + 1, 6));
+
       } catch (error) {
         setErrorMessage(error.message);
-      } finally {
-        setSubmitting(false);
       }
     }
-  
-    setStep((prevStep) => Math.min(prevStep + 1, 6)); // Adjust to the last step
   };
-  
 
   const prevStep = () => {
     setStep((prevStep) => Math.max(prevStep - 1, 0));
   };
 
-  const handleSubmit = () => {
-    // Submit the final form data
-    console.log("Submitting final form data:", formData);
+  const handleSubmit = async () => {
+    const payload = { sid, step: step + 1, _id: id };
+    keysToSubmit.forEach(key => {
+      payload[key] = dataToSubmit[key];
+    });
+    try {
+      const response = await fetch("http://localhost:3000/activity/step", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const responseData = await response.json();
+      console.log(responseData);
+
+      // Move to the next step without invoking nextStep recursively
+      setStep((prevStep) => Math.min(prevStep + 1, 6));
+
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
   };
 
 
@@ -266,11 +299,27 @@ const Add = () => {
                     Next
                   </button>
                 )}
+<<<<<<< HEAD
                 </div>
               </Form>
             )}
           </Formik>
         </div>
+=======
+                {step === Object.keys(steps).length ? (
+                  <button type="submit" onClick={() => nextStep(values)} disabled={isSubmitting} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
+                    Submit
+                  </button>
+                ) : (
+                  <button type="button" onClick={() => nextStep(values)} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
+                    Next
+                  </button>
+                )}
+              </div>
+            </Form>
+          )}
+        </Formik>
+>>>>>>> 1851993b5b544d33729e13dcc8b4069ed54050fb
       </div>
     </section>
   );

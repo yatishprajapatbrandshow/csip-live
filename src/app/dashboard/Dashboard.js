@@ -32,7 +32,7 @@ export default function Dashboard() {
             <div className="absolute top-0 left-0 z-20">
                 <SideBar />
             </div>
-            <div className="ml-20 p-6 bg-purple-100 space-y-6 font-sans">
+            <div className="ml-20 p-6 bg-white space-y-6 font-sans">
                 <div className="grid grid-cols-12 gap-4">
                     <div className="bg-pink-200 p-4 rounded-lg col-span-4">
                         <div className="flex items-center justify-between">
@@ -42,7 +42,7 @@ export default function Dashboard() {
                                 <p className="text-sm text-purple-500 font-gilMedium">You've successfully mimicked a new form!</p>
                             </div>
                             <img
-                                src="https://csip.fieindia.org/img/congratulation-img.png"
+                                src="/images/congratulation-img.png"
                                 alt="Ditto transformation"
                                 width={150}
                                 height={150}
@@ -63,7 +63,7 @@ export default function Dashboard() {
                     <div className="bg-pink-200 col-span-2 p-4 rounded-lg">
                         <h3 className="text-lg font-gilBold text-purple-800 mb-2">Points Earned</h3>
                         <div className="flex justify-center">
-                            <CircularProgressBar value={62} text="62" color="text-cyan-500" />
+                            <CircularProgressBar value={62} text="62" color="text-pink-500" />
                         </div>
                     </div>
                     <div className="bg-pink-200 col-span-2 p-4 rounded-lg">
@@ -74,78 +74,84 @@ export default function Dashboard() {
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div className="bg-yellow-100 p-4 rounded-lg space-y-2">
-                        <button className="w-full text-left text-purple-800 border-b pb-1 border-gray-400 font-gilBold">👀 View Curriculum</button>
-                        <button className="w-full text-left text-purple-800 border-b pb-2 border-gray-400 font-gilBold">📊 View Report</button>
+                        <button className="w-full text-left text-purple-800 border-b pb-3 border-gray-400 font-gilBold">👀 View Curriculum</button>
+                        <button className="w-full text-left text-purple-800 border-b pb-3 border-gray-400 font-gilBold">📊 View Report</button>
                         <button className="w-full text-left text-purple-800 font-gilBold">🔄 Change Form</button>
                     </div>
-                    <div className="bg-purple-200 p-4 rounded-lg col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="bg-[#dfccfa] p-4 rounded-lg col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="flex items-center gap-2 border border-gray-100 p-1">
-                            <div className="text-3xl font-gilBold bg-white px-3 text-purple-800">3</div>
-                            <p className="text-sm text-purple-600">Topic Studying</p>
+                            <div className="text-3xl font-gilBold bg-white  text-purple-800 w-10 flex justify-center">3</div>
+                            <p className="text-sm font-gilBold">Topic Studying</p>
                         </div>
                         <div className="flex items-center gap-2 border border-gray-100 p-1">
-                            <div className="text-3xl font-gilBold bg-white px-3 text-purple-800">1</div>
-                            <p className="text-sm text-purple-600">Activity Applied</p>
+                            <div className="text-3xl font-gilBold bg-white w-10 flex justify-center text-purple-800">1</div>
+                            <p className="text-sm font-gilBold">Activity Applied</p>
                         </div>
                         <div className="flex items-center gap-2 border border-gray-100 p-1">
-                            <div className="text-3xl font-gilBold bg-white px-3 text-purple-800">0</div>
-                            <p className="text-sm text-purple-600">Ongoing Activity</p>
+                            <div className="text-3xl font-gilBold bg-white w-10 flex justify-center text-purple-800">0</div>
+                            <p className="text-sm font-gilBold">Ongoing Activity</p>
                         </div>
                         <div className="flex items-center gap-2 border border-gray-100 p-1">
-                            <div className="text-3xl font-gilBold bg-white px-3 text-purple-800">0</div>
-                            <p className="text-sm text-purple-600">Submission Pending</p>
+                            <div className="text-3xl font-gilBold bg-white w-10 flex justify-center text-purple-800">0</div>
+                            <p className="text-sm font-gilBold">Submission Pending</p>
                         </div>
                         <div className="flex items-center gap-2 border border-gray-100 p-1">
-                            <div className="text-3xl font-gilBold bg-white px-3 text-purple-800">0</div>
-                            <p className="text-sm text-purple-600">Completed Activity</p>
+                            <div className="text-3xl font-gilBold bg-white w-10 flex justify-center text-purple-800">0</div>
+                            <p className="text-sm font-gilBold">Payment Pending</p>
                         </div>
                         <div className="flex items-center gap-2 border border-gray-100 p-1">
-                            <div className="text-3xl font-gilBold bg-white px-3 text-purple-800">0</div>
-                            <p className="text-sm text-purple-600">Total Score</p>
+                            <div className="text-3xl font-gilBold bg-white w-10 flex justify-center text-purple-800">0</div>
+                            <p className="text-sm font-gilBold">Completed Activity</p>
                         </div>
                         <div className="flex items-center gap-2 border border-gray-100 p-1">
-                            <div className="text-3xl font-gilBold bg-white px-3 text-purple-800">0</div>
-                            <p className="text-sm text-purple-600">Skill Endorsement from Corporate</p>
+                            <div className="text-3xl font-gilBold bg-white w-10 flex justify-center text-purple-800">0</div>
+                            <p className="text-sm font-gilBold">Total Score</p>
                         </div>
                         <div className="flex items-center gap-2 border border-gray-100 p-1">
-                            <div className="text-3xl font-gilBold bg-white px-3 text-purple-800">0</div>
-                            <p className="text-sm text-purple-600">Leaderborad is Being Evaluated...</p>
+                            <div className="text-3xl font-gilBold bg-white w-10 flex justify-center text-purple-800">0</div>
+                            <p className="text-sm font-gilBold">Skill Endorsement from Corporate</p>
+                        </div>
+                        <div className="flex items-center gap-2 border border-gray-100 p-1">
+                            <p className="text-sm font-gilBold">Leaderborad is Being Evaluated...</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-white p-4 rounded-lg">
-                        <h3 className="text-lg font-gilBold text-purple-800 mb-2">Profile Status</h3>
-                        <div className="flex justify-center">
-                            <CircularProgressBar value={16} text="16%" color="text-blue-500" />
+                <div className="grid grid-cols-5 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 col-span-2">
+                        <div className="bg-purple-100 p-4 rounded-lg">
+                            <h3 className="text-lg font-gilBold text-purple-800 mb-2">Profile Status</h3>
+                            <div className="flex justify-center">
+                                <CircularProgressBar value={16} text="16%" color="text-pink-500" />
+                            </div>
+                            <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
                         </div>
-                        <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
+                        <div className="bg-purple-100 p-4 rounded-lg">
+                            <h3 className="text-lg font-gilBold text-purple-800 mb-2">Activity/Curriculum</h3>
+                            <div className="flex justify-center">
+                                <CircularProgressBar value={70} text="70%" color="text-pink-500" />
+                            </div>
+                            <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
+                        </div>
+                        <div className="bg-purple-100 p-4 rounded-lg">
+                            <h3 className="text-lg font-gilBold text-purple-800 mb-2">Score</h3>
+                            <div className="flex justify-center">
+                                <CircularProgressBar value={85} text="85%" color="text-pink-500" />
+                            </div>
+                            <p className="text-center text-sm text-purple-600 mt-2">Points Earned</p>
+                        </div>
                     </div>
-                    <div className="bg-white p-4 rounded-lg">
-                        <h3 className="text-lg font-gilBold text-purple-800 mb-2">Activity/Curriculum</h3>
-                        <div className="flex justify-center">
-                            <CircularProgressBar value={70} text="70%" color="text-yellow-500" />
+                    <div className="bg-pink-100 p-4 rounded-lg col-span-3">
+                        <h3 className="text-lg font-gilBold text-purple-800 mb-2">📚 Topics:</h3>
+                        <div className="flex flex-wrap gap-2">
+                            <span className="bg-purple-200 text-purple-800 px-2 py-1 rounded">Advances in Business Communication </span>
+                            <span className="bg-purple-200 text-purple-800 px-2 py-1 rounded">Advances in Business Communication </span>
+                            <Link href="" className="bg-green-400 text-white px-2 py-1 rounded">Add New Topic </Link>
                         </div>
-                        <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-lg">
-                        <h3 className="text-lg font-gilBold text-purple-800 mb-2">Score</h3>
-                        <div className="flex justify-center">
-                            <CircularProgressBar value={85} text="85%" color="text-green-400" />
-                        </div>
-                        <p className="text-center text-sm text-purple-600 mt-2">Points Earned</p>
                     </div>
                 </div>
 
-                <div className="bg-pink-100 p-4 rounded-lg">
-                    <h3 className="text-lg font-gilBold text-purple-800 mb-2">📚 Topics:</h3>
-                    <div className="flex flex-wrap gap-2">
-                        <span className="bg-purple-200 text-purple-800 px-2 py-1 rounded">Advances in Business Communication </span>
-                        <span className="bg-purple-200 text-purple-800 px-2 py-1 rounded">Advances in Business Communication </span>
-                        <Link href="" className="bg-green-400 text-white px-2 py-1 rounded">Add New Topic </Link>
-                    </div>
-                </div>
+
             </div>
         </div>
     );
