@@ -1,8 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { AlignJustify, ChevronRight } from "lucide-react";
+import { getLocalStorageItem } from "@/Config/localstorage";
 const Header = ({ session = false }) => {
-
+    const userData = getLocalStorageItem('userData');
+    
     const [isSession, setIsSession] = useState(session);
     const [ShowQuickLink, setShowQuickLink] = useState(false);
     const [time, setTime] = useState("");
