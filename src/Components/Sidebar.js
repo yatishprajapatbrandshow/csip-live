@@ -54,9 +54,9 @@ export default function SideBar() {
               viewBox="0 0 24 24"
               fill="#9779FF"
               stroke="#9779FF"
-              stroke-width="1"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className="lucide lucide-pin"
             >
               <path d="M12 17v5" />
@@ -211,9 +211,9 @@ export default function SideBar() {
               viewBox="0 0 24 24"
               fill="#9779FF"
               stroke="#9779FF"
-              stroke-width="1"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className="lucide lucide-pin"
             >
               <path d="M12 17v5" />

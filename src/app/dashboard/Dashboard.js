@@ -1,8 +1,30 @@
 import SideBar from "@/Components/Sidebar"
 import { CircularProgressBar } from "@/Components/CircularProgressBar";
 import Link from "next/link";
+import ReviewSlider from "@/Components/ReviewSlider";
 
-
+const reviews = [
+    {
+        id: 1,
+        text: "This is a great place to work!",
+        author: "John Doe"
+    },
+    {
+        id: 2,
+        text: "I had an amazing experience with the team.",
+        author: "Jane Smith"
+    },
+    {
+        id: 3,
+        text: "The corporate culture is really supportive.",
+        author: "Alice Johnson"
+    },
+    {
+        id: 4,
+        text: "Great opportunities for growth and learning.",
+        author: "Bob Brown"
+    },
+];
 
 export default function Dashboard() {
     return (
@@ -36,11 +58,13 @@ export default function Dashboard() {
                     </div>
                     <div className="bg-blue-200 col-span-2 p-4 rounded-lg">
                         <h3 className="text-lg font-gilBold text-purple-800 mb-2">Corporate Reviews</h3>
-                        <p className="text-sm text-purple-600 font-gilMedium">No Data to Generate Report</p>
+                        <ReviewSlider reviews={reviews} />
                     </div>
                     <div className="bg-pink-200 col-span-2 p-4 rounded-lg">
                         <h3 className="text-lg font-gilBold text-purple-800 mb-2">Points Earned</h3>
-                        <p className="text-sm text-purple-600 font-gilMedium">No Data to Generate Report</p>
+                        <div className="flex justify-center">
+                            <CircularProgressBar value={62} text="62" color="text-cyan-500" />
+                        </div>
                     </div>
                     <div className="bg-pink-200 col-span-2 p-4 rounded-lg">
                         <h3 className="text-lg font-gilBold text-purple-800 mb-2">Corporate Skill Endorsement</h3>
@@ -94,21 +118,21 @@ export default function Dashboard() {
                     <div className="bg-white p-4 rounded-lg">
                         <h3 className="text-lg font-gilBold text-purple-800 mb-2">Profile Status</h3>
                         <div className="flex justify-center">
-                            <CircularProgressBar value={0} text="0%" color="text-pink-500" />
+                            <CircularProgressBar value={16} text="16%" color="text-blue-500" />
                         </div>
                         <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
                     </div>
                     <div className="bg-white p-4 rounded-lg">
                         <h3 className="text-lg font-gilBold text-purple-800 mb-2">Activity/Curriculum</h3>
                         <div className="flex justify-center">
-                            <CircularProgressBar value={0} text="0%" color="text-yellow-500" />
+                            <CircularProgressBar value={70} text="70%" color="text-yellow-500" />
                         </div>
                         <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
                     </div>
                     <div className="bg-white p-4 rounded-lg">
                         <h3 className="text-lg font-gilBold text-purple-800 mb-2">Score</h3>
                         <div className="flex justify-center">
-                            <CircularProgressBar value={0} text="0%" color="text-pink-400" />
+                            <CircularProgressBar value={85} text="85%" color="text-green-400" />
                         </div>
                         <p className="text-center text-sm text-purple-600 mt-2">Points Earned</p>
                     </div>

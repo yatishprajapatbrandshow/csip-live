@@ -3,7 +3,7 @@ import Header from "@/Components/Header";
 import Add from "./Add";
 export default function Home() {
   return (
-    <section className="bg-white">
+    <section className="bg-[#e9e9e9] min-h-screen">
       <Header session={true} />
       <div className='relative '>
       <div className="absolute top-0 left-0 z-20">
