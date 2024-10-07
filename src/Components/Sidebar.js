@@ -49,7 +49,7 @@ export default function SideBar({ }) {
 
 
           <nav className="flex flex-col w-full mt-3 mb-5">
-            <SidebarItem icon={<FileSpreadsheet className="w-4 h-4" />} title="View" />
+            <SidebarItem path={'/curriculum'} icon={<FileSpreadsheet className="w-4 h-4" />} title="View" />
             {
               userType !== "Corporate" &&
               <>
