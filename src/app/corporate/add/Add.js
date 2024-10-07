@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 const Add = () => {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
   const [sid, setSid] = useState(''); // Store sid from step-1
@@ -19,7 +19,7 @@ const Add = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("v");
   const userData = useSelector((state) => state.session.userData);
-  console.log(userData);
+
 
 
   const inputFields = [
@@ -34,7 +34,7 @@ const Add = () => {
     { name: 'note', label: 'Note' },
   
     { name: 'corporate_hierarchy_overview', label: 'Corporate Hierarchy Overview' },
-    { name: 'corporate_id', label: 'Corporate ID', id : userData.sid },
+    { name: 'corporate_id', label: 'Corporate ID', id: userData?.sid },
     { name: 'tag', label: 'Tag' },
     { name: 'topic_id', label: 'Search Topic', type: 'select' },
   
@@ -69,6 +69,8 @@ const Add = () => {
     6: ["participant_quantity", "need_approval"],
     7: ["activity_start_date", "activity_end_date", "submission_start_date", "submission_end_date"],
   };
+
+
 
   
 
@@ -117,13 +119,25 @@ const Add = () => {
       // Other steps logic (POST to activity/step API)
       const keysToSubmit = steps[step + 1];
       const dataToSubmit = { ...values };
-
-      const payload = { sid, step: step + 1, _id: id };
+      
+      const payload = {
+        sid,
+        step: step + 1,
+        _id: id,
+      };
+      
+      // Add the rest of the keys from keysToSubmit
       keysToSubmit.forEach(key => {
-        payload[key] = dataToSubmit[key];
+        if (key === "corporate_id") {
+          payload[key] = userData?.sid;
+        } else {
+          payload[key] = dataToSubmit[key]; // Assign values from dataToSubmit for other keys
+        }
       });
 
-      console.log("Submitting data for step", step + 1, ":", payload);
+      console.log(payload)
+
+      
       const APIURL = `${API_URL}activity/step`
       try {
         const response = await fetch(APIURL, {
@@ -170,7 +184,8 @@ const Add = () => {
         },
         body: JSON.stringify(payload),
       });
-
+      
+      console.log(response)
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -184,7 +199,7 @@ const Add = () => {
       setStep((prevStep) => Math.min(prevStep + 1, 6));
 
     } catch (error) {
-      setErrorMessage(error.message);
+      setErrorMessage("df", error.message);
     }
   };
 
@@ -199,11 +214,15 @@ const Add = () => {
     inputFields.slice(23)      
   ][step];
 
-  // Define initialValues with default values for controlled inputs
-  const initialValues = inputFields.reduce((acc, field) => {
-    acc[field.name] = formData[field.name] || ''; // Set to empty string if undefined
-    return acc;
-  }, {});
+  
+// Define initialValues with default values for controlled inputs
+const initialValues = inputFields.reduce((acc, field) => {
+  if (field.name !== 'corporate_id') {
+    acc[field.name] = formData[field.name] || ''; // Set to formData if available, otherwise empty string
+  }
+  return acc;
+}, {});
+
 
 
 
@@ -241,6 +260,8 @@ const Add = () => {
     fetchTopic(value);
   };
 
+
+  
 
 
   return (
@@ -355,7 +376,7 @@ const Add = () => {
                       <Field as="select" name={field.name} className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
                       <option value="">Select a topic</option>
                       {topics.map((topic) => (
-                        <option key={topic.id} value={topic.id}>
+                        <option key={topic._id} value={topic._id}>
                           {topic.major}
                         </option>
                       ))}
@@ -367,8 +388,8 @@ const Add = () => {
                             <Field
                               type={field.type || 'text'}
                               name={field.name}
-                              value= {field.id}
-                              className="mt-1 hidden font-gilMedium w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
+                              value={field.id}
+                              className="mt-1 font-gilMedium w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
                             />
                           : null
                         :

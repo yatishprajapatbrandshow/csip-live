@@ -132,7 +132,7 @@ const Header = ({ session = false }) => {
                         </div>
                         <div className="w-full h-full flex justify-center flex-col gap-1">
                             <button
-                                onClick={() => { setShowQuickLink(false) }}
+                                onClick={() => userData.type === "Corporate" ?  router.push("/corporate/activity-list"): router.push("/dashboard")}
                                 className="flex gap-2 text-xl text-[#8280FD] font-medium hover:text-[#acabfc]"
                             >
                                 <ChevronRight /> Dashboard
