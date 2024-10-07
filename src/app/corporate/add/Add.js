@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { API_URL } from "@/Config/Config";
 import * as Yup from 'yup';
 
 const inputFields = [
@@ -40,7 +41,7 @@ const inputFields = [
   { name: 'submission_end_date', label: 'Submission End Date', type: 'date' },
 ];
 
-const data = ['Basic Information', 'Scenario and Description', 'Corporate Information', 'Media and Resources', 'Activity Details', 'Participant and Approval', 'Activity and Submission Dates'];
+const dataFormStepData = ['Basic Information', 'Scenario and Description', 'Corporate Information', 'Media and Resources', 'Activity Details', 'Participant and Approval', 'Activity and Submission Dates'];
 
 
 const steps = {
@@ -62,6 +63,7 @@ const Add = () => {
   const nextStep = async (values) => {
     setErrorMessage('')
     setFormData({ ...formData, ...values });
+
     if (step === 0) {
       const { name, short_name, objective, short_desc } = values
 
@@ -71,8 +73,9 @@ const Add = () => {
       }
 
       // Step 1 logic (POST to activity/add API)
+      const APIURL = `${API_URL}activity/add`
       try {
-        const response = await fetch("http://localhost:3000/activity/add", {
+        const response = await fetch(APIURL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -107,9 +110,9 @@ const Add = () => {
       });
 
       console.log("Submitting data for step", step + 1, ":", payload);
-
+      const APIURL = `${API_URL}activity/step`
       try {
-        const response = await fetch("http://localhost:3000/activity/step", {
+        const response = await fetch(APIURL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -123,6 +126,9 @@ const Add = () => {
 
         const responseData = await response.json();
         console.log(responseData);
+        if(responseData.status === true){
+          alert(`${dataFormStepData[step]} added successfully`);
+        }
 
         // Move to the next step without invoking nextStep recursively
         setStep((prevStep) => Math.min(prevStep + 1, 6));
@@ -156,7 +162,9 @@ const Add = () => {
       }
 
       const responseData = await response.json();
-      console.log(responseData);
+      if(responseData.status === true){
+        alert(`${dataFormStepData[step]} added successfully`);
+      }
 
       // Move to the next step without invoking nextStep recursively
       setStep((prevStep) => Math.min(prevStep + 1, 6));
@@ -174,7 +182,7 @@ const Add = () => {
     inputFields.slice(12, 16), // Step 4
     inputFields.slice(16, 21), // Step 5
     inputFields.slice(21, 23), // Step 6
-    inputFields.slice(23)      // Step 7
+    inputFields.slice(23)      
   ][step];
 
   // Define initialValues with default values for controlled inputs
@@ -189,19 +197,19 @@ const Add = () => {
       <div className='grid grid-cols-3 bg-white shadow-lg p-10'>
         <div className="col-span-1">
           <ol className="h-fit overflow-hidden space-y-8">
-            {data?.map((label, index) => (
+            {dataFormStepData?.map((label, index) => (
               <li
                 key={index}
-                className={`relative flex-1 after:content-[''] after:w-0.5 after:h-full ${step > index ? 'after:bg-blue-500' : 'after:bg-gray-300'
+                className={`relative flex-1 after:content-[''] after:w-0.5 after:h-full ${step+1 > index ? 'after:bg-blue-500' : 'after:bg-gray-300'
                   } after:inline-block after:absolute after:-bottom-12 after:left-4 lg:after:left-5`}
               >
                 <a className="flex items-center font-gilMedium w-full">
                   <span
-                    className={`w-8 h-8 ${step > index ? 'bg-blue-500' : 'bg-gray-100'
-                      } border-2 border-gray-300 rounded-full flex justify-center items-center mr-3 text-sm ${step > index ? 'text-white' : 'text-gray-900'
+                    className={`w-8 h-8 ${step+1 > index ? 'bg-blue-500' : 'bg-gray-100'
+                      } border-2 border-gray-300 rounded-full flex justify-center items-center mr-3 text-sm ${step+1 > index ? 'text-white' : 'text-gray-900'
                       } lg:w-10 lg:h-10`}
                   >
-                    {step > index ? (
+                    {step+1 > index ? (
                       <svg
                         className="w-5 h-5 stroke-white"
                         viewBox="0 0 24 24"
@@ -231,7 +239,7 @@ const Add = () => {
           </ol>
         </div>
         <div className="col-span-2 w-full mx-auto p-6 h-fit bg-white shadow-inner rounded-md">
-          <h2 className="text-3xl font-gilMedium text-gray-800 mb-4">{data[step]}</h2>
+          <h2 className="text-3xl font-gilMedium text-gray-800 mb-4">{dataFormStepData[step]}</h2>
           <Formik
             initialValues={initialValues}
             // validationSchema={validationSchema}

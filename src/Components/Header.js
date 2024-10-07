@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { AlignJustify, ChevronRight } from "lucide-react";
+import { AlignJustify, ChevronRight, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { getLocalStorageItem } from "@/Config/localstorage";
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,7 +10,7 @@ import { setUserData } from '../../redux/actions/sessionSlice';
 const Header = ({ session = false }) => {
     const router = useRouter();
     const dispatch = useDispatch();
-    const [isSession, setIsSession] = useState(session);
+    const [isSession, setIsSession] = useState(false);
     const [ShowQuickLink, setShowQuickLink] = useState(false);
     const [time, setTime] = useState("");
     const [date, setDate] = useState("");
@@ -18,12 +18,19 @@ const Header = ({ session = false }) => {
     const startSessionTrigger = useSelector((state) => state.session.startSessionTrigger);
     
 
+    const LogOut = () => {
+        localStorage.removeItem("userData");
+        router.replace('/login')
+    }
+
     useEffect(() => {
         const userData = getLocalStorageItem("userData")
         if(userData){
             dispatch(setUserData(userData)); 
+            setIsSession(true);
         }else{
             router.push('/login')
+            setIsSession(false);
         }
     }, []);
 
@@ -124,11 +131,13 @@ const Header = ({ session = false }) => {
                             </button>
                             <button
                                 className="flex gap-2 text-xl text-[#8280FD] font-medium hover:text-[#acabfc]"
+                                onClick={()=> router.push("/edit-profile")}
                             >
                                 <ChevronRight /> Edit Profile
                             </button>
                             <button
                                 className="flex gap-2 text-xl text-[#8280FD] font-medium hover:text-[#acabfc]"
+                                onClick={()=> LogOut()}
                             >
                                 <ChevronRight /> Logout
                             </button>
@@ -150,7 +159,7 @@ const Header = ({ session = false }) => {
                         {/* Login and Register Links */}
                         <div className="flex space-x-4">
                             <button
-                            onClick={()=> router.push("/dashboard")}
+                                onClick={()=> router.push("/dashboard")}
                                 className="text-[#3455CE] text-sm sm:text-base md:text-lg font-medium hover:underline"
                             >
                                 Login

@@ -28,9 +28,9 @@ export default function SideBar() {
 
         <nav className="flex flex-col w-full mt-3 mb-5">
           <SidebarItem path="/dashboard" icon={<ChartPie className="w-4 h-4" />} title="Dashboard" />
-          <SidebarItem icon={<User className="w-4 h-4" />} title="Edit Profile" />
+          <SidebarItem path="/edit-profile" icon={<User className="w-4 h-4" />} title="Edit Profile" />
           <SidebarItem icon={<ShoppingCart className="w-4 h-4" />} title="Payment Reciepts" />
-          <SidebarItem icon={<LockKeyhole className="w-4 h-4" />} title="Logout" />
+          {/* <SidebarItem icon={<LockKeyhole className="w-4 h-4" />} title="Logout" /> */}
         </nav>
 
 
