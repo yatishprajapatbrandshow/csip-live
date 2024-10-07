@@ -20,9 +20,19 @@ function Login() {
     const [password, setPassword] = useState('');
 
 
+    // useEffect(() => {
+    //     const userData = getLocalStorageItem("userData")
+    //     if(userData){
+    //         router.replace('/dashboard')
+    //     }
+    // }, []);
+
+
     useEffect(() => {
         const userData = getLocalStorageItem("userData")
-        if(userData){
+        if(userData?.type==="Corporate"){
+            router.replace('/corporate/activity-list')   
+        }else{
             router.replace('/dashboard')
         }
     }, []);
@@ -80,8 +90,13 @@ function Login() {
 
                 alert("Logged in successfully")
                 setLocalStorageItem('userData', result?.data);
-                router.push('/dashboard')
                 setLoginProcess(false)
+                if (result?.data?.type==="Corporate") {
+                    router.push('/corporate/activity-list')
+                }else{
+                    router.push('/dashboard')
+                }
+                // router.push('/dashboard')
             } else {
                 alert(result?.message)
                 setLoginProcess(false)

@@ -30,17 +30,19 @@ export default function SideBar({ }) {
       <div className="pl-5 bg-white fixed pt-20 top-0 left-0 z-50 w-52 h-full">
         <div className="pb-20 overflow-y-auto text-gray-700 flex flex-col items-center py-4 transition-all duration-300 ease-in-out group">
 
-          <p className="text-xl w-full text-left"> Main </p>
 
-          <nav className="flex flex-col w-full mt-3 mb-5">
-            <SidebarItem path="/dashboard" icon={<ChartPie className="w-4 h-4" />} title="Dashboard" />
-            <SidebarItem path="/edit-profile" icon={<User className="w-4 h-4" />} title="Edit Profile" />
             {
               userType !== "Corporate" &&
-              <SidebarItem icon={<ShoppingCart className="w-4 h-4" />} title="Payment Reciepts" />
+              <>
+              <p className="text-xl w-full text-left"> Main </p>
+          <nav className="flex flex-col w-full mt-3 mb-5">
+              <SidebarItem path="/dashboard" icon={<ChartPie className="w-4 h-4" />} title="Dashboard" />
+                <SidebarItem path="/edit-profile" icon={<User className="w-4 h-4" />} title="Edit Profile" />
+                <SidebarItem icon={<ShoppingCart className="w-4 h-4" />} title="Payment Reciepts" />
+          </nav>
+                </>
             }
             {/* <SidebarItem icon={<LockKeyhole className="w-4 h-4" />} title="Logout" /> */}
-          </nav>
 
 
           <p className="text-xl w-full text-left"> Curriculum </p>

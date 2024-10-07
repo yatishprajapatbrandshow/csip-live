@@ -24,8 +24,8 @@ const Header = ({ session = false }) => {
     }
 
     useEffect(() => {
+        
         const userData = getLocalStorageItem("userData")
-        console.log("User Data from Header :", userData);
 
         if (userData) {
             setUserDataShow(userData)

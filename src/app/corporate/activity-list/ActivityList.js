@@ -81,7 +81,6 @@ const cardData = [
   },
 ]
 
-
 function ActivityList() {
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
@@ -125,11 +124,7 @@ function ActivityList() {
 
   return (
     <div className="pl-20 p-6 bg-white">
-      <h1 className="text-3xl font-gilBold mb-6">Activity List</h1>
-      <Link href="/dashboard" className="flex items-center font-gilSemiBold mb-6">
-        <ArrowLeft className="w-4 h-4 mr-2" />
-        Go Back
-      </Link>
+      <h1 className="text-3xl font-gilBold mb-6">Added Activity List</h1>
       <div className="flex flex-wrap justify-start gap-6">
         {items?.map((activity) => (
           <CardCorporate key={activity.id} activity={activity} />
