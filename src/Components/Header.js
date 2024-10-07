@@ -14,9 +14,10 @@ const Header = ({ session = false }) => {
     const [ShowQuickLink, setShowQuickLink] = useState(false);
     const [time, setTime] = useState("");
     const [date, setDate] = useState("");
+    const [UserDataShow, setUserDataShow] = useState("");
     const userData = useSelector((state) => state.session.userData);
     const startSessionTrigger = useSelector((state) => state.session.startSessionTrigger);
-    
+    console.log(UserDataShow);
 
     const LogOut = () => {
         localStorage.removeItem("userData");
@@ -26,6 +27,7 @@ const Header = ({ session = false }) => {
     useEffect(() => {
         const userData = getLocalStorageItem("userData")
         if(userData){
+            setUserDataShow(userData)
             dispatch(setUserData(userData)); 
             setIsSession(true);
         }else{
@@ -91,21 +93,24 @@ const Header = ({ session = false }) => {
                                     Quick Links
                                 </button>
                             </div>
-                            <div className="flex gap-5 pr-10 max-sm:pr-1">
-                                <div className="max-sm:hidden">
-                                    <h3 className="font-bold text-lg text-end">User Name</h3>
-                                    <span className="text-sm text-gray-500">
-                                        yatishprajapat.official@gmail.com
-                                    </span>
+                            {userData ? 
+                                <div className="flex gap-5 pr-10 max-sm:pr-1">
+                                    <div className="max-sm:hidden">
+                                        <h3 className="font-bold text-lg text-end">{userData.name}</h3>
+                                        <span className="text-sm text-gray-500">
+                                            {userData.email}
+                                        </span>
+                                    </div>
+                                    {/* /images/default.jpg */}
+                                    <div className="profile">
+                                        <img
+                                            src={`https://csip.fieindia.org/images/profile/${userData.participantpic}`}
+                                            alt="profile image"
+                                            className="h-16 rounded-full"
+                                        />
+                                    </div>
                                 </div>
-                                <div className="profile">
-                                    <img
-                                        src="/images/default.jpg"
-                                        alt="profile image"
-                                        className="h-16 rounded-full" // Adjust logo height for responsiveness
-                                    />
-                                </div>
-                            </div>
+                            : null}
                         </div>
                     </div>
                     {/* Quick Link */}

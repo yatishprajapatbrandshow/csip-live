@@ -54,7 +54,7 @@ const steps = {
 };
 
 const Add = () => {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(2);
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
   const [sid, setSid] = useState(''); // Store sid from step-1

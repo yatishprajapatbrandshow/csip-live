@@ -9,12 +9,14 @@ export default function SideBar({}) {
   const [role, setRole] = useState('Admin');
   
   function SidebarItem({ path, icon, title }) {
+    const router = useRouter();
+    
     return (
       <button
-        onClick={() => { router.push(path) }}
+        onClick={path ? () => router.push(path) : null}
         className="flex items-start justify-start w-full gap-2"
       >
-        {icon} <span className=" whitespace-nowrap text-sm"> {title} </span>
+        {icon} <span className="whitespace-nowrap text-sm"> {title} </span>
       </button>
     );
   }
