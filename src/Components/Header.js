@@ -3,47 +3,53 @@ import { useState, useEffect } from "react";
 import { AlignJustify, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { getLocalStorageItem } from "@/Config/localstorage";
-import { useSelector } from 'react-redux';
-import { toggleStartSession } from '@/redux/actions/sessionSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserData } from '../../redux/actions/sessionSlice';
 
 
 const Header = ({ session = false }) => {
-    const router = useRouter()
+    const router = useRouter();
+    const dispatch = useDispatch();
     const [isSession, setIsSession] = useState(session);
     const [ShowQuickLink, setShowQuickLink] = useState(false);
     const [time, setTime] = useState("");
     const [date, setDate] = useState("");
+    const userData = useSelector((state) => state.session.userData);
     const startSessionTrigger = useSelector((state) => state.session.startSessionTrigger);
-    console.log(startSessionTrigger);
     
-    useEffect(() => {
-        const userData =  getLocalStorageItem("userData")
-
-    }, []);
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            const now = new Date();
-            // Format time as HH : MM : SS
-            const formattedTime = now
-                .toLocaleTimeString("en-US", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                    hour12: false, // 24-hour format
-                })
-                .replace(/:/g, " : ");
-            // Format date as Mon, 30 September 2024
-            const options = { weekday: "short", year: "numeric", month: "long", day: "numeric" };
-            const formattedDate = now.toLocaleDateString("en-US", options);
-
-            setTime(formattedTime);
-            setDate(formattedDate);
-        }, 1000); // Update every second
-
-        // Clean up the interval on component unmount
-        return () => clearInterval(timer);
+        const userData = getLocalStorageItem("userData")
+        if(userData){
+            dispatch(setUserData(userData)); 
+        }else{
+            router.push('/login')
+        }
     }, []);
+
+    // useEffect(() => {
+    //     const timer = setInterval(() => {
+    //         const now = new Date();
+    //         // Format time as HH : MM : SS
+    //         const formattedTime = now
+    //             .toLocaleTimeString("en-US", {
+    //                 hour: "2-digit",
+    //                 minute: "2-digit",
+    //                 second: "2-digit",
+    //                 hour12: false, // 24-hour format
+    //             })
+    //             .replace(/:/g, " : ");
+    //         // Format date as Mon, 30 September 2024
+    //         const options = { weekday: "short", year: "numeric", month: "long", day: "numeric" };
+    //         const formattedDate = now.toLocaleDateString("en-US", options);
+
+    //         setTime(formattedTime);
+    //         setDate(formattedDate);
+    //     }, 1000); // Update every second
+
+    //     // Clean up the interval on component unmount
+    //     return () => clearInterval(timer);
+    // }, []);
 
     return (
         <>

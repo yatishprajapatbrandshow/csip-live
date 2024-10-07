@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import sessionSlice from '@redux/actions/sessionSlice';
+import sessionSlice from './actions/sessionSlice';
 export const store = configureStore({
     reducer: {
         session: sessionSlice
