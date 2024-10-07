@@ -299,7 +299,7 @@ function Login() {
                                 className="px-6 py-2 flex gap-2 justify-center items-center bg-[#6045E2] text-white rounded-full hover:bg-[#8a74fc] focus:bg-[#8a74fc] font-semibold mt-5 duration-150"
                             >
                                 Log In
-                                {!LoginProcess ? <>
+                                {LoginProcess ? <>
 
                                     <div role="status">
                                         <svg aria-hidden="true" class="w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
