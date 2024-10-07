@@ -30,10 +30,12 @@ function Login() {
 
     useEffect(() => {
         const userData = getLocalStorageItem("userData")
-        if(userData?.type==="Corporate"){
-            router.replace('/corporate/activity-list')   
-        }else{
-            router.replace('/dashboard')
+        if(userData){
+            if(userData?.type==="Corporate"){
+                router.replace('/corporate/activity-list')   
+            }else{
+                router.replace('/dashboard')
+            }
         }
     }, []);
 
