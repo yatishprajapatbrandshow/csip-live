@@ -1,6 +1,7 @@
 'use client'
 import {
   Minus, ChartPie, User, ShoppingCart, LockKeyhole, FileSpreadsheet, FileCog, FileChartColumnIncreasing, FileMinus2, FilePlus2, Library, Search, ParkingMeter, ListPlus, TrendingUp, MoveRight, CheckCheck, ListTodo, LayoutList, IndianRupee, SquarePlus,
+  ListCheck,
 } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -76,7 +77,7 @@ export default function SideBar({ }) {
             {userType === "Corporate" &&
               <>
                 <SidebarItem icon={<SquarePlus className="w-4 h-4" />} title="Add" />
-                <SidebarItem icon={<SquarePlus className="w-4 h-4" />} title="View Added" />
+                <SidebarItem icon={<ListCheck className="w-4 h-4" />} title="View Added" />
               </>
             }
             {
