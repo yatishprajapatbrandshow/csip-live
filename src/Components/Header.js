@@ -4,7 +4,7 @@ import { AlignJustify, ChevronRight, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { getLocalStorageItem } from "@/Config/localstorage";
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserData } from '../../redux/actions/sessionSlice';
+import { setUserData, setUserType } from '../../redux/actions/sessionSlice';
 
 
 const Header = ({ session = false }) => {
@@ -26,11 +26,15 @@ const Header = ({ session = false }) => {
 
     useEffect(() => {
         const userData = getLocalStorageItem("userData")
-        if(userData){
+        console.log("User Data from Header :", userData);
+
+        if (userData) {
             setUserDataShow(userData)
-            dispatch(setUserData(userData)); 
+            dispatch(setUserData(userData));
+            console.log(userData);
+            dispatch(setUserType(userData?.type));
             setIsSession(true);
-        }else{
+        } else {
             router.push('/login')
             setIsSession(false);
         }
@@ -93,7 +97,7 @@ const Header = ({ session = false }) => {
                                     Quick Links
                                 </button>
                             </div>
-                            {userData ? 
+                            {userData ?
                                 <div className="flex gap-5 pr-10 max-sm:pr-1">
                                     <div className="max-sm:hidden">
                                         <h3 className="font-bold text-lg text-end">{userData.name}</h3>
@@ -110,7 +114,7 @@ const Header = ({ session = false }) => {
                                         />
                                     </div>
                                 </div>
-                            : null}
+                                : null}
                         </div>
                     </div>
                     {/* Quick Link */}
@@ -136,13 +140,13 @@ const Header = ({ session = false }) => {
                             </button>
                             <button
                                 className="flex gap-2 text-xl text-[#8280FD] font-medium hover:text-[#acabfc]"
-                                onClick={()=> router.push("/edit-profile")}
+                                onClick={() => router.push("/edit-profile")}
                             >
                                 <ChevronRight /> Edit Profile
                             </button>
                             <button
                                 className="flex gap-2 text-xl text-[#8280FD] font-medium hover:text-[#acabfc]"
-                                onClick={()=> LogOut()}
+                                onClick={() => LogOut()}
                             >
                                 <ChevronRight /> Logout
                             </button>
@@ -164,7 +168,7 @@ const Header = ({ session = false }) => {
                         {/* Login and Register Links */}
                         <div className="flex space-x-4">
                             <button
-                                onClick={()=> router.push("/dashboard")}
+                                onClick={() => router.push("/dashboard")}
                                 className="text-[#3455CE] text-sm sm:text-base md:text-lg font-medium hover:underline"
                             >
                                 Login
