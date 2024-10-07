@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { API_URL } from "@/Config/Config";
 import * as Yup from 'yup';
@@ -54,6 +54,7 @@ const steps = {
 };
 
 const Add = () => {
+  const selectRef = useRef(null);
   const [step, setStep] = useState(2);
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
@@ -63,6 +64,14 @@ const Add = () => {
   const [topics, setTopics] = useState([]);
   const [topic, setTopic] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState(true);
+
+  useEffect(() => {
+    if (topics.length > 0 && selectRef.current) {
+      // Automatically focus on the select element
+      selectRef.current.focus();
+    }
+  }, [topics]);
 
   const nextStep = async (values) => {
     setErrorMessage('')
@@ -228,7 +237,7 @@ const Add = () => {
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
-    debouncedFetchTopic(value);
+    fetchTopic(value);
   };
 
 
@@ -314,11 +323,11 @@ const Add = () => {
                     )}
 
                     {field.type === 'select' ? 
-                      <Field as="select" name={field.name} className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                      <Field as="select" name={field.name} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" ref={selectRef}>
                         <option value="">Select a topic</option>
                         {topics.map((topic) => (
                           <option key={topic.id} value={topic.id}>
-                            {topic.name}
+                            {topic.major}
                           </option>
                         ))}
                       </Field>
@@ -341,11 +350,15 @@ const Add = () => {
                         </label>
                       </div>
                     ) : (
-                      <Field
-                        type={field.type || 'text'}
-                        name={field.name}
-                        className="mt-1 font-gilMedium block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
-                      />
+                      <>
+                        {field.type === 'select' ? 
+                          <Field
+                            type={field.type || 'text'}
+                            name={field.name}
+                            className="mt-1 font-gilMedium block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
+                          />
+                        : null}
+                      </>
                     )}
                     <ErrorMessage
                       name={field.name}
