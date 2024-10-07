@@ -14,7 +14,7 @@ const Card = ({ activity }) => {
     return (
         <div className="bg-[#f0f0f1] rounded-2xl overflow-hidden w-72  shadow-[rgba(13,_38,_76,_0.19)_0px_0px_10px]">
             <div className="relative h-40">
-                {activity.image_assc ? 
+                {activity.image_assc ?
                     <Image
                         // src={activity.image}
                         src={`https://csip.fieindia.org/images/activity/${activity.image_assc}`}
@@ -23,10 +23,10 @@ const Card = ({ activity }) => {
                         objectFit="cover"
                         className="w-full h-full object-cover"
                     />
-                : null}
+                    : null}
                 <div className="absolute top-2 right-2 bg-white rounded-full p-1">
                     <ContactRound className="w-4 h-4" />
-                    <span className="text-xs font-semibold ml-1">{activity.views}</span>
+                    <span className="text-xs font-semibold ml-1">{activity?.views}</span>
                 </div>
                 <div className="absolute top-2 left-2 p-1">
                     <button onClick={toggleHeart}><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill={isToggled ? "red" : "#fff"} stroke="red" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg></button>

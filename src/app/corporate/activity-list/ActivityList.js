@@ -3,93 +3,23 @@ import CardCorporate from '@/Components/CardCorporate';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { API_URL } from '@/Config/Config';
-
-
-const cardData = [
-  {
-    id: 1,
-    title: "Exploring Team Dynamics",
-    image: "/images/analysis.jpg",
-    addedBy: "bs",
-    companyImg: "/images/brandShow.png",
-    startDate: "26 August - 2023",
-    fee: "180.00/-",
-    applyBefore: "30th Sep 2025",
-    submissionDate: "31st Oct 2025",
-    views: 40,
-  },
-  {
-    id: 2,
-    title: "Time Management Principles",
-    image: "/images/time-management.jpg",
-    addedBy: "tcs",
-    companyImg: "/images/tcs.jpg",
-    startDate: "8 August - 2023",
-    fee: "91.00/-",
-    applyBefore: "29th Sep 2025",
-    submissionDate: "29th Sep 2025",
-    views: 2,
-  },
-  {
-    id: 3,
-    title: "Financial Accounting Enhancement",
-    image: "/images/finance.png",
-    addedBy: "harvard",
-    companyImg: "/images/tcs.jpg",
-    startDate: "14 August - 2023",
-    fee: "189.00/-",
-    applyBefore: "31st Aug 2025",
-    submissionDate: "10th Sep 2025",
-    views: 45,
-  },
-  {
-    id: 4,
-    title: "Leadership Styles Assessment",
-    image: "/images/leadership.jpg",
-    addedBy: "tcs",
-    companyImg: "/images/tcs.jpg",
-    startDate: "8 August - 2025",
-    fee: "91.00/-",
-    applyBefore: "29th Aug 2024",
-    submissionDate: "29th Aug 2024",
-    views: 2,
-  },
-  {
-    id: 5,
-    title: "Productivity Tools and Techniques",
-    image: "/images/productivity.jpg",
-    addedBy: "tcs",
-    companyImg: "/images/tcs.jpg",
-    startDate: "8 August - 2023",
-    fee: "91.00/-",
-    applyBefore: "29th Sep 2025",
-    submissionDate: "31st Aug 2025",
-    views: 50,
-  },
-  {
-    id: 7,
-    title: "Productivity and Techniques",
-    image: "/images/analysis.jpg",
-    addedBy: "tcs",
-    companyImg: "/images/tcs.jpg",
-    startDate: "8 August - 2023",
-    fee: "91.00/-",
-    applyBefore: "29th Sep 2025",
-    submissionDate: "31st Aug 2025",
-    views: 50,
-  },
-]
+import { API_URL, API_URL_LOCAL } from '@/Config/Config';
+import { useSelector } from 'react-redux';
 
 function ActivityList() {
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const userData = useSelector((state) => state.session.userData);
 
   const fetchActivities = async () => {
+    console.log(userData);
 
-    const APIURL = `${API_URL}activity/list?corporate_id=8854816`;
-    // const APIURL = `${API_URL}activity/list`;
+    // Only append corporate_id if it's defined
+    const APIURL = userData?.sid
+      ? `${API_URL}activity/list?corporate_id=${userData?.sid}`
+      : `${API_URL}activity/list`;
+
     try {
       const response = await fetch(APIURL, {
         headers: {
@@ -104,10 +34,9 @@ function ActivityList() {
 
       const responseData = await response.json();
       console.log(responseData);
-      if(responseData.status === true) { 
+      if (responseData.status === true) {
         setItems(responseData.data);
       }
-      
     } catch (error) {
       console.error("Error:", error);
       setError("Failed to fetch activities.");
@@ -116,9 +45,12 @@ function ActivityList() {
     }
   };
 
+
   useEffect(() => {
-    fetchActivities();
-  }, []);
+    if (userData) {
+      fetchActivities();
+    }
+  }, [userData]);
 
   if (loading) return <div className="text-center w-full ">Loading...</div>; // Loading state
 

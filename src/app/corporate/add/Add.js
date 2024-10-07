@@ -17,10 +17,8 @@ const Add = () => {
   const [topics, setTopics] = useState([]);
   const [topic, setTopic] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("v");
+  const [searchTerm, setSearchTerm] = useState("");
   const userData = useSelector((state) => state.session.userData);
-
-
 
   const inputFields = [
     { name: 'name', label: 'Name' },
@@ -70,13 +68,13 @@ const Add = () => {
     7: ["activity_start_date", "activity_end_date", "submission_start_date", "submission_end_date"],
   };
 
-
-
-  
-
-
-
   const nextStep = async (values) => {
+    console.log(step);
+
+    if (step === 6) {
+      handleSubmit(values);
+      return;
+    }
     setErrorMessage('')
     setFormData({ ...formData, ...values });
 
@@ -89,7 +87,7 @@ const Add = () => {
       }
 
       // Step 1 logic (POST to activity/add API)
-      const APIURL = `${API_URL_LOCAL}activity/add`
+      const APIURL = `${API_URL}activity/add`
       try {
         const response = await fetch(APIURL, {
           method: "POST",
@@ -119,17 +117,17 @@ const Add = () => {
       // Other steps logic (POST to activity/step API)
       const keysToSubmit = steps[step + 1];
       const dataToSubmit = { ...values };
-      
+
       const payload = {
         sid,
         step: step + 1,
         _id: id,
       };
-      
+
       // Add the rest of the keys from keysToSubmit
       keysToSubmit.forEach(key => {
         if (key === "corporate_id") {
-          payload[key] = userData?.sid;
+          payload[key] = userData?.sid||0;
         } else {
           payload[key] = dataToSubmit[key]; // Assign values from dataToSubmit for other keys
         }
@@ -137,7 +135,7 @@ const Add = () => {
 
       console.log(payload)
 
-      
+
       const APIURL = `${API_URL}activity/step`
       try {
         const response = await fetch(APIURL, {
@@ -171,24 +169,21 @@ const Add = () => {
     setStep((prevStep) => Math.max(prevStep - 1, 0));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (values) => {
     const payload = { sid, step: step + 1, _id: id };
+    const keysToSubmit = steps[step + 1];
+    const dataToSubmit = { ...values };
     keysToSubmit.forEach(key => {
       payload[key] = dataToSubmit[key];
     });
     try {
-      const response = await fetch(`${API_URL_LOCAL}activity/step`, {
+      const response = await fetch(`${API_URL}activity/step`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
-      
-      console.log(response)
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
 
       const responseData = await response.json();
       if (responseData.status === true) {
@@ -199,7 +194,7 @@ const Add = () => {
       setStep((prevStep) => Math.min(prevStep + 1, 6));
 
     } catch (error) {
-      setErrorMessage("df", error.message);
+      setErrorMessage("Error", error.message);
     }
   };
 
@@ -214,20 +209,21 @@ const Add = () => {
     inputFields.slice(23)
   ][step];
 
-  
-// Define initialValues with default values for controlled inputs
-const initialValues = inputFields.reduce((acc, field) => {
-  if (field.name !== 'corporate_id') {
-    acc[field.name] = formData[field.name] || ''; // Set to formData if available, otherwise empty string
-  }
-  return acc;
-}, {});
 
-
+  // Define initialValues with default values for controlled inputs
+  const initialValues = inputFields.reduce((acc, field) => {
+    if (field.name !== 'corporate_id') {
+      acc[field.name] = formData[field.name] || ''; // Set to formData if available, otherwise empty string
+    }
+    return acc;
+  }, {});
 
 
   const fetchTopic = async (topic) => {
-    const APIURL = `${API_URL_LOCAL}topic`
+    console.log(topic);
+    setTopics([])
+
+    const APIURL = `${API_URL}topic`
     try {
       const response = await fetch(APIURL, {
         method: "POST",
@@ -235,34 +231,31 @@ const initialValues = inputFields.reduce((acc, field) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          TopicSearch: topic || "Advances in Business Communication"
+          TopicSearch: topic
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
       const responseData = await response.json();
-      console.log(responseData);
-      setTopics(responseData.data)
-      console.log(responseData.data);
 
+      if (responseData.status === true) {
+        setTopics(responseData.data)
+        console.log(responseData.data);
+      } else {
+        setErrorMessage(responseData.message)
+      }
     } catch (error) {
       setErrorMessage(error.message);
     }
   }
 
-
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
-    fetchTopic(value);
+    if (value.length > 1) {
+      setErrorMessage("")
+      fetchTopic(value);
+    }
   };
-
-
-  
-
 
   return (
     <section className="max-w-5xl mx-auto pt-10">
@@ -314,8 +307,8 @@ const initialValues = inputFields.reduce((acc, field) => {
           <h2 className="text-3xl font-gilMedium text-gray-800 mb-4">{dataFormStepData[step]}</h2>
           <Formik
             initialValues={initialValues}
-            // validationSchema={validationSchema}
-            onSubmit={handleSubmit}
+          // validationSchema={validationSchema}
+          // onSubmit={handleSubmit}
           >
             {({ values, isSubmitting }) => (
               <Form>
@@ -377,7 +370,7 @@ const initialValues = inputFields.reduce((acc, field) => {
                             <option value="">Select a topic</option>
                             {topics.map((topic) => (
                               <option key={topic.id} value={topic.sid}>
-                                {topic.major}
+                                {topic.topic}
                               </option>
                             ))}
                           </Field>
@@ -420,7 +413,7 @@ const initialValues = inputFields.reduce((acc, field) => {
                     </button>
                   )}
                   {step === Object.keys(steps).length ? (
-                    <button type="submit" disabled={isSubmitting} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
+                    <button type="button" onClick={() => nextStep(values)} disabled={isSubmitting} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
                       Submit
                     </button>
                   ) : (
