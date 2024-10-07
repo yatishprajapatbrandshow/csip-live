@@ -4,7 +4,7 @@ import { Minus, ChartPie, User, ShoppingCart, LockKeyhole, FileSpreadsheet, File
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function SideBar() {
+export default function SideBar({}) {
   const router = useRouter()
   const [role, setRole] = useState('Admin');
   

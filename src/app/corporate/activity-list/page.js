@@ -6,8 +6,10 @@ export default function Home() {
     <>
       <Header session={true} />
       <div className='flex'>
-        <SideBar />
-        <ActivityList />
+          <SideBar />
+          <div className="pl-52">
+            <ActivityList />
+          </div>
       </div>
 
     </>

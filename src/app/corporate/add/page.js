@@ -8,12 +8,12 @@ export default function Home() {
     clipPath: 'polygon(100% 35%, 0% 100%, 100% 100%)'
   }}/>
     <Header session={true} />
-    <div className="relative z-10">
-        <SideBar />
-        <div className="pl-52">
-          <Add />
-        </div>
-    </div>
+      <div className="relative z-10">
+          <SideBar />
+          <div className="pl-52">
+            <Add />
+          </div>
+      </div>
     </section>
   );
 }
