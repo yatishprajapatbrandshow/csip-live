@@ -17,7 +17,6 @@ const Header = ({ session = false }) => {
     const [UserDataShow, setUserDataShow] = useState("");
     const userData = useSelector((state) => state.session.userData);
     const startSessionTrigger = useSelector((state) => state.session.startSessionTrigger);
-    console.log(UserDataShow);
 
     const LogOut = () => {
         localStorage.removeItem("userData");

@@ -19,7 +19,7 @@ const inputFields = [
   { name: 'corporate_hierarchy_overview', label: 'Corporate Hierarchy Overview' },
   { name: 'corporate_id', label: 'Corporate ID', },
   { name: 'tag', label: 'Tag' },
-  { name: 'topic_id', label: 'Topic ID' },
+  { name: 'topic_id', label: 'Topic ID', type: 'select' },
 
   { name: 'tools_used', label: 'Tools Used' },
   { name: 'snap_shot', label: 'Snap Shot' },
@@ -59,6 +59,10 @@ const Add = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [sid, setSid] = useState(''); // Store sid from step-1
   const [id, setId] = useState('');   // Store id from step-1
+
+  const [topics, setTopics] = useState([]);
+  const [topic, setTopic] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const nextStep = async (values) => {
     setErrorMessage('')
@@ -192,6 +196,43 @@ const Add = () => {
   }, {});
 
 
+
+  const fetchTopic = async (topic) => {
+    const APIURL = `${API_URL}topic`
+    try {
+      const response = await fetch(APIURL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          TopicSearch: topic || "Advances in Business Communication"
+        }),
+      });
+ 
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+ 
+      const responseData = await response.json();
+      console.log(responseData);
+      setTopics(responseData.data)
+      console.log(responseData.data);
+     
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  }
+
+
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+    debouncedFetchTopic(value);
+  };
+
+
+
   return (
     <section className="max-w-5xl mx-auto pt-10">
       <div className='grid grid-cols-3 bg-white shadow-lg p-10'>
@@ -257,6 +298,34 @@ const Add = () => {
                         {field.label}
                       </label>
                     </div>
+
+                    {/* Search input for Topic ID */}
+                    {field.name === 'topic_id' && (
+                      <>
+                        <input
+                          type="text"
+                          placeholder="Search topics..."
+                          value={searchTerm}
+                          onChange={handleSearchChange}
+                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        />
+                        {loading && <div>Loading topics...</div>}
+                      </>
+                    )}
+
+                    {field.type === 'select' ? 
+                      <Field as="select" name={field.name} className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                        <option value="">Select a topic</option>
+                        {topics.map((topic) => (
+                          <option key={topic.id} value={topic.id}>
+                            {topic.name}
+                          </option>
+                        ))}
+                      </Field>
+                    : null}
+
+
+
                     {field.type === 'checkbox' ? (
                       <div className="flex items-center mt-1">
                         <Field

@@ -1,8 +1,9 @@
 "use client";
-import Card from '@/Components/Card';
+import CardCorporate from '@/Components/CardCorporate';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { API_URL } from '@/Config/Config';
 
 
 const cardData = [
@@ -83,12 +84,15 @@ const cardData = [
 
 function ActivityList() {
   const [items, setItems] = useState([]);
-  const [error, setError] = useState(null); // State for error handling
-  const [loading, setLoading] = useState(true); // State for loading indicator
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchActivities = async () => {
+
+    const APIURL = `${API_URL}activity/list?corporate_id=8854816`;
+    // const APIURL = `${API_URL}activity/list`;
     try {
-      const response = await fetch("https://csip-backend.onrender.com/activity/list", {
+      const response = await fetch(APIURL, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -100,12 +104,14 @@ function ActivityList() {
       }
 
       const responseData = await response.json();
-      setItems(responseData.data); // Update state with fetched data
-      console.log(responseData.data);
+      console.log(responseData);
+      if(responseData.status === true) { 
+        setItems(responseData.data);
+      }
       
     } catch (error) {
       console.error("Error:", error);
-      setError("Failed to fetch activities."); // Set error message
+      setError("Failed to fetch activities.");
     } finally {
       setLoading(false); // Set loading to false after fetch is done
     }
@@ -125,8 +131,8 @@ function ActivityList() {
         Go Back
       </Link>
       <div className="flex flex-wrap justify-start gap-6">
-        {cardData?.map((activity) => (
-          <Card key={activity.id} activity={activity} />
+        {items?.map((activity) => (
+          <CardCorporate key={activity.id} activity={activity} />
         ))}
       </div>
     </div>
