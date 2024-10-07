@@ -66,7 +66,7 @@ const Header = ({ session = false }) => {
     return (
         <>
             {isSession ? (
-                <header className="bg-white shadow-md py-4 px-1 sticky top-0 z-50">
+                <header className="bg-white shadow-md py-4 px-1 sticky top-0 z-[60]">
                     <div className="flex justify-between items-center w-full">
                         {/* Logo */}
                         <div className="flex items-center md:mb-0 gap-2">

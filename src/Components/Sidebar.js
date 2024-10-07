@@ -27,7 +27,7 @@ export default function SideBar({ }) {
 
   return (
     <>
-      <div className="pl-5 bg-white fixed top-20 left-0 z-50 w-52">
+      <div className="pl-5 bg-white fixed pt-20 top-0 left-0 z-50 w-52 h-full">
         <div className="pb-20 overflow-y-auto text-gray-700 flex flex-col items-center py-4 transition-all duration-300 ease-in-out group">
 
           <p className="text-xl w-full text-left"> Main </p>
@@ -76,8 +76,8 @@ export default function SideBar({ }) {
           <nav className="flex flex-col w-full mt-3 mb-5">
             {userType === "Corporate" &&
               <>
-                <SidebarItem icon={<SquarePlus className="w-4 h-4" />} title="Add" />
-                <SidebarItem icon={<ListCheck className="w-4 h-4" />} title="View Added" />
+                <SidebarItem path={"/corporate/add"} icon={<SquarePlus className="w-4 h-4" />} title="Add" />
+                <SidebarItem path={"/corporate/activity-list"} icon={<ListCheck className="w-4 h-4" />} title="View Added" />
               </>
             }
             {

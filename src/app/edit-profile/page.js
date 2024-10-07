@@ -6,11 +6,12 @@ export default function Page() {
     return (
         <div>
             <Header session={true} />
-            <div className='flex'>
+            <div className="relative z-10">
                 <SideBar />
+                <div className="pl-52 pb-[500px]">
                 <EditProfile />
+                </div>
             </div>
-            <Footer />
         </div>
     );
 }

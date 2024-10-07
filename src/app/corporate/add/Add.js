@@ -1,60 +1,13 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { API_URL } from "@/Config/Config";
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
 
-const inputFields = [
-  { name: 'name', label: 'Name' },
-  { name: 'short_name', label: 'Short Name' },
-  { name: 'objective', label: 'Objective' },
-  { name: 'short_desc', label: 'Short Description' },
-
-  { name: 'case_scenario', label: 'Case Scenario' },
-  { name: 'case_scenario_title', label: 'Case Scenario Title' },
-  { name: 'description', label: 'Description' },
-  { name: 'note', label: 'Note' },
-
-  { name: 'corporate_hierarchy_overview', label: 'Corporate Hierarchy Overview' },
-  { name: 'corporate_id', label: 'Corporate ID', },
-  { name: 'tag', label: 'Tag' },
-  { name: 'topic_id', label: 'Topic ID', type: 'select' },
-
-  { name: 'tools_used', label: 'Tools Used' },
-  { name: 'snap_shot', label: 'Snap Shot' },
-  { name: 'youtube_video_link', label: 'Youtube Video Link' },
-  { name: 'image_assc', label: 'Image Associated' },
-
-  { name: 'entry_type', label: 'Entry Type' },
-  { name: 'activity_category', label: 'Activity Category' },
-  { name: 'activity_type', label: 'Activity Type' },
-  { name: 'amount', label: 'Amount', type: 'number' },
-  { name: 'job_roles_and_description', label: 'Job Roles and Description' },
-
-  { name: 'participant_quantity', label: 'Participant Quantity', type: 'number' },
-  { name: 'need_approval', label: 'Need Approval', type: 'checkbox' },
-
-  { name: 'activity_start_date', label: 'Activity Start Date', type: 'date' },
-  { name: 'activity_end_date', label: 'Activity End Date', type: 'date' },
-  { name: 'submission_start_date', label: 'Submission Start Date', type: 'date' },
-  { name: 'submission_end_date', label: 'Submission End Date', type: 'date' },
-];
-
-const dataFormStepData = ['Basic Information', 'Scenario and Description', 'Corporate Information', 'Media and Resources', 'Activity Details', 'Participant and Approval', 'Activity and Submission Dates'];
-
-
-const steps = {
-  2: ["case_scenario", "case_scenario_title", "description", "note"],
-  3: ["corporate_hierarchy_overview", "corporate_id", "tag", "topic_id"],
-  4: ["tools_used", "snap_shot", "youtube_video_link", "image_assc"],
-  5: ["entry_type", "activity_category", "activity_type", "amount", "job_roles_and_description"],
-  6: ["participant_quantity", "need_approval"],
-  7: ["activity_start_date", "activity_end_date", "submission_start_date", "submission_end_date"],
-};
 
 const Add = () => {
-  const selectRef = useRef(null);
   const [step, setStep] = useState(2);
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
@@ -64,14 +17,62 @@ const Add = () => {
   const [topics, setTopics] = useState([]);
   const [topic, setTopic] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("v");
+  const userData = useSelector((state) => state.session.userData);
+  console.log(userData);
 
-  useEffect(() => {
-    if (topics.length > 0 && selectRef.current) {
-      // Automatically focus on the select element
-      selectRef.current.focus();
-    }
-  }, [topics]);
+
+  const inputFields = [
+    { name: 'name', label: 'Name' },
+    { name: 'short_name', label: 'Short Name' },
+    { name: 'objective', label: 'Objective' },
+    { name: 'short_desc', label: 'Short Description' },
+  
+    { name: 'case_scenario', label: 'Case Scenario' },
+    { name: 'case_scenario_title', label: 'Case Scenario Title' },
+    { name: 'description', label: 'Description' },
+    { name: 'note', label: 'Note' },
+  
+    { name: 'corporate_hierarchy_overview', label: 'Corporate Hierarchy Overview' },
+    { name: 'corporate_id', label: 'Corporate ID', id : userData.sid },
+    { name: 'tag', label: 'Tag' },
+    { name: 'topic_id', label: 'Search Topic', type: 'select' },
+  
+    { name: 'tools_used', label: 'Tools Used' },
+    { name: 'snap_shot', label: 'Snap Shot' },
+    { name: 'youtube_video_link', label: 'Youtube Video Link' },
+    { name: 'image_assc', label: 'Image Associated' },
+  
+    { name: 'entry_type', label: 'Entry Type' },
+    { name: 'activity_category', label: 'Activity Category' },
+    { name: 'activity_type', label: 'Activity Type' },
+    { name: 'amount', label: 'Amount', type: 'number' },
+    { name: 'job_roles_and_description', label: 'Job Roles and Description' },
+  
+    { name: 'participant_quantity', label: 'Participant Quantity', type: 'number' },
+    { name: 'need_approval', label: 'Need Approval', type: 'checkbox' },
+  
+    { name: 'activity_start_date', label: 'Activity Start Date', type: 'date' },
+    { name: 'activity_end_date', label: 'Activity End Date', type: 'date' },
+    { name: 'submission_start_date', label: 'Submission Start Date', type: 'date' },
+    { name: 'submission_end_date', label: 'Submission End Date', type: 'date' },
+  ];
+  
+  const dataFormStepData = ['Basic Information', 'Scenario and Description', 'Corporate Information', 'Media and Resources', 'Activity Details', 'Participant and Approval', 'Activity and Submission Dates'];
+  
+  
+  const steps = {
+    2: ["case_scenario", "case_scenario_title", "description", "note"],
+    3: ["corporate_hierarchy_overview", "corporate_id", "tag", "topic_id"],
+    4: ["tools_used", "snap_shot", "youtube_video_link", "image_assc"],
+    5: ["entry_type", "activity_category", "activity_type", "amount", "job_roles_and_description"],
+    6: ["participant_quantity", "need_approval"],
+    7: ["activity_start_date", "activity_end_date", "submission_start_date", "submission_end_date"],
+  };
+
+  
+
+
 
   const nextStep = async (values) => {
     setErrorMessage('')
@@ -302,7 +303,7 @@ const Add = () => {
                     <div>
                       <label
                         htmlFor={field.name}
-                        className="block text-sm font-gilMedium text-gray-700"
+                        className={`${field.name === "corporate_id" ? "hidden" : null} block  text-sm font-gilMedium text-gray-700`}
                       >
                         {field.label}
                       </label>
@@ -318,12 +319,11 @@ const Add = () => {
                           onChange={handleSearchChange}
                           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                         />
-                        {loading && <div>Loading topics...</div>}
                       </>
                     )}
 
-                    {field.type === 'select' ? 
-                      <Field as="select" name={field.name} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" ref={selectRef}>
+                    {/* {field.type === 'select' ? 
+                      <Field as="select" name={field.name} className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
                         <option value="">Select a topic</option>
                         {topics.map((topic) => (
                           <option key={topic.id} value={topic.id}>
@@ -331,7 +331,7 @@ const Add = () => {
                           </option>
                         ))}
                       </Field>
-                    : null}
+                    : null} */}
 
 
 
@@ -351,13 +351,36 @@ const Add = () => {
                       </div>
                     ) : (
                       <>
-                        {field.type === 'select' ? 
-                          <Field
+                      {field.type === 'select' ?
+                      <Field as="select" name={field.name} className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                      <option value="">Select a topic</option>
+                      {topics.map((topic) => (
+                        <option key={topic.id} value={topic.id}>
+                          {topic.major}
+                        </option>
+                      ))}
+                    </Field>
+                       : 
+                       <>
+                        {field.id ? 
+                          field.name === "corporate_id" ? 
+                            <Field
+                              type={field.type || 'text'}
+                              name={field.name}
+                              value= {field.id}
+                              className="mt-1 hidden font-gilMedium w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
+                            />
+                          : null
+                        :
+                        <Field
                             type={field.type || 'text'}
                             name={field.name}
                             className="mt-1 font-gilMedium block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
                           />
-                        : null}
+                        }
+                          
+                       </>
+                      }
                       </>
                     )}
                     <ErrorMessage
@@ -377,15 +400,6 @@ const Add = () => {
                   )}
                   {step === Object.keys(steps).length ? (
                   <button type="submit" disabled={isSubmitting} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
-                    Submit
-                  </button>
-                ) : (
-                  <button type="button" onClick={() => nextStep(values)} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
-                    Next
-                  </button>
-                )}
-                {step === Object.keys(steps).length ? (
-                  <button type="submit" onClick={() => nextStep(values)} disabled={isSubmitting} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
                     Submit
                   </button>
                 ) : (
