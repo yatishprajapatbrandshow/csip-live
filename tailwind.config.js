@@ -14,7 +14,7 @@ module.exports = {
         foreground: "var(--foreground)",
       },
       backgroundImage: {
-        'bgForm': "url('/image/845.jpg')",
+        'bgForm': "url('/images/845.jpg')",
       }
     },
     fontFamily: {
