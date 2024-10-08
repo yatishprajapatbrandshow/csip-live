@@ -15,7 +15,7 @@ const Activities = ({ cardData, title }) => {
             <section>
                 <div className='p-6'>
                     <div className='flex justify-between items-center'>
-                        <h2 className='text-3xl font-gilBold'>{title}</h2>
+                        <h2 className='text-3xl '>{title}</h2>
                         {showNavigation && (
                             <div className='flex space-x-2'>
                                 <div className="swiper-button-prev cursor-pointer bg-purple-300 rounded-full p-2">

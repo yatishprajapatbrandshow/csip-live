@@ -20,7 +20,7 @@ const ReviewSlider = ({ reviews }) => {
             {reviews?.map((review) => (
                 <SwiperSlide key={review.id}>
                     <p className="text-sm text-purple-600 font-gilMedium">{review.text}</p>
-                    <p className="text-sm text-purple-700 font-gilBold">{`- ${review.author}`}</p>
+                    <p className="text-sm text-purple-700 ">{`- ${review.author}`}</p>
                 </SwiperSlide>
             ))}
         </Swiper>

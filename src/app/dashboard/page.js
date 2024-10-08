@@ -10,9 +10,9 @@ export default function Home() {
     return (
         <>
             <Header session={true} />
-            <div>
-                <SideBar />
-                <div className="pl-52">
+            <div className="max-w-[1500px] mx-auto">
+                {/* <SideBar /> */}
+                <div className="">
                     <Dashboard />
                     <Activities title="Favorite Activity" cardData={favoriteData} />
                     <Activities title="Recommended Activity" cardData={recommendedData} />

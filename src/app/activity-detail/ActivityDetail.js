@@ -13,7 +13,7 @@ const ActivityDetail = () => {
                     Go Back
                 </Link>
                 <div className='border border-[#eee2e4] rounded-xl bg-white p-10'>
-                    <h2 className='text-xl font-gilBold'>Time Management Principles</h2>
+                    <h2 className='text-xl '>Time Management Principles</h2>
                     <div className="my-4 bg-[#fff3d9] p-4 max-w-lg">
                         <div className="space-y-3 w-fit">
                             <div className="bg-[#fff7e5] p-2 flex items-start space-x-3 border border-[#eee2e4]">

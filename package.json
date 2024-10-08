@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.1.9",
+    "@heroicons/react": "^2.1.5",
+    "@next/font": "^14.2.14",
     "@reduxjs/toolkit": "^2.2.7",
     "formik": "^2.4.6",
     "lucide-react": "^0.446.0",

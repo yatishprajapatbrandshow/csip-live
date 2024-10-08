@@ -2,33 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "Gilroy-Bold";
-  src: url("../fonts/Gilroy-Bold.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Gilroy-Light";
-  src: url("../fonts/Gilroy-Light.ttf") format("truetype");
-}
-@font-face {
-  font-family: "Gilroy-Medium";
-  src: url("../fonts/Gilroy-Medium.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Gilroy-Regular";
-  src: url("../fonts/Gilroy-Regular.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Gilroy-SemiBold";
-  src: url("../fonts/Gilroy-SemiBold.ttf") format("truetype");
-}
-@font-face {
-  font-family: "Gilroy-Thin";
-  src: url("../fonts/Gilroy-Thin.ttf") format("truetype");
-}
 
 :root {
   --background: #ffffff;
@@ -45,7 +18,7 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: Arial, Helvetica, sans-serif; */
 }
 
 @layer utilities {
@@ -74,4 +47,21 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #d3d3d3;
   /* Color on hover */
+}
+
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+ 
+.animate-scaleIn {
+  animation: scaleIn 0.3s ease forwards;
 }

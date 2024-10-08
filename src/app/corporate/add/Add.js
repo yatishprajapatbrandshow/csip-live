@@ -21,7 +21,6 @@ const Add = () => {
   const userData = useSelector((state) => state.session.userData);
 
 
-
   const inputFields = [
     { name: 'name', label: 'Name' },
     { name: 'short_name', label: 'Short Name' },
@@ -302,7 +301,7 @@ const initialValues = inputFields.reduce((acc, field) => {
                     )}
                   </span>
                   <div className="block">
-                    <h4 className="text-base font-gilBold text-gray-800"> {label} </h4>
+                    <h4 className="text-base  text-gray-800"> {label} </h4>
                     <span className="text-sm text-gray-600">{`Step ${index + 1}`}</span>
                   </div>
                 </a>
