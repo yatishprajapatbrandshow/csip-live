@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { API_URL } from "@/Config/Config";
+import { API_URL, API_URL_LOCAL } from "@/Config/Config";
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -17,49 +17,52 @@ const Add = () => {
   const [topics, setTopics] = useState([]);
   const [topic, setTopic] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("v");
+  const [searchTerm, setSearchTerm] = useState("");
   const userData = useSelector((state) => state.session.userData);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4a43a5ed28d01ab37a9a81fda44609dfe33daa56
   const inputFields = [
     { name: 'name', label: 'Name' },
     { name: 'short_name', label: 'Short Name' },
     { name: 'objective', label: 'Objective' },
     { name: 'short_desc', label: 'Short Description' },
-  
+
     { name: 'case_scenario', label: 'Case Scenario' },
     { name: 'case_scenario_title', label: 'Case Scenario Title' },
     { name: 'description', label: 'Description' },
     { name: 'note', label: 'Note' },
-  
+
     { name: 'corporate_hierarchy_overview', label: 'Corporate Hierarchy Overview' },
     { name: 'corporate_id', label: 'Corporate ID', id: userData?.sid },
     { name: 'tag', label: 'Tag' },
     { name: 'topic_id', label: 'Search Topic', type: 'select' },
-  
+
     { name: 'tools_used', label: 'Tools Used' },
     { name: 'snap_shot', label: 'Snap Shot' },
     { name: 'youtube_video_link', label: 'Youtube Video Link' },
     { name: 'image_assc', label: 'Image Associated' },
-  
+
     { name: 'entry_type', label: 'Entry Type' },
     { name: 'activity_category', label: 'Activity Category' },
     { name: 'activity_type', label: 'Activity Type' },
     { name: 'amount', label: 'Amount', type: 'number' },
     { name: 'job_roles_and_description', label: 'Job Roles and Description' },
-  
+
     { name: 'participant_quantity', label: 'Participant Quantity', type: 'number' },
     { name: 'need_approval', label: 'Need Approval', type: 'checkbox' },
-  
+
     { name: 'activity_start_date', label: 'Activity Start Date', type: 'date' },
     { name: 'activity_end_date', label: 'Activity End Date', type: 'date' },
     { name: 'submission_start_date', label: 'Submission Start Date', type: 'date' },
     { name: 'submission_end_date', label: 'Submission End Date', type: 'date' },
   ];
-  
+
   const dataFormStepData = ['Basic Information', 'Scenario and Description', 'Corporate Information', 'Media and Resources', 'Activity Details', 'Participant and Approval', 'Activity and Submission Dates'];
-  
-  
+
+
   const steps = {
     2: ["case_scenario", "case_scenario_title", "description", "note"],
     3: ["corporate_hierarchy_overview", "corporate_id", "tag", "topic_id"],
@@ -69,13 +72,13 @@ const Add = () => {
     7: ["activity_start_date", "activity_end_date", "submission_start_date", "submission_end_date"],
   };
 
-
-
-  
-
-
-
   const nextStep = async (values) => {
+    console.log(step);
+
+    if (step === 6) {
+      handleSubmit(values);
+      return;
+    }
     setErrorMessage('')
     setFormData({ ...formData, ...values });
 
@@ -118,17 +121,17 @@ const Add = () => {
       // Other steps logic (POST to activity/step API)
       const keysToSubmit = steps[step + 1];
       const dataToSubmit = { ...values };
-      
+
       const payload = {
         sid,
         step: step + 1,
         _id: id,
       };
-      
+
       // Add the rest of the keys from keysToSubmit
       keysToSubmit.forEach(key => {
         if (key === "corporate_id") {
-          payload[key] = userData?.sid;
+          payload[key] = userData?.sid||0;
         } else {
           payload[key] = dataToSubmit[key]; // Assign values from dataToSubmit for other keys
         }
@@ -136,7 +139,7 @@ const Add = () => {
 
       console.log(payload)
 
-      
+
       const APIURL = `${API_URL}activity/step`
       try {
         const response = await fetch(APIURL, {
@@ -153,7 +156,7 @@ const Add = () => {
 
         const responseData = await response.json();
         console.log(responseData);
-        if(responseData.status === true){
+        if (responseData.status === true) {
           alert(`${dataFormStepData[step]} added successfully`);
         }
 
@@ -170,27 +173,24 @@ const Add = () => {
     setStep((prevStep) => Math.max(prevStep - 1, 0));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (values) => {
     const payload = { sid, step: step + 1, _id: id };
+    const keysToSubmit = steps[step + 1];
+    const dataToSubmit = { ...values };
     keysToSubmit.forEach(key => {
       payload[key] = dataToSubmit[key];
     });
     try {
-      const response = await fetch("http://localhost:3000/activity/step", {
+      const response = await fetch(`${API_URL}activity/step`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
-      
-      console.log(response)
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
 
       const responseData = await response.json();
-      if(responseData.status === true){
+      if (responseData.status === true) {
         alert(`${dataFormStepData[step]} added successfully`);
       }
 
@@ -198,7 +198,7 @@ const Add = () => {
       setStep((prevStep) => Math.min(prevStep + 1, 6));
 
     } catch (error) {
-      setErrorMessage("df", error.message);
+      setErrorMessage("Error", error.message);
     }
   };
 
@@ -210,22 +210,23 @@ const Add = () => {
     inputFields.slice(12, 16), // Step 4
     inputFields.slice(16, 21), // Step 5
     inputFields.slice(21, 23), // Step 6
-    inputFields.slice(23)      
+    inputFields.slice(23)
   ][step];
 
-  
-// Define initialValues with default values for controlled inputs
-const initialValues = inputFields.reduce((acc, field) => {
-  if (field.name !== 'corporate_id') {
-    acc[field.name] = formData[field.name] || ''; // Set to formData if available, otherwise empty string
-  }
-  return acc;
-}, {});
 
-
+  // Define initialValues with default values for controlled inputs
+  const initialValues = inputFields.reduce((acc, field) => {
+    if (field.name !== 'corporate_id') {
+      acc[field.name] = formData[field.name] || ''; // Set to formData if available, otherwise empty string
+    }
+    return acc;
+  }, {});
 
 
   const fetchTopic = async (topic) => {
+    console.log(topic);
+    setTopics([])
+
     const APIURL = `${API_URL}topic`
     try {
       const response = await fetch(APIURL, {
@@ -234,34 +235,31 @@ const initialValues = inputFields.reduce((acc, field) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          TopicSearch: topic || "Advances in Business Communication"
+          TopicSearch: topic
         }),
       });
- 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
- 
+
       const responseData = await response.json();
-      console.log(responseData);
-      setTopics(responseData.data)
-      console.log(responseData.data);
-     
+
+      if (responseData.status === true) {
+        setTopics(responseData.data)
+        console.log(responseData.data);
+      } else {
+        setErrorMessage(responseData.message)
+      }
     } catch (error) {
       setErrorMessage(error.message);
     }
   }
 
-
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
-    fetchTopic(value);
+    if (value.length > 1) {
+      setErrorMessage("")
+      fetchTopic(value);
+    }
   };
-
-
-  
-
 
   return (
     <section className="max-w-5xl mx-auto pt-10">
@@ -271,16 +269,16 @@ const initialValues = inputFields.reduce((acc, field) => {
             {dataFormStepData?.map((label, index) => (
               <li
                 key={index}
-                className={`relative flex-1 after:content-[''] after:w-0.5 after:h-full ${step+1 > index ? 'after:bg-blue-500' : 'after:bg-gray-300'
+                className={`relative flex-1 after:content-[''] after:w-0.5 after:h-full ${step + 1 > index ? 'after:bg-blue-500' : 'after:bg-gray-300'
                   } after:inline-block after:absolute after:-bottom-12 after:left-4 lg:after:left-5`}
               >
                 <a className="flex items-center font-gilMedium w-full">
                   <span
-                    className={`w-8 h-8 ${step+1 > index ? 'bg-blue-500' : 'bg-gray-100'
-                      } border-2 border-gray-300 rounded-full flex justify-center items-center mr-3 text-sm ${step+1 > index ? 'text-white' : 'text-gray-900'
+                    className={`w-8 h-8 ${step + 1 > index ? 'bg-blue-500' : 'bg-gray-100'
+                      } border-2 border-gray-300 rounded-full flex justify-center items-center mr-3 text-sm ${step + 1 > index ? 'text-white' : 'text-gray-900'
                       } lg:w-10 lg:h-10`}
                   >
-                    {step+1 > index ? (
+                    {step + 1 > index ? (
                       <svg
                         className="w-5 h-5 stroke-white"
                         viewBox="0 0 24 24"
@@ -313,8 +311,8 @@ const initialValues = inputFields.reduce((acc, field) => {
           <h2 className="text-3xl font-gilMedium text-gray-800 mb-4">{dataFormStepData[step]}</h2>
           <Formik
             initialValues={initialValues}
-            // validationSchema={validationSchema}
-            onSubmit={handleSubmit}
+          // validationSchema={validationSchema}
+          // onSubmit={handleSubmit}
           >
             {({ values, isSubmitting }) => (
               <Form>
@@ -371,36 +369,36 @@ const initialValues = inputFields.reduce((acc, field) => {
                       </div>
                     ) : (
                       <>
-                      {field.type === 'select' ?
-                      <Field as="select" name={field.name} className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-                      <option value="">Select a topic</option>
-                      {topics.map((topic) => (
-                        <option key={topic._id} value={topic._id}>
-                          {topic.major}
-                        </option>
-                      ))}
-                    </Field>
-                       : 
-                       <>
-                        {field.id ? 
-                          field.name === "corporate_id" ? 
-                            <Field
-                              type={field.type || 'text'}
-                              name={field.name}
-                              value={field.id}
-                              className="mt-1 font-gilMedium w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
-                            />
-                          : null
-                        :
-                        <Field
-                            type={field.type || 'text'}
-                            name={field.name}
-                            className="mt-1 font-gilMedium block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
-                          />
+                        {field.type === 'select' ?
+                          <Field as="select" name={field.name} className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                            <option value="">Select a topic</option>
+                            {topics.map((topic) => (
+                              <option key={topic.id} value={topic.sid}>
+                                {topic.topic}
+                              </option>
+                            ))}
+                          </Field>
+                          :
+                          <>
+                            {field.id ?
+                              field.name === "corporate_id" ?
+                                <Field
+                                  type={field.type || 'text'}
+                                  name={field.name}
+                                  value={field.id}
+                                  className="mt-1 hidden font-gilMedium w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
+                                />
+                                : null
+                              :
+                              <Field
+                                type={field.type || 'text'}
+                                name={field.name}
+                                className="mt-1 font-gilMedium block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            }
+
+                          </>
                         }
-                          
-                       </>
-                      }
                       </>
                     )}
                     <ErrorMessage
@@ -419,19 +417,19 @@ const initialValues = inputFields.reduce((acc, field) => {
                     </button>
                   )}
                   {step === Object.keys(steps).length ? (
-                  <button type="submit" disabled={isSubmitting} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
-                    Submit
-                  </button>
-                ) : (
-                  <button type="button" onClick={() => nextStep(values)} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
-                    Next
-                  </button>
-                )}
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </div>
+                    <button type="button" onClick={() => nextStep(values)} disabled={isSubmitting} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
+                      Submit
+                    </button>
+                  ) : (
+                    <button type="button" onClick={() => nextStep(values)} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
+                      Next
+                    </button>
+                  )}
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
     </section>
   );

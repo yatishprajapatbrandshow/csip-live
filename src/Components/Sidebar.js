@@ -4,7 +4,7 @@ import {
   ListCheck,
 } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 export default function SideBar({ }) {
   const router = useRouter()
@@ -29,31 +29,29 @@ export default function SideBar({ }) {
     <>
       <div className="pl-5 bg-white fixed pt-20 top-0 left-0 z-50 w-52 h-full">
         <div className="pb-20 overflow-y-auto text-gray-700 flex flex-col items-center py-4 transition-all duration-300 ease-in-out group">
-
-
-            {
-              userType !== "Corporate" &&
-              <>
+          {
+            userType !== "Corporate" &&
+            <>
               <p className="text-xl w-full text-left"> Main </p>
-          <nav className="flex flex-col w-full mt-3 mb-5">
-              <SidebarItem path="/dashboard" icon={<ChartPie className="w-4 h-4" />} title="Dashboard" />
+              <nav className="flex flex-col w-full mt-3 mb-5">
+                <SidebarItem path="/dashboard" icon={<ChartPie className="w-4 h-4" />} title="Dashboard" />
                 <SidebarItem path="/edit-profile" icon={<User className="w-4 h-4" />} title="Edit Profile" />
                 <SidebarItem icon={<ShoppingCart className="w-4 h-4" />} title="Payment Reciepts" />
-          </nav>
-                </>
-            }
-            {/* <SidebarItem icon={<LockKeyhole className="w-4 h-4" />} title="Logout" /> */}
+              </nav>
+            </>
+          }
+          {/* <SidebarItem icon={<LockKeyhole className="w-4 h-4" />} title="Logout" /> */}
 
 
           <p className="text-xl w-full text-left"> Curriculum </p>
 
 
           <nav className="flex flex-col w-full mt-3 mb-5">
-            <SidebarItem icon={<FileSpreadsheet className="w-4 h-4" />} title="View" />
+            <SidebarItem path={'/curriculum'} icon={<FileSpreadsheet className="w-4 h-4" />} title="View" />
             {
               userType !== "Corporate" &&
               <>
-                <SidebarItem icon={<FileCog className="w-4 h-4" />} title="Choose / Change" />
+                <SidebarItem path={'/all-curriculum'} icon={<FileCog className="w-4 h-4" />} title="Choose / Change" />
                 <SidebarItem icon={<FileChartColumnIncreasing className="w-4 h-4" />} title="College Wise" />
               </>
             }
