@@ -18,6 +18,9 @@
       ],
       "@fonts/*": [
         "./src/fonts/*"
+      ],
+      "@image/*": [
+        "./src/images/*"
       ]
     }
   }

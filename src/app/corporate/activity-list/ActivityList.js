@@ -13,8 +13,6 @@ function ActivityList() {
   const userData = useSelector((state) => state.session.userData);
 
   const fetchActivities = async () => {
-    console.log(userData);
-
     // Only append corporate_id if it's defined
     const APIURL = userData?.sid
       ? `${API_URL}activity/list?corporate_id=${userData?.sid}`

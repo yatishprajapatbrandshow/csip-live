@@ -87,11 +87,12 @@ function Curriculum() {
     }
   }, [userData]);
 
-  const handleClick = (item, topic) => {
+  const handleClick = (item,topic) => { 
     console.log(item);
     console.log(topic);
   }
-  
+
+
   if (loading) return <div className="text-center w-full ">Loading...</div>; // Loading state
 
   return (
@@ -123,7 +124,7 @@ function Curriculum() {
 
                     {/* Column for Click to Select */}
                     <div className="flex items-center justify-center col-span-1">
-                      <button onClick={() => { handleClick(item, ele) }} className="flex items-center bg-[#9779FF] text-white py-1 px-4  text-sm hover:bg-[#8A6CE0] transition-colors duration-200">
+                      <button onClick={() => { handleClick(item,ele) }} className="flex items-center bg-[#9779FF] text-white py-1 px-4  text-sm hover:bg-[#8A6CE0] transition-colors duration-200">
                         <MousePointerClick className="w-4 h-4 mr-2" />
                         <span>Click to Select</span>
                       </button>
