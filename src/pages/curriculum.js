@@ -76,6 +76,7 @@ function Curriculum() {
       setLoading(false); // Set loading to false after fetch is done
     }
   }
+  
   useEffect(() => {
     if (curriId) {
       fetchCurriculumDetails();

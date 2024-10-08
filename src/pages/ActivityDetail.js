@@ -1,5 +1,5 @@
-
-import Link from 'next/link'
+"use client"
+;import Link from 'next/link'
 import React from 'react'
 import { Calendar, Clock, MousePointer, ArrowLeft } from "lucide-react"
 

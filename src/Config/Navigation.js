@@ -22,7 +22,7 @@ export const MenuItemLinks = [
         { 
           name: 'View', 
           description: 'Gain insights into your academic traffic and performance metrics.', 
-          href: '#', 
+          href: '/AllCurriculum', 
           icon: ChartPieIcon 
         },
         { 

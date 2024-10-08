@@ -1,10 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CircularProgressBar } from "@/Components/CircularProgressBar";
 import ReviewSlider from "@/Components/ReviewSlider";
 import TopicModal from '@/Components/TopicModal';
 import { SquareX } from 'lucide-react';
+import Activities from "@/Components/Activities";
+
+import { API_URL, API_URL_LOCAL } from "@/Config/Config";
+import { useSelector } from "react-redux";
+import Header from '@/Components/Header';
+
 
 const reviews = [
     {
@@ -29,13 +35,74 @@ const reviews = [
     },
 ];
 
-export default function Dashboard() {
+export default function DashboardCombind() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
+    const [newActivities, setNewActivities] = useState([])
+    const [recommendedActivities, setRecommendedActivities] = useState([])
+    const userData = useSelector((state) => state.session.userData);
+    // Fetch new activity
+
+    const fetchNewActivities = async () => {
+        try {
+            const response = await fetch(`${API_URL}activity/list?limit=15&&date=true`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: "GET",
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const responseData = await response.json();
+            console.log(responseData);
+            if (responseData.status === true) {
+                setNewActivities(responseData.data);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+    // Fetch favourite activity
+    const fetchRecomentedActivities = async () => {
+        try {
+            const APIURL = userData?.sid
+                ? `${API_URL_LOCAL}recommended-activity/?participant_id=${userData?.sid}`
+                : `${API_URL_LOCAL}recommended-activity`;
+
+            const response = await fetch(`${APIURL}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: "GET",
+            });
+
+            const responseData = await response.json();
+            console.log(responseData);
+            if (responseData.status === true) {
+                setRecommendedActivities(responseData.data);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    useEffect(() => {
+        fetchNewActivities();
+        fetchRecomentedActivities();
+    }, [])
+
+
+
     return (
+        <>
+        <Header />
+        {/* <Dashboard /> */}
         <div className="relative">
             <div className="p-6 bg-white space-y-6 font-sans">
                 <div className="grid grid-cols-12 gap-4">
@@ -159,5 +226,8 @@ export default function Dashboard() {
                 </div>
             </div>
         </div>
+        <Activities title="Recommended Activity" cardData={recommendedActivities} />
+        <Activities title="New Activity" cardData={newActivities} />
+        </>
     );
 }

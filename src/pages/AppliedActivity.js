@@ -1,3 +1,4 @@
+"use client";
 import React from 'react'
 import { ArrowLeft } from "lucide-react"
 import Card from '@/Components/Card'

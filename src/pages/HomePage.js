@@ -4,6 +4,7 @@ import Header from "../Components/Header";
 import SignUp from "../Components/SignUp";
 import { CircleCheck } from 'lucide-react';
 import Footer from '../Components/Footer';
+
 function HomePage() {
     return (
         <div>

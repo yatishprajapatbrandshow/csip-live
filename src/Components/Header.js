@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { AlignJustify, ChevronRight, LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/router'
 import { getLocalStorageItem } from "@/Config/localstorage";
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserData, setUserType } from '../../redux/actions/sessionSlice';
@@ -118,7 +118,7 @@ const Header = ({ session = false }) => {
                         <Popover className="relative">
                             <PopoverButton className="inline-flex items-center gap-x-1 text-sm font-medium leading-6 text-gray-700 outline-none">
                                 <span>{item.name}</span>
-                                <ChevronDownIcon aria-hidden="true" className="h-5 w-5" />
+                                <ChevronDownIcon aria-hidden="true" className="h-4 w-4" />
                             </PopoverButton>
 
                             <PopoverPanel
@@ -133,10 +133,10 @@ const Header = ({ session = false }) => {
                                             <item.icon aria-hidden="true" className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" />
                                         </div>
                                         <div>
-                                        <a href={item.href} className="font-semibold text-gray-900">
+                                        <button onClick={()=> router.push(item.href)} className="font-semibold text-gray-900">
                                             {item.name}
                                             <span className="absolute inset-0" />
-                                        </a>
+                                        </button>
                                         <p className="mt-1 text-gray-600 line-clamp-2">{item.description}</p>
                                         </div>
                                     </div>
@@ -155,14 +155,14 @@ const Header = ({ session = false }) => {
                             </PopoverPanel>
                         </Popover>
                     : 
-                        <a
-                        key={item.name}
-                        href={item.href}
-                        aria-current={item.current ? 'page' : undefined}
-                        className={`inline-flex items-center gap-x-1 text-sm font-medium leading-6 text-gray-700`}
-                        >
-                        {item.name}
-                        </a>
+                        <button
+                            key={item.name}
+                            onClick={()=> router.push(item.href)}
+                            aria-current={item.current ? 'page' : undefined}
+                            className={`inline-flex items-center gap-x-1 text-sm font-medium leading-6 text-gray-700`}
+                            >
+                            {item.name}
+                        </button>
                     }
                 </div>
               ))}

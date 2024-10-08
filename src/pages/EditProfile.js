@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 
 export default function EditProfile() {
   const [activeLink, setActivelink] = useState(1);
+  
   return (
     <div className="flex w-full flex-col gap-4 lg:flex-row min-h-[80vh] bg-gray-100 p-10">
       {/* Sidebar */}

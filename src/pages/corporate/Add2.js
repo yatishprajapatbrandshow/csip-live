@@ -20,10 +20,6 @@ const Add = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const userData = useSelector((state) => state.session.userData);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 4a43a5ed28d01ab37a9a81fda44609dfe33daa56
   const inputFields = [
     { name: 'name', label: 'Name' },
     { name: 'short_name', label: 'Short Name' },
