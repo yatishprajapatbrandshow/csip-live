@@ -206,7 +206,7 @@ export default function DashboardCombind() {
                         </div>
                         <div className="bg-[#dfccfa] p-4 rounded-lg col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl  bg-white  text-purple-800 w-10 flex justify-center">3</div>
+                                <div className="text-3xl  bg-white  text-purple-800 w-10 flex justify-center">{topicData.length}</div>
                                 <p className="text-sm ">Topic Studying</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
