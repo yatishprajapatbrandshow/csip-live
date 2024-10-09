@@ -150,7 +150,7 @@ const TopicModal = ({ isOpen, onClose }) => {
                             topics.length > 0 ? (
                                 <>
                                     <div className='border p-4'>
-                                        <h2 className='font-gilSemiBold text-lg mb-3'>Choose Topic</h2>
+                                        <h2 className=' text-lg mb-3'>Choose Topic</h2>
                                         <ul className="max-h-32 overflow-y-auto space-y-2">
                                             {topics.slice(0, visibleTopics).map((topic, index) => (
                                                 <li onClick={() => handleTopicSelect(topic.sid)} key={index} className="flex items-center space-x-2 cursor-pointer w-fit">
@@ -175,7 +175,7 @@ const TopicModal = ({ isOpen, onClose }) => {
                                                 setShowAddNewTopicForm(true);
                                                 setIsAddingNewTopic(true);
                                             }}
-                                            className='mt-3 w-fit mx-auto float-right bg-green-600 text-white font-gilSemiBold px-4 py-2 rounded'>
+                                            className='mt-3 w-fit mx-auto float-right bg-green-600 text-white  px-4 py-2 rounded'>
                                             Topic Not Found? Add New Topic
                                         </button>
                                     </div>
@@ -183,7 +183,7 @@ const TopicModal = ({ isOpen, onClose }) => {
                             )
                         ) : ( // Render new topic form
                             <div className="mt-4 border border-gray-200 p-4">
-                                <label htmlFor="newTopic" className="block mb-1 text-gray-700 font-gilSemiBold">New Topic</label>
+                                <label htmlFor="newTopic" className="block mb-1 text-gray-700 ">New Topic</label>
                                 <input
                                     type="text"
                                     id="newTopic"
@@ -194,7 +194,7 @@ const TopicModal = ({ isOpen, onClose }) => {
                                 />
                                 <button
                                     onClick={handleSubmitNewTopic}
-                                    className="w-full bg-purple-500 text-white py-2 font-gilSemiBold rounded-full hover:bg-purple-600"
+                                    className="w-full bg-purple-500 text-white py-2  rounded-full hover:bg-purple-600"
                                 >
                                     Submit
                                 </button>
@@ -206,16 +206,16 @@ const TopicModal = ({ isOpen, onClose }) => {
                         <div className="mt-3">
                             <button
                                 onClick={handleSubmitSelectedTopics}
-                                className="w-full bg-purple-500 text-white py-2 font-gilSemiBold rounded"
+                                className="w-full bg-purple-500 text-white py-2  rounded"
                             >
                                 Submit Selected Topics
                             </button>
                         </div>
                     )}
 
-                    {!showAddNewTopicForm && !showNoResults && (
+                    {!showAddNewTopicForm && (
                         <div className="mt-5 border border-gray-200 p-4">
-                            <label htmlFor="search" className="block mb-1 text-gray-700 font-gilSemiBold">Search Topics</label>
+                            <label htmlFor="search" className="block mb-1 text-gray-700 ">Search Topics</label>
                             <input
                             id='search'
                                 type="text"
@@ -239,15 +239,15 @@ const TopicModal = ({ isOpen, onClose }) => {
                                     setIsAddingNewTopic(true);
                                 }
                             }}
-                                className='mt-3 mx-auto bg-blue-600 text-white text-lg font-gilSemiBold px-7 py-2 rounded'>
+                                className='mt-3 mx-auto bg-blue-600 text-white text-lg  px-7 py-2 rounded'>
                                 {isAddingNewTopic ? 'Choose Topic' : 'Topic Not Found? Add New Topic'}
                             </button>
                         ) : null}
                         <div className="flex justify-between gap-2">
-                            <button className="bg-green-600 text-white font-gilSemiBold px-4 py-2 rounded" onClick={handleClose}>
+                            <button className="bg-green-600 text-white  px-4 py-2 rounded" onClick={handleClose}>
                                 Continue with Existing Topic
                             </button>
-                            <button className="bg-red-600 text-white font-gilSemiBold px-4 py-2 rounded" onClick={handleClose}>
+                            <button className="bg-red-600 text-white  px-4 py-2 rounded" onClick={handleClose}>
                                 Cancel
                             </button>
                         </div>

@@ -46,7 +46,6 @@ export default function DashboardCombind() {
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
-
     const fetchNewActivities = async () => {
         try {
             const response = await fetch(`${API_URL}activity/list?limit=15&&date=true`, {
