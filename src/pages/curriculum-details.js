@@ -5,18 +5,25 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { API_URL, API_URL_LOCAL } from '@/Config/Config';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 function Curriculum() {
+  const router = useRouter();
   const [CurriculumData, setCurriculumData] = useState();
   const [groupsData, setGroupData] = useState([]);
   const [curriId, setcurriId] = useState(0);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const userData = useSelector((state) => state.session.userData);
+  const [clickedCurriculum, setClickedCurriculum] = useState({});
 
+  useEffect(() => {
+    if (router.query.item) {
+      const parsedItem = JSON.parse(router.query.item); // Parse the item back to an object
+      setClickedCurriculum(parsedItem);
+    }
+  }, [router.query]);
   const fetchCurriculumID = async () => {
-
     // Only append corporate_id if it's defined
     const APIURL = userData?.sid
       ? `${API_URL}curriculum/maped-curriculum?participant_id=${userData?.sid}`
@@ -44,11 +51,32 @@ function Curriculum() {
       setLoading(false); // Set loading to false after fetch is done
     }
   };
+  const chooseCurriculum = async (sid) => {
 
+    try {
+      const response = await fetch(`${API_URL_LOCAL}curriculum/choose`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: "POST",
+        body: JSON.stringify({ participant_id: userData?.sid, curriculum_id: sid }),
+      });
+
+      const responseData = await response.json();
+      if (responseData.status === true) {
+        console.log(responseData);
+        setcurriId(responseData.data.curriculum_id);
+      }
+    } catch (error) {
+      setError("Failed to fetch activities.");
+    } finally {
+      setLoading(false); // Set loading to false after fetch is done
+    }
+  };
   const fetchCurriculumDetails = async () => {
 
     // Only append corporate_id if it's defined
-    const APIURL = `${API_URL}curriculum/details?curriculum_sid=${curriId}`;
+    const APIURL = `${API_URL}curriculum/details?curriculum_sid=${clickedCurriculum?.sid}`;
 
     try {
       const response = await fetch(APIURL, {
@@ -76,66 +104,58 @@ function Curriculum() {
       setLoading(false); // Set loading to false after fetch is done
     }
   }
+
   useEffect(() => {
     if (curriId) {
       fetchCurriculumDetails();
     }
   }, [curriId])
+
   useEffect(() => {
+    setLoading(true)
     if (userData) {
       fetchCurriculumID();
     }
   }, [userData]);
 
-  const handleClick = (item,topic) => { 
-    console.log(item);
-    console.log(topic);
+  const handleClick = (sid) => {
+    chooseCurriculum(sid);
   }
 
-
-  if (loading) return <div className="text-center w-full ">Loading...</div>; // Loading state
-
   return (
-    <div className="pl-10 p-6 bg-[#F0F0F0] w-full">
+    <div className="pl-10 p-6 bg-white w-full">
       <div className='flex items-center gap-2 mb-4 '><Undo2 className='w-5 h-5' />Go Back</div>
-      <div className='bg-white  w-full p-6'>
-        <h1 className="text-3xl font-gilBold mb-6">Curriculum</h1>
-        <h5 className="text-sm text-gray-700 mb-3">{CurriculumData?.name}</h5>
-        {
-          groupsData.map((item, index) =>
-            <ul className=' border-b-[1px] border-[#F9DAEA] mb-5' key={index}>
-              <h4 className='mb-3 text-gray-900 font-medium'>{item?.groupName}</h4>
+      {
+        loading ? <div className='text-center'>Loading ....</div> :
+          <div className='bg-white  w-full p-6'>
+            <h5 className="text-3xl text-gray-700 mb-2 py-6 font-gilBold">{CurriculumData?.name}</h5>
+            {
+              curriId !== clickedCurriculum?.sid &&
+              <button onClick={() => handleClick(clickedCurriculum?.sid)} className='mb-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-purple-700 transition'>
+                Choose This Curriculum
+              </button>
+            }
+            <div className='grid grid-cols-2 gap-5'>
               {
-                item?.topics.map((ele, idx) =>
-                  <li className="list-none grid grid-cols-4 gap-10 border-t border-[#F9DAEA] py-[.25rem]">
-                    {/* Column for Check and Topic Name */}
-                    <div className="flex items-center gap-5 col-span-2">
-                      <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center">
-                        <Check className="w-4 h-4 text-gray-500" />
-                      </div>
-                      <p className="text-gray-700 font-medium text-sm">{ele?.topic}</p>
-                    </div>
-
-                    {/* Column for Search Activity */}
-                    <div className="flex items-center col-span-1 text-gray-600  font-medium text-sm cursor-pointer">
-                      <Search className="text-[#9779FF] w-4 h-4 mr-2" />
-                      <span >Search Activity</span>
-                    </div>
-
-                    {/* Column for Click to Select */}
-                    <div className="flex items-center justify-center col-span-1">
-                      <button onClick={() => { handleClick(item,ele) }} className="flex items-center bg-[#9779FF] text-white py-1 px-4  text-sm hover:bg-[#8A6CE0] transition-colors duration-200">
-                        <MousePointerClick className="w-4 h-4 mr-2" />
-                        <span>Click to Select</span>
-                      </button>
-                    </div>
-                  </li>
+                groupsData.map((item, index) =>
+                  <ul className=' mb-5 col-span-1 max-md:col-span-2' key={index}>
+                    {item.topics.length > 0 && <h4 className='mb-3 text-gray-900 font-medium '>{item?.groupName}</h4>}
+                    {
+                      item?.topics.map((ele, idx) =>
+                        <li className={`list-none gap-10 border-t border-[#F9DAEA] py-[.25rem] ${idx === item?.topics.length - 1 && 'border-b-[1px] border-[#F9DAEA] '}`}>
+                          {/* Column for Check and Topic Name */}
+                          <div className="flex items-center gap-5 w-full">
+                            <p className="text-gray-700 font-medium text-sm">{ele?.topic}</p>
+                          </div>
+                        </li>
+                      )
+                    }
+                  </ul>
                 )
               }
-            </ul>
-          )
-        }
-      </div>
+            </div>
+          </div>
+      }
     </div>
   );
 }
