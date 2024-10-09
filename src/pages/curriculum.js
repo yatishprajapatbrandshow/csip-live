@@ -35,6 +35,8 @@ function Curriculum() {
       }
 
       const responseData = await response.json();
+      console.log(responseData);
+      
       if (responseData.status === true) {
         setcurriId(responseData.data[0].curriculum_id);
       }
@@ -46,7 +48,6 @@ function Curriculum() {
   };
 
   const fetchCurriculumDetails = async () => {
-
     // Only append corporate_id if it's defined
     const APIURL = `${API_URL}curriculum/details?curriculum_sid=${curriId}`;
 
