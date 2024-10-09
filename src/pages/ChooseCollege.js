@@ -46,7 +46,7 @@ function ChooseCollege() {
     console.log(value);
 
     try {
-      const response = await fetch(`${API_URL_LOCAL}college/?name=${value}`, {
+      const response = await fetch(`${API_URL_LOCAL}college/?name=${value}&limit=12`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -87,22 +87,35 @@ function ChooseCollege() {
         className="w-full max-w-md p-2 border rounded-md focus:outline-none"
       />
       <div>
-        <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
-          <div className="p-4 flex items-center space-x-3">
-            <div className="bg-gray-100 rounded-lg p-2">
-              <Home className="h-5 w-5 text-gray-500" />
-            </div>
-            <div className="flex-grow">
-              <h2 className="text-sm font-medium text-gray-800">Accurate Institute of Management & Technology</h2>
-            </div>
-          </div>
-          <div className="pb-4">
-            <button className="w-full bg-violet-400 hover:bg-violet-500 text-white text-sm font-medium py-2 px-1 rounded-lg transition duration-300 ease-in-out flex justify-center items-center">
-              <SquareMousePointer />
-              Choose Curriculum
-            </button>
-          </div>
+        <div className='w-full h-max mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+          {
+            AllCollege.map((ele, index) => {
+              return (
+                <div key={index} className="px-4 py-2 flex items-center space-x-3 rounded-lg shadow-md border-[1px] border-[#FEBBCC]"
+                  style={{
+                    backgroundImage: "url('../../images/pattern.svg')",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "contain",
+                    backgroundPosition: "right"
+                  }}>
+                  <div className="bg-gray-100 rounded-lg p-2">
+                    <Home className="h-5 w-5 text-gray-500" />
+                  </div>
+                  <div className="flex-grow">
+                    <h2 className="text-sm font-medium text-gray-800 mb-2">{ele.collegename}</h2>
+                    <div>
+                      <button className="bg-violet-400 gap-2 px-2 hover:bg-violet-500 text-white text-sm font-medium py-1 rounded-lg transition duration-300 ease-in-out flex justify-center items-center">
+                        <SquareMousePointer className='w-4 h-4' />
+                        Choose Curriculum
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )
+            })
+          }
         </div>
+
       </div>
     </div>
   );
