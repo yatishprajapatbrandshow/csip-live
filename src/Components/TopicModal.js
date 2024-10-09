@@ -2,6 +2,7 @@
 
 import { Check } from 'lucide-react';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const TopicModal = ({ isOpen, onClose }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -12,6 +13,8 @@ const TopicModal = ({ isOpen, onClose }) => {
     const [showAddNewTopicForm, setShowAddNewTopicForm] = useState(false);
     const [isAddingNewTopic, setIsAddingNewTopic] = useState(false);
     const [selectedTopics, setSelectedTopics] = useState([]);
+
+    const userData = useSelector((state) => state.session.userData);
 
     if (!isOpen) return null;
 
@@ -92,18 +95,48 @@ const TopicModal = ({ isOpen, onClose }) => {
         });
     };
 
+    const submitTopics = async (newTopicValue = '') => {
+        const payload = {
+            participant_id: userData?.sid,
+            TopicsList: selectedTopics,
+            TopicNew: newTopicValue,
+        };
+        console.log('Payload:', payload);
+        
+
+        try {
+            const response = await fetch('https://csip-backend.onrender.com/topic/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Submitted successfully:', data);
+                // Clear selected topics after submission if needed
+                setSelectedTopics([]);
+                handleClose();
+            } else {
+                console.error('Error submitting topics');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
     const handleSubmitSelectedTopics = () => {
-        // Handle submission of selected topics (e.g., API call or state update)
-        console.log('Selected Topics:', selectedTopics);
-        // Clear selected topics after submission if needed
-        setSelectedTopics([]);
-        handleClose();
+        submitTopics();
     };
 
     const handleSubmitNewTopic = () => {
+        submitTopics(newTopic);
         setNewTopic('');
         setShowAddNewTopicForm(false);
         setIsAddingNewTopic(false);
+        handleClose();
     };
 
     return (
