@@ -72,8 +72,8 @@ export default function DashboardCombind() {
     const fetchRecomentedActivities = async () => {
         try {
             const APIURL = userData?.sid
-                ? `${API_URL_LOCAL}recommended-activity/?participant_id=${userData?.sid}`
-                : `${API_URL_LOCAL}recommended-activity`;
+                ? `${API_URL}recommended-activity/?participant_id=${userData?.sid}`
+                : `${API_URL}recommended-activity`;
 
             const response = await fetch(`${APIURL}`, {
                 headers: {
