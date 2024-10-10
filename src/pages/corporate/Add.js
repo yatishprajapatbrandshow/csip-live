@@ -165,7 +165,7 @@ const Add = () => {
       }
 
       const data = await response.json();
-      console.logg(data)
+      console.log(data)
 
       
       setId(data?.data?.id);
@@ -173,7 +173,7 @@ const Add = () => {
       setStep((prevStep) => prevStep + 1);
 
     } catch (error) {
-      console.error("Error submitting step 1:", error);
+      console.log(error);
       setErrorMessage("There was an error submitting your data. Please try again.");
     }
 

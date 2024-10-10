@@ -14,7 +14,6 @@ const roboto = Roboto({
 function MyApp({ Component, pageProps }) {
   return (
     <div className="bg-white">
-
     <Provider store={store}>
       <Component {...pageProps} />
     </Provider>
