@@ -18,7 +18,7 @@ const ReviewSlider = ({ reviews }) => {
             slidesPerView={1}
         >
             {reviews?.map((review) => (
-                <SwiperSlide key={review.id}>
+                <SwiperSlide key={review.id} className='cursor-grab'>
                     <p className="text-sm text-purple-600 font-gilMedium">{review.text}</p>
                     <p className="text-sm text-purple-700 ">{`- ${review.author}`}</p>
                 </SwiperSlide>

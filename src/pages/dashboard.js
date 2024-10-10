@@ -10,6 +10,7 @@ import { API_URL, API_URL_LOCAL } from "@/Config/Config";
 import { useSelector } from "react-redux";
 import Header from '@/Components/Header';
 import { useCountUp } from '@/hooks/useCountUp';
+import { useRouter } from 'next/router';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -38,12 +39,14 @@ const reviews = [
 ];
 
 export default function DashboardCombind() {
+    const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newActivities, setNewActivities] = useState([])
     const [recommendedActivities, setRecommendedActivities] = useState([])
     const [topicData, setTopicData] = useState([]);
     const [dashboardData, setDashboardData] = useState([]);
 
+    const isTriggeredApply = useSelector((state) => state.trigger.applyTrigger);
     const userData = useSelector((state) => state.session.userData);
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -55,6 +58,31 @@ export default function DashboardCombind() {
     const paymentPendingCount = useCountUp(dashboardData?.paymentPending?.length || 0);
     const completedActivitiesCount = useCountUp(dashboardData?.completedActivities?.length || 0);
     const totalScoreCount = useCountUp(dashboardData?.totalScore || 0); // Assuming totalScore is a number
+
+    const fetchDashboardData = async () => {
+        if (!userData?.sid) return;
+
+        try {
+            const response = await fetch(`${API_URL}dashboardInfo?participant_id=${userData?.sid}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: "GET",
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const responseData = await response.json();
+            if (responseData.status === true) {
+                console.log(responseData);
+                setDashboardData(responseData?.data)
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
 
     const fetchNewActivities = async () => {
         try {
@@ -158,31 +186,6 @@ export default function DashboardCombind() {
         }
     };
 
-    const fetchDashboardData = async () => {
-        if (!userData?.sid) return;
-
-        try {
-            const response = await fetch(`${API_URL}dashboardInfo?participant_id=${userData?.sid}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                method: "GET",
-            });
-
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-
-            const responseData = await response.json();
-            if (responseData.status === true) {
-                console.log(responseData);
-                setDashboardData(responseData?.data)
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    }
-
     useEffect(() => {
         if (userData?.sid) {
             fetchDashboardData();
@@ -191,6 +194,10 @@ export default function DashboardCombind() {
             fetchTopicData();
         }
     }, [userData]);
+
+    useEffect(() => {
+        fetchDashboardData();
+    }, [isTriggeredApply])
 
     const getRandomWidth = () => {
         const widths = ['w-28', 'w-32', 'w-36', 'w-40', 'w-44', 'w-48', 'w-52', 'w-56', 'w-60'];
@@ -263,7 +270,7 @@ export default function DashboardCombind() {
                                 <div className="text-3xl  bg-white  text-purple-800 w-10 flex justify-center">{topicStudyingCount}</div>
                                 <p className="text-sm ">Topic Studying</p>
                             </div>
-                            <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                            <div onClick={() => router.push('/AppliedActivity')} className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5 cursor-pointer">
                                 <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{activityAppliedCount}</div>
                                 <p className="text-sm ">Activity Applied</p>
                             </div>
@@ -275,7 +282,7 @@ export default function DashboardCombind() {
                                 <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{submissionPendingCount}</div>
                                 <p className="text-sm ">Submission Pending</p>
                             </div>
-                            <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                            <div onClick={() => router.push('/PaymentPending')} className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5 cursor-pointer">
                                 <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{paymentPendingCount}</div>
                                 <p className="text-sm ">Payment Pending</p>
                             </div>
@@ -326,7 +333,7 @@ export default function DashboardCombind() {
                             <div className="flex flex-wrap gap-2">
                                 <ul className="flex flex-wrap gap-2">
                                     {topicData?.length === 0 ? (
-                                        Array.from({ length: 15 }).map((_, index) => (
+                                        Array.from({ length: 25 }).map((_, index) => (
                                             <li key={index} className={`h-6 rounded-full animate-pulse bg-purple-300 ${getRandomWidth()}`} />
                                         ))
                                     ) : (

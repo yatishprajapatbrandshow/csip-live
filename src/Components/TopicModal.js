@@ -4,7 +4,7 @@ import { Check } from 'lucide-react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const TopicModal = ({ isOpen, onClose, fetchTopicData, fetchDashboardData, showToast  }) => {
+const TopicModal = ({ isOpen, onClose, fetchTopicData, fetchDashboardData, showToast }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [topics, setTopics] = useState([]);
     const [visibleTopics, setVisibleTopics] = useState(3);
@@ -140,12 +140,11 @@ const TopicModal = ({ isOpen, onClose, fetchTopicData, fetchDashboardData, showT
     const handleSubmitNewTopic = async () => {
         try {
             await submitTopics(newTopic);
-            setNewTopic(''); // Clear the input field
+            setNewTopic('');
             setShowAddNewTopicForm(false);
             setIsAddingNewTopic(false);
-            handleClose(); // Close the modal
+            handleClose();
 
-            // Call fetchTopicData to refresh the data in Dashboard
             if (fetchTopicData) {
                 fetchTopicData();
             }
@@ -162,7 +161,7 @@ const TopicModal = ({ isOpen, onClose, fetchTopicData, fetchDashboardData, showT
                     <h2 className="text-3xl  mb-4 text-center">Choose Topic</h2>
 
                     <div className="mt-4">
-                        {!showAddNewTopicForm ? ( // Conditional rendering
+                        {!showAddNewTopicForm ? (
                             topics.length > 0 ? (
                                 <>
                                     <div className='border p-4'>
