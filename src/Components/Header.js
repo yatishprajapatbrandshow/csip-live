@@ -29,8 +29,6 @@ function classNames(...classes) {
 }
 
 
-
-
 const Header = ({ session = false }) => {
     const router = useRouter();
     const dispatch = useDispatch();
@@ -90,7 +88,12 @@ const Header = ({ session = false }) => {
     //     // Clean up the interval on component unmount
     //     return () => clearInterval(timer);
     // }, []);
-
+    const handleRegisterClick = () => {
+        const formElement = document.getElementById('signupForm'); // Get the signup form by its ID
+        if (formElement) {
+          formElement.scrollIntoView({ behavior: 'smooth' }); // Scroll smoothly to the form
+        }
+      };
     return (
         <>
 
@@ -226,8 +229,8 @@ const Header = ({ session = false }) => {
                             <span>Log In</span>
                         </button>
                         <button 
-                            onClick={()=> router.push('/')}
-                        type="button" className="relative bg-blue-700 p-1 text-white rounded-md px-4" >
+                            onClick={handleRegisterClick}
+                            type="button" className="relative bg-blue-700 p-1 text-white rounded-md px-4" >
                             <span>Register</span>
                         </button>
                     </div>

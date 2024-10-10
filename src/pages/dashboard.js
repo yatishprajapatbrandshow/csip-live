@@ -40,7 +40,7 @@ export default function DashboardCombind() {
     const [newActivities, setNewActivities] = useState([])
     const [recommendedActivities, setRecommendedActivities] = useState([])
     const [topicData, setTopicData] = useState([]);
-    const [count, setCount] = useState(0);
+
     const userData = useSelector((state) => state.session.userData);
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -101,7 +101,6 @@ export default function DashboardCombind() {
             });
 
             const responseData = await response.json();
-            console.log(responseData);
             if (responseData.status === true) {
                 setRecommendedActivities(responseData.data);
             }
@@ -140,7 +139,7 @@ export default function DashboardCombind() {
 
     const handleRemoveTopic = async (topicId) => {
         try {
-            const response = await fetch('https://csip-backend.onrender.com/topic/remove', {
+            const response = await fetch(`${API_URL_LOCAL}topic/remove`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -162,8 +161,34 @@ export default function DashboardCombind() {
         }
     };
 
+    const fetchDashboardData = async () => {
+        if (!userData?.sid) return;
+
+        try {
+            const response = await fetch(`${API_URL}dashboardInfo?participant_id=${userData?.sid}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: "GET",
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const responseData = await response.json();
+            if (responseData.status === true) {
+                console.log(responseData);
+                setDashboardData(responseData?.data)
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
     useEffect(() => {
         if (userData?.sid) {
+            fetchDashboardData()
             fetchNewActivities();
             fetchRecomentedActivities();
             fetchTopicData();
@@ -224,31 +249,31 @@ export default function DashboardCombind() {
                         </div>
                         <div className="bg-[#dfccfa] p-4 rounded-lg col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl bg-white font-montserrat2 text-purple-800 w-10 flex justify-center">{count}</div>
+                                <div className="text-3xl  bg-white  text-purple-800 w-10 flex justify-center">{topicData.length}</div>
                                 <p className="text-sm ">Topic Studying</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl font-montserrat2  bg-white w-10 flex justify-center text-purple-800">1</div>
+                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">1</div>
                                 <p className="text-sm ">Activity Applied</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl font-montserrat2  bg-white w-10 flex justify-center text-purple-800">0</div>
+                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">0</div>
                                 <p className="text-sm ">Ongoing Activity</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl font-montserrat2  bg-white w-10 flex justify-center text-purple-800">0</div>
+                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">0</div>
                                 <p className="text-sm ">Submission Pending</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl font-montserrat2  bg-white w-10 flex justify-center text-purple-800">0</div>
+                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">0</div>
                                 <p className="text-sm ">Payment Pending</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl font-montserrat2  bg-white w-10 flex justify-center text-purple-800">0</div>
+                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">0</div>
                                 <p className="text-sm ">Completed Activity</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl font-montserrat2  bg-white w-10 flex justify-center text-purple-800">0</div>
+                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">0</div>
                                 <p className="text-sm ">Total Score</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
