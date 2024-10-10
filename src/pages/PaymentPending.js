@@ -7,19 +7,14 @@ import { useSelector } from 'react-redux';
 import { API_URL, API_URL_LOCAL } from '@/Config/Config';
 import Header from '@/Components/Header';
 
-const RecommendedActivity = () => {
+function PaymentPending() {
     const userData = useSelector((state) => state.session.userData);
     const [cardData, setCardData] = useState([])
     // Fetch favourite activity
 
     const fetchRecomentedActivities = async () => {
         try {
-            const APIURL = userData?.sid
-                ? `${API_URL}recommended-activity/?participant_id=${userData?.sid}`
-                : `${API_URL}recommended-activity`;
-            console.log(APIURL);
-
-            const response = await fetch(`${APIURL}`, {
+            const response = await fetch(`${API_URL}payment/pending?participant_id=${userData?.sid}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -47,7 +42,7 @@ const RecommendedActivity = () => {
         <>
             <Header />
             <div className="pl-20 p-6 bg-white">
-                <h1 className="text-3xl  mb-6">Recommended Activity</h1>
+                <h1 className="text-3xl  mb-6">Payment Pending</h1>
                 <Link href="/dashboard" className="flex items-center font-gilSemiBold mb-6">
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Go Back
@@ -64,4 +59,4 @@ const RecommendedActivity = () => {
     )
 }
 
-export default RecommendedActivity
+export default PaymentPending

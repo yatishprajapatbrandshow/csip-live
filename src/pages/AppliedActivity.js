@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react"
 import Card from '../Components/CardCorporate'
 import Link from 'next/link'
 import { useSelector } from 'react-redux';
-import { API_URL_LOCAL } from '@/Config/Config';
+import { API_URL, API_URL_LOCAL } from '@/Config/Config';
 import Header from '@/Components/Header';
 
 
@@ -90,7 +90,7 @@ const AppliedActivity = () => {
         if (!userData?.sid) return;
 
         try {
-            const response = await fetch(`${API_URL_LOCAL}activity/applied?participantId=${userData?.sid}`, {
+            const response = await fetch(`${API_URL}activity/applied?participantId=${userData?.sid}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
