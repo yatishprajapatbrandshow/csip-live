@@ -4,7 +4,7 @@ import { Check } from 'lucide-react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const TopicModal = ({ isOpen, onClose }) => {
+const TopicModal = ({ isOpen, onClose, fetchTopicData  }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [topics, setTopics] = useState([]);
     const [visibleTopics, setVisibleTopics] = useState(3);
@@ -127,16 +127,34 @@ const TopicModal = ({ isOpen, onClose }) => {
         }
     };
 
-    const handleSubmitSelectedTopics = () => {
-        submitTopics();
+    const handleSubmitSelectedTopics = async () => {
+        try {
+            await submitTopics();
+
+            if (fetchTopicData) {
+                fetchTopicData();
+            }
+        } catch (error) {
+            console.error("Error submitting the topic:", error);
+        }
     };
 
-    const handleSubmitNewTopic = () => {
-        submitTopics(newTopic);
-        setNewTopic('');
-        setShowAddNewTopicForm(false);
-        setIsAddingNewTopic(false);
-        handleClose();
+    const handleSubmitNewTopic = async () => {
+        try {
+            await submitTopics(newTopic); 
+            setNewTopic(''); // Clear the input field
+            setShowAddNewTopicForm(false);
+            setIsAddingNewTopic(false);
+            handleClose(); // Close the modal
+
+            // Call fetchTopicData to refresh the data in Dashboard
+            if (fetchTopicData) {
+                fetchTopicData();
+            }
+
+        } catch (error) {
+            console.error("Error submitting the topic:", error);
+        }
     };
 
     return (
