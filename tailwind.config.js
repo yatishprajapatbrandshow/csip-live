@@ -15,7 +15,11 @@ module.exports = {
       },
       backgroundImage: {
         'bgForm': "url('/images/845.jpg')",
-      }
+      },
+      fontFamily: {
+        'montserrat': ['"My Font"'],
+        'montserrat2': ['"My Font2"'],
+      },
     },
     fontFamily: {
       gilBold: ['Gilroy-Bold', 'Gilroy-Bold'],

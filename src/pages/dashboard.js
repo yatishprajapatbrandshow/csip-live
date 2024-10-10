@@ -40,11 +40,29 @@ export default function DashboardCombind() {
     const [newActivities, setNewActivities] = useState([])
     const [recommendedActivities, setRecommendedActivities] = useState([])
     const [topicData, setTopicData] = useState([]);
-    const [dashboardData, setDashboardData] = useState([]);
 
     const userData = useSelector((state) => state.session.userData);
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+
+    
+
+    useEffect(() => {
+        let start = 0;
+        const end = topicData.length;
+        if (start === end) return;
+
+        const incrementTime = Math.floor(2000 / end);
+        const timer = setInterval(() => {
+            start += 1;
+            setCount(start);
+            if (start >= end) {
+                clearInterval(timer); 
+            }
+        }, incrementTime);
+
+        return () => clearInterval(timer);
+    }, [topicData.length]);
 
     const fetchNewActivities = async () => {
         try {
@@ -135,7 +153,6 @@ export default function DashboardCombind() {
             if (response.ok) {
                 const updatedTopics = topicData.filter((topic) => topic.sid !== topicId);
                 setTopicData(updatedTopics); // update the local state after successful deletion
-                console.log(`Topic with id ${topicId} removed successfully`);
             } else {
                 console.error('Failed to remove topic');
             }
@@ -177,6 +194,7 @@ export default function DashboardCombind() {
             fetchTopicData();
         }
     }, [userData]);
+
 
     return (
         <>
@@ -231,35 +249,35 @@ export default function DashboardCombind() {
                         </div>
                         <div className="bg-[#dfccfa] p-4 rounded-lg col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl  bg-white  text-purple-800 w-10 flex justify-center">{dashboardData?.topicStudying?.length || 0}</div>
+                                <div className="text-3xl  bg-white  text-purple-800 w-10 flex justify-center">{topicData.length}</div>
                                 <p className="text-sm ">Topic Studying</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{dashboardData?.activityApplied?.length || 0}</div>
+                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">1</div>
                                 <p className="text-sm ">Activity Applied</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{dashboardData?.ongoingActivities?.length || 0}</div>
+                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">0</div>
                                 <p className="text-sm ">Ongoing Activity</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{dashboardData?.submissionPending?.length || 0}</div>
+                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">0</div>
                                 <p className="text-sm ">Submission Pending</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{dashboardData?.paymentPending?.length || 0}</div>
+                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">0</div>
                                 <p className="text-sm ">Payment Pending</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{dashboardData?.completedActivities?.length || 0}</div>
+                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">0</div>
                                 <p className="text-sm ">Completed Activity</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{dashboardData?.totalScore?.length || 0}</div>
+                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">0</div>
                                 <p className="text-sm ">Total Score</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
-                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">0</div>
+                                <div className="text-3xl font-montserrat2  bg-white w-10 flex justify-center text-purple-800">0</div>
                                 <p className="text-sm ">Skill Endorsement from Corporate</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1">
@@ -296,15 +314,23 @@ export default function DashboardCombind() {
                             <h3 className="text-lg  text-purple-800 mb-2">📚 Topics:</h3>
                             <div className="flex flex-wrap gap-2">
                                 <ul className="flex flex-wrap gap-2">
-                                    {topicData?.map((topic, index) => (
-                                        <li key={index} className="bg-purple-200 text-purple-800 px-2 py-1 rounded flex items-center gap-1 font-gilSemiBold text-[15px]">
-                                            {topic?.topic}
-                                            <SquareX onClick={() => handleRemoveTopic(topic.sid)} className="cursor-pointer hover:text-purple-700 text-purple-500 w-5 h-5" />
-                                        </li>
-                                    ))}
+                                    {topicData?.length === 0 ? (
+                                        [28, 32, 36, 40, 44, 52, 28, 40, 60].map((width) => (
+                                            Array.from({ length: 4 }).map((_, index) => (
+                                                <li key={`${width}-${index}`} className={`h-6 rounded-full animate-pulse bg-purple-300 w-${width}`} />
+                                            ))
+                                        ))
+                                    ) : (
+                                        topicData?.map((topic, index) => (
+                                            <li key={index} className="bg-purple-200 text-purple-800 px-2 py-1 rounded flex items-center gap-1 font-gilSemiBold text-[15px]">
+                                                {topic?.topic}
+                                                <SquareX onClick={() => handleRemoveTopic(topic.sid)} className="cursor-pointer hover:text-purple-700 text-purple-500 w-5 h-5" />
+                                            </li>
+                                        ))
+                                    )}
                                 </ul>
                                 <button onClick={openModal} className="bg-green-400 text-white px-2 py-1 rounded">Add New Topic</button>
-                                <TopicModal isOpen={isModalOpen} onClose={closeModal} />
+                                <TopicModal isOpen={isModalOpen} onClose={closeModal} fetchTopicData={fetchTopicData} />
                             </div>
                         </div>
                     </div>
