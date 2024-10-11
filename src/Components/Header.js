@@ -9,6 +9,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton,Popover
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { PlusIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
 import { MenuItemLinks } from '@/Config/Navigation'
+import TopicModal from "./TopicModal";
 
 const user = {
   name: 'Tom Cook',
@@ -28,8 +29,6 @@ function classNames(...classes) {
 }
 
 
-
-
 const Header = ({ session = false }) => {
     const router = useRouter();
     const dispatch = useDispatch();
@@ -40,6 +39,10 @@ const Header = ({ session = false }) => {
     const [UserDataShow, setUserDataShow] = useState("");
     const userData = useSelector((state) => state.session.userData);
     const startSessionTrigger = useSelector((state) => state.session.startSessionTrigger);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
     const LogOut = () => {
         localStorage.removeItem("userData");
@@ -85,7 +88,12 @@ const Header = ({ session = false }) => {
     //     // Clean up the interval on component unmount
     //     return () => clearInterval(timer);
     // }, []);
-
+    const handleRegisterClick = () => {
+        const formElement = document.getElementById('signupForm'); // Get the signup form by its ID
+        if (formElement) {
+          formElement.scrollIntoView({ behavior: 'smooth' }); // Scroll smoothly to the form
+        }
+      };
     return (
         <>
 
@@ -173,10 +181,11 @@ const Header = ({ session = false }) => {
                 {isSession ? 
                 <>
                     <div className="flex-shrink-0">
-                        <button type="button" className="relative inline-flex items-center gap-x-1.5 rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" >
+                        <button onClick={openModal} type="button" className="relative inline-flex items-center gap-x-1.5 rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" >
                             <PlusIcon aria-hidden="true" className="-ml-0.5 h-5 w-5" />
                             Add Topic
                         </button>
+                        <TopicModal isOpen={isModalOpen} onClose={closeModal} />
                     </div>
                     <div className="hidden md:ml-4 md:flex md:flex-shrink-0 md:items-center">
                         <button type="button" className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" >
@@ -220,8 +229,8 @@ const Header = ({ session = false }) => {
                             <span>Log In</span>
                         </button>
                         <button 
-                            onClick={()=> router.push('/')}
-                        type="button" className="relative bg-blue-700 p-1 text-white rounded-md px-4" >
+                            onClick={handleRegisterClick}
+                            type="button" className="relative bg-blue-700 p-1 text-white rounded-md px-4" >
                             <span>Register</span>
                         </button>
                     </div>

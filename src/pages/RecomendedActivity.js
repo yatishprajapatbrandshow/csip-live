@@ -7,24 +7,24 @@ import { useSelector } from 'react-redux';
 import { API_URL, API_URL_LOCAL } from '@/Config/Config';
 import Header from '@/Components/Header';
 
-
-const AppliedActivity = () => {
+const RecommendedActivity = () => {
     const userData = useSelector((state) => state.session.userData);
     const [cardData, setCardData] = useState([])
-    const fetchNewActivities = async () => {
-        if (!userData?.sid) return;
+    // Fetch favourite activity
 
+    const fetchRecomentedActivities = async () => {
         try {
-            const response = await fetch(`${API_URL}activity/applied?participantId=${userData?.sid}`, {
+            const APIURL = userData?.sid
+                ? `${API_URL}recommended-activity/?participant_id=${userData?.sid}`
+                : `${API_URL}recommended-activity`;
+            console.log(APIURL);
+
+            const response = await fetch(`${APIURL}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 method: "GET",
             });
-
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
 
             const responseData = await response.json();
             if (responseData.status === true) {
@@ -34,20 +34,20 @@ const AppliedActivity = () => {
             console.error("Error:", error);
         }
     }
+
     useEffect(() => {
 
         if (userData?.sid) {
             console.log(userData);
-            fetchNewActivities();
+            fetchRecomentedActivities();
         }
     }, [userData]);
-    
 
     return (
         <>
             <Header />
             <div className="pl-20 p-6 bg-white">
-                <h1 className="text-3xl  mb-6">Applied Activity</h1>
+                <h1 className="text-3xl  mb-6">Recommended Activity</h1>
                 <Link href="/dashboard" className="flex items-center font-gilSemiBold mb-6">
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Go Back
@@ -64,4 +64,4 @@ const AppliedActivity = () => {
     )
 }
 
-export default AppliedActivity
+export default RecommendedActivity

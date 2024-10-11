@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react'
-import Card from './CardCorporate'
+import Card from './CardStudent'
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -9,7 +9,6 @@ import { Navigation, Autoplay } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Activities = ({ cardData, title }) => {
-    
     const showNavigation = cardData?.length >= 6;
     return (
         <>

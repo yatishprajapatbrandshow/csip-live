@@ -4,7 +4,7 @@ import { Check } from 'lucide-react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const TopicModal = ({ isOpen, onClose }) => {
+const TopicModal = ({ isOpen, onClose, fetchTopicData, fetchDashboardData, showToast }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [topics, setTopics] = useState([]);
     const [visibleTopics, setVisibleTopics] = useState(3);
@@ -33,11 +33,11 @@ const TopicModal = ({ isOpen, onClose }) => {
                 console.log('Data:', data);
 
                 if (data.data.length > 0) {
-                    setTopics(data.data);  // Hide the "Add New Topic" inputs
+                    setTopics(data.data);
                     setVisibleTopics(3);
                     setShowNoResults(false);
                 } else {
-                    setTopics([]);  // Clear the topics list
+                    setTopics([]);
                     setShowNoResults(true);
                 }
             } else {
@@ -49,25 +49,23 @@ const TopicModal = ({ isOpen, onClose }) => {
             console.error('Error:', error);
             setTopics([]);
             setShowNoResults(true);
+            showToast('Error fetching topics. Please try again.', 'error');
         }
     };
 
     const handleInputChange = (e) => {
         const value = e.target.value;
         setSearchTerm(value);
-
-        // Trigger search when input has 3 or more characters
         if (value.length >= 3) {
             onSearch(value);
         } else {
-            // Reset the state when input has less than 3 characters
             setTopics([]);
             setShowNoResults(false);
         }
     };
 
     const handleShowMore = () => {
-        setVisibleTopics(prevCount => prevCount + 3);  // Show 3 more topics
+        setVisibleTopics(prevCount => prevCount + 3);
     };
 
     const handleClose = () => {
@@ -115,8 +113,7 @@ const TopicModal = ({ isOpen, onClose }) => {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Submitted successfully:', data);
-                // Clear selected topics after submission if needed
+                showToast('Topic Added successfully!', 'success');
                 setSelectedTopics([]);
                 handleClose();
             } else {
@@ -127,16 +124,34 @@ const TopicModal = ({ isOpen, onClose }) => {
         }
     };
 
-    const handleSubmitSelectedTopics = () => {
-        submitTopics();
+    const handleSubmitSelectedTopics = async () => {
+        try {
+            await submitTopics();
+
+            if (fetchTopicData && fetchDashboardData) {
+                fetchTopicData();
+                fetchDashboardData();
+            }
+        } catch (error) {
+            console.error("Error submitting the topic:", error);
+        }
     };
 
-    const handleSubmitNewTopic = () => {
-        submitTopics(newTopic);
-        setNewTopic('');
-        setShowAddNewTopicForm(false);
-        setIsAddingNewTopic(false);
-        handleClose();
+    const handleSubmitNewTopic = async () => {
+        try {
+            await submitTopics(newTopic);
+            setNewTopic('');
+            setShowAddNewTopicForm(false);
+            setIsAddingNewTopic(false);
+            handleClose();
+
+            if (fetchTopicData) {
+                fetchTopicData();
+            }
+
+        } catch (error) {
+            console.error("Error submitting the topic:", error);
+        }
     };
 
     return (
@@ -146,7 +161,7 @@ const TopicModal = ({ isOpen, onClose }) => {
                     <h2 className="text-3xl  mb-4 text-center">Choose Topic</h2>
 
                     <div className="mt-4">
-                        {!showAddNewTopicForm ? ( // Conditional rendering
+                        {!showAddNewTopicForm ? (
                             topics.length > 0 ? (
                                 <>
                                     <div className='border p-4'>
@@ -217,7 +232,7 @@ const TopicModal = ({ isOpen, onClose }) => {
                         <div className="mt-5 border border-gray-200 p-4">
                             <label htmlFor="search" className="block mb-1 text-gray-700 ">Search Topics</label>
                             <input
-                            id='search'
+                                id='search'
                                 type="text"
                                 value={searchTerm}
                                 onChange={handleInputChange}
@@ -230,15 +245,15 @@ const TopicModal = ({ isOpen, onClose }) => {
                     <div className='mt-4 flex flex-col items-center gap-2'>
                         {topics.length > 0 ? (
                             <button
-                            onClick={() => {
-                                if (isAddingNewTopic) {
-                                    setShowAddNewTopicForm(false);
-                                    setIsAddingNewTopic(false);
-                                } else {
-                                    setShowAddNewTopicForm(true);
-                                    setIsAddingNewTopic(true);
-                                }
-                            }}
+                                onClick={() => {
+                                    if (isAddingNewTopic) {
+                                        setShowAddNewTopicForm(false);
+                                        setIsAddingNewTopic(false);
+                                    } else {
+                                        setShowAddNewTopicForm(true);
+                                        setIsAddingNewTopic(true);
+                                    }
+                                }}
                                 className='mt-3 mx-auto bg-blue-600 text-white text-lg  px-7 py-2 rounded'>
                                 {isAddingNewTopic ? 'Choose Topic' : 'Topic Not Found? Add New Topic'}
                             </button>
