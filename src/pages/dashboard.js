@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { CircularProgressBar } from "@/Components/CircularProgressBar";
 import ReviewSlider from "@/Components/ReviewSlider";
 import TopicModal from '@/Components/TopicModal';
-import { SquareX } from 'lucide-react';
+import { SquareX, Star } from 'lucide-react';
 import Activities from "@/Components/Activities";
 import { API_URL, API_URL_LOCAL } from "@/Config/Config";
 import { useSelector } from "react-redux";
@@ -13,6 +13,7 @@ import { useCountUp } from '@/hooks/useCountUp';
 import { useRouter } from 'next/router';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CommentsSlider from '@/Components/CommentsSlider';
 
 
 const reviews = [
@@ -38,6 +39,7 @@ const reviews = [
     },
 ];
 
+
 export default function DashboardCombind() {
     const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,6 +47,7 @@ export default function DashboardCombind() {
     const [recommendedActivities, setRecommendedActivities] = useState([])
     const [topicData, setTopicData] = useState([]);
     const [dashboardData, setDashboardData] = useState([]);
+    const [commentsData, setCommentsData] = useState([]);
 
     const isTriggeredApply = useSelector((state) => state.trigger.applyTrigger);
     const userData = useSelector((state) => state.session.userData);
@@ -107,7 +110,7 @@ export default function DashboardCombind() {
         }
     }
     // Fetch favourite activity
-    const fetchRecomentedActivities = async () => {
+    const fetchRecommenedActivities = async () => {
         try {
             const APIURL = userData?.sid
                 ? `${API_URL}recommended-activity/?participant_id=${userData?.sid}`
@@ -186,12 +189,39 @@ export default function DashboardCombind() {
         }
     };
 
+    const fetchCommentsData = async () => {
+        const participantId = userData?.sid;
+
+        try {
+            const response = await fetch(`${API_URL}comments?participant_id=${participantId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const responseData = await response.json();
+            console.log(responseData);
+            if (responseData.status === true) {
+                setCommentsData(responseData.data);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+
     useEffect(() => {
         if (userData?.sid) {
             fetchDashboardData();
             fetchNewActivities();
-            fetchRecomentedActivities();
+            fetchRecommenedActivities();
             fetchTopicData();
+            fetchCommentsData();
         }
     }, [userData]);
 
@@ -353,6 +383,7 @@ export default function DashboardCombind() {
                     <ToastContainer position="top-right" autoClose={1000} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
                 </div>
             </div>
+            <CommentsSlider commentsData={commentsData} />
             <Activities title="Recommended Activity" cardData={recommendedActivities} />
             <Activities title="New Activity" cardData={newActivities} />
         </>
