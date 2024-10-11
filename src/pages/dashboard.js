@@ -81,7 +81,6 @@ export default function DashboardCombind() {
 
             const responseData = await response.json();
             if (responseData.status === true) {
-                console.log("DashboardData = ", responseData);
                 setDashboardData(responseData?.data)
             }
         } catch (error) {
@@ -103,7 +102,6 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
-            console.log("New Activities = ", responseData);
             if (responseData.status === true) {
                 setNewActivities(responseData.data);
             }
@@ -125,7 +123,6 @@ export default function DashboardCombind() {
             });
 
             const responseData = await response.json();
-            console.log("Recommended Activities = ", responseData);
             if (responseData.status === true) {
                 setRecommendedActivities(responseData.data);
             }
@@ -154,11 +151,9 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
-            console.log("Topic Data = ", responseData);
 
             if (responseData.status === true) {
                 setTopicData(responseData.data);
-                console.log(responseData.data);
             }
         } catch (error) {
             console.error("Error:", error);
@@ -211,7 +206,6 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
-            console.log("CommentData = ", responseData);
             if (responseData.status === true) {
                 setCommentsData(responseData.data);
             }
@@ -392,7 +386,7 @@ export default function DashboardCombind() {
                 </div>
             </div>
             <CommentsSlider commentsData={commentsData} />
-            
+
             <Activities title="Activity" activityData={true} />
             <Activities title="Recommended Activity" cardData={recommendedActivities} />
             <Activities title="New Activity" cardData={newActivities} />

@@ -13,38 +13,41 @@ const CardStudent = ({ activity }) => {
     const dispatch = useDispatch();
     const userData = useSelector((state) => state.session.userData);
     const [isToggled, setIsToggled] = useState(false);
+
     const toggleHeart = () => {
         setIsToggled(!isToggled);
     };
     const handleApply = async () => {
+    
+        if (activity?.activity_category === "Direct") {
 
-        if (!userData?.sid) return;
-        const payload = {
-            participantId: userData?.sid,
-            activityId: activity?.sid
-        }
-        try {
-            const response = await fetch(`${API_URL}activity/apply`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                method: "POST",
-                body: JSON.stringify(payload),
-            });
-            const responseData = await response.json();
-            console.log(responseData);
-            if (responseData.status === true) {
-                dispatch(applyTrigger());
-                alert(responseData?.message)
-            } else {
-                alert(responseData?.message)
+            if (!userData?.sid) return;
+            const payload = {
+                participantId: userData?.sid,
+                activityId: activity?.sid
             }
-        } catch (error) {
-            console.error("Error:", error);
+            
+            try {
+                const response = await fetch(`${API_URL}activity/apply`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    method: "POST",
+                    body: JSON.stringify(payload),
+                });
+                const responseData = await response.json();
+                console.log(responseData.orderId);
+                
+                if (responseData.status === true) {
+                    dispatch(applyTrigger());
+                    alert(responseData?.message)
+                } else {
+                    alert(responseData?.message)
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
         }
-
-        console.log("Activity ------ ",activity);
-        
     }
     return (
         <>
@@ -100,7 +103,7 @@ const CardStudent = ({ activity }) => {
                     <button onClick={() => router.push('/landing')} className="bg-purple-500 w-full text-white hover:bg-purple-600 transition-colors flex justify-center items-center">
                         View Activity
                     </button>
-                    <button onClick={() => { handleApply() }} className="bg-gray-200 w-full text-gray-800 hover:bg-gray-300 transition-colors">
+                    <button onClick={handleApply} className="bg-gray-200 w-full text-gray-800 hover:bg-gray-300 transition-colors">
                         Apply Now
                     </button>
                 </div>
