@@ -41,6 +41,7 @@ const AppliedActivity = () => {
             fetchNewActivities();
         }
     }, [userData]);
+    
 
     return (
         <>

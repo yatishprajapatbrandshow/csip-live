@@ -383,9 +383,9 @@ export default function DashboardCombind() {
                                     )}
                                 </ul>
                                 <button onClick={openModal} className="bg-green-400 text-white px-2 py-1 rounded">Add New Topic</button>
-                                <TopicModal isOpen={isModalOpen} onClose={closeModal} fetchTopicData={fetchTopicData} fetchDashboardData={fetchDashboardData} showToast={showToast} />
                             </div>
                         </div>
+                        <TopicModal isOpen={isModalOpen} onClose={closeModal} fetchTopicData={fetchTopicData} fetchDashboardData={fetchDashboardData} showToast={showToast} />
                     </div>
                     <ToastContainer position="top-right" autoClose={1000} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
                 </div>

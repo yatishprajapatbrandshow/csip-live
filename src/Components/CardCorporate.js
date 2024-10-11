@@ -13,6 +13,13 @@ const Card = ({ activity }) => {
         setIsToggled(!isToggled);
     };
 
+    const handleClick = (activity) => {
+        router.push({
+          pathname: '/landing',
+          query: { item: JSON.stringify(activity._id) }
+        });
+      };
+
     return (
         <div className="bg-[#f0f0f1] rounded-2xl overflow-hidden w-72  shadow-[rgba(13,_38,_76,_0.19)_0px_0px_10px]">
             <div className="relative h-40">
@@ -63,7 +70,7 @@ const Card = ({ activity }) => {
                 </div>
             </div>
             <div className="flex justify-between h-12 border-t font-gilMedium border-gray-300">
-                <button onClick={() => router.push('/landing')} className="bg-purple-500 w-full text-white hover:bg-purple-600 transition-colors flex justify-center items-center">
+                <button onClick={() => handleClick(activity)} className="bg-purple-500 w-full text-white hover:bg-purple-600 transition-colors flex justify-center items-center">
                     View
                 </button>
                 <button className="bg-gray-200 w-full text-gray-800 hover:bg-gray-300 transition-colors">
