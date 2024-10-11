@@ -8,7 +8,7 @@ import { applyTrigger } from '../../redux/actions/triggerSlice';
 import { API_URL } from '@/Config/Config';
 import { useRouter } from 'next/router';
 
-const Card = ({ activity }) => {
+const CardStudent = ({ activity }) => {
     const router = useRouter();
     const dispatch = useDispatch();
     const userData = useSelector((state) => state.session.userData);
@@ -109,4 +109,4 @@ const Card = ({ activity }) => {
     );
 };
 
-export default Card;
+export default CardStudent;

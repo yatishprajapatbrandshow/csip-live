@@ -1,47 +1,12 @@
-"use client";
-import React, { useEffect, useState } from 'react'
 import { ArrowLeft } from "lucide-react"
-import Card from '../Components/CardCorporate'
 import Link from 'next/link'
-import { useSelector } from 'react-redux';
-import { API_URL, API_URL_LOCAL } from '@/Config/Config';
 import Header from '@/Components/Header';
+import { useFetchActivities } from '@/hooks/useFetchActivities';
+import CardCorporate from "../Components/CardCorporate";
 
 
 const AppliedActivity = () => {
-    const userData = useSelector((state) => state.session.userData);
-    const [cardData, setCardData] = useState([])
-    const fetchNewActivities = async () => {
-        if (!userData?.sid) return;
-
-        try {
-            const response = await fetch(`${API_URL}activity/applied?participantId=${userData?.sid}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                method: "GET",
-            });
-
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-
-            const responseData = await response.json();
-            if (responseData.status === true) {
-                setCardData(responseData.data);
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    }
-    useEffect(() => {
-
-        if (userData?.sid) {
-            console.log(userData);
-            fetchNewActivities();
-        }
-    }, [userData]);
-    
+    const { activities, loading, error } = useFetchActivities();
 
     return (
         <>
@@ -52,9 +17,13 @@ const AppliedActivity = () => {
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Go Back
                 </Link>
+
+                {loading && <p>Loading activities...</p>}
+                {error && <p>Error: {error}</p>}
+
                 <div className="flex flex-wrap justify-start gap-6">
-                    {cardData?.map((activity) => (
-                        <Card key={activity.id} activity={activity} />
+                    {activities?.map((activity) => (
+                        <CardCorporate key={activity.id} activity={activity} />
                     ))}
                 </div>
             </div>
