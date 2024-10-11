@@ -48,6 +48,7 @@ export default function DashboardCombind() {
     const [topicData, setTopicData] = useState([]);
     const [dashboardData, setDashboardData] = useState([]);
     const [commentsData, setCommentsData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const isTriggeredApply = useSelector((state) => state.trigger.applyTrigger);
     const userData = useSelector((state) => state.session.userData);
@@ -79,7 +80,7 @@ export default function DashboardCombind() {
 
             const responseData = await response.json();
             if (responseData.status === true) {
-                console.log(responseData);
+                console.log("DashboardData = ", responseData);
                 setDashboardData(responseData?.data)
             }
         } catch (error) {
@@ -101,7 +102,7 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
-            console.log(responseData);
+            console.log("New Activities = ", responseData);
             if (responseData.status === true) {
                 setNewActivities(responseData.data);
             }
@@ -109,7 +110,6 @@ export default function DashboardCombind() {
             console.error("Error:", error);
         }
     }
-    // Fetch favourite activity
     const fetchRecommenedActivities = async () => {
         try {
             const APIURL = userData?.sid
@@ -124,7 +124,7 @@ export default function DashboardCombind() {
             });
 
             const responseData = await response.json();
-            console.log(responseData);
+            console.log("Recommended Activities = ", responseData);
             if (responseData.status === true) {
                 setRecommendedActivities(responseData.data);
             }
@@ -136,6 +136,7 @@ export default function DashboardCombind() {
     const fetchTopicData = async () => {
         if (!userData?.sid) return;
 
+        setLoading(true);
         try {
             const response = await fetch("https://csip-backend.onrender.com/topic/get", {
                 headers: {
@@ -152,12 +153,16 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
+            console.log("Topic Data = ", responseData);
+
             if (responseData.status === true) {
                 setTopicData(responseData.data);
                 console.log(responseData.data);
             }
         } catch (error) {
             console.error("Error:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -205,7 +210,7 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
-            console.log(responseData);
+            console.log("CommentData = ", responseData);
             if (responseData.status === true) {
                 setCommentsData(responseData.data);
             }
@@ -362,12 +367,14 @@ export default function DashboardCombind() {
                             <h3 className="text-lg  text-purple-800 mb-2">📚 Topics:</h3>
                             <div className="flex flex-wrap gap-2">
                                 <ul className="flex flex-wrap gap-2">
-                                    {topicData?.length === 0 ? (
+                                    {loading ? (
                                         Array.from({ length: 25 }).map((_, index) => (
                                             <li key={index} className={`h-6 rounded-full animate-pulse bg-purple-300 ${getRandomWidth()}`} />
                                         ))
+                                    ) : topicData?.length === 0 ? (
+                                        <li className="text-purple-800">No topics found</li>
                                     ) : (
-                                        topicData?.map((topic, index) => (
+                                        topicData.map((topic, index) => (
                                             <li key={index} className="bg-purple-200 text-purple-800 px-2 py-1 rounded flex items-center gap-1 font-gilSemiBold text-[15px] hover:drop-shadow-md">
                                                 {topic?.topic}
                                                 <SquareX onClick={() => handleRemoveTopic(topic.sid)} className="cursor-pointer hover:text-purple-700 text-purple-500 w-5 h-5" />

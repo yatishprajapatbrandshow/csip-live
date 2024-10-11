@@ -3,11 +3,13 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { CalendarDays, Clock, ContactRound, Heart } from 'lucide-react';
-import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { applyTrigger } from '../../redux/actions/triggerSlice';
 import { API_URL } from '@/Config/Config';
+import { useRouter } from 'next/router';
+
 const Card = ({ activity }) => {
+    const router = useRouter();
     const dispatch = useDispatch();
     const userData = useSelector((state) => state.session.userData);
     const [isToggled, setIsToggled] = useState(false);
@@ -40,6 +42,9 @@ const Card = ({ activity }) => {
         } catch (error) {
             console.error("Error:", error);
         }
+
+        console.log("Activity ------ ",activity);
+        
     }
     return (
         <>
@@ -92,9 +97,9 @@ const Card = ({ activity }) => {
                     </div>
                 </div>
                 <div className="flex justify-between h-12 border-t font-gilMedium border-gray-300">
-                    <Link href="#" className="bg-purple-500 w-full text-white hover:bg-purple-600 transition-colors flex justify-center items-center">
+                    <button onClick={() => router.push('/landing')} className="bg-purple-500 w-full text-white hover:bg-purple-600 transition-colors flex justify-center items-center">
                         View Activity
-                    </Link>
+                    </button>
                     <button onClick={() => { handleApply() }} className="bg-gray-200 w-full text-gray-800 hover:bg-gray-300 transition-colors">
                         Apply Now
                     </button>
