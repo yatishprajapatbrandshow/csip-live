@@ -121,24 +121,28 @@ export default function DashboardCombind() {
     };
 
     const handleRemoveTopic = async (topicId) => {
+
+        const datatSend = {
+            participant_id: userData?.sid,
+            TopicsList: [`"${topicId}"`],
+        }
+        const APIURL = `${API_URL}topic/remove`
+
         try {
-            const response = await fetch('https://csip-backend.onrender.com/topic/remove', {
+            const response = await fetch(APIURL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    participant_id: userData?.sid,
-                    TopicsList: [`"${topicId}"`],
-                }),
+                body: JSON.stringify(datatSend),
             });
 
-            if (response.ok) {
-                const updatedTopics = topicData.filter((topic) => topic.sid !== topicId);
-                setTopicData(updatedTopics); // update the local state after successful deletion
-                console.log(`Topic with id ${topicId} removed successfully`);
-            } else {
-                console.error('Failed to remove topic');
+            const responseData = response.json()
+
+            if(responseData.status === true){
+                alert("topics removed successfully")
+            }else{
+                alert("Something went wrong, please try again")
             }
         } catch (error) {
             console.error('Error:', error);
@@ -242,6 +246,8 @@ export default function DashboardCombind() {
                             </div>
                         </div>
                     </div>
+
+                 
 
                     <div className="grid grid-cols-5 gap-4">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 col-span-2">

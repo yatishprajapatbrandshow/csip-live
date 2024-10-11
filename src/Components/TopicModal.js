@@ -103,7 +103,7 @@ const TopicModal = ({ isOpen, onClose }) => {
         };
         console.log('Payload:', payload);
         
-
+    // const APIURL 
         try {
             const response = await fetch('https://csip-backend.onrender.com/topic/add', {
                 method: 'POST',

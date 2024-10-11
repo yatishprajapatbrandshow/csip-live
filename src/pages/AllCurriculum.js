@@ -9,7 +9,7 @@ import Header from '@/Components/Header';
 import { useRouter } from 'next/router';
 function AllCurriculum() {
   const router = useRouter();
-  const [allCurriculum, setAllCurriculum] = useState([]);
+  const [allCurriculum, setAllCurriculum] = useState("inProcess");
   const fetchCurriculum = async () => {
     // Only append corporate_id if it's defined
     try {
@@ -48,18 +48,48 @@ function AllCurriculum() {
   return (
     <>
       <Header />
-      <div className="pl-10 p-6 bg-[#F0F0F0] w-full h-screen ">
-        <div className='flex items-center gap-2 mb-4 '><Undo2 className='w-5 h-5' />Go Back</div>
-        {
-          allCurriculum.map((ele, index) => {
-            return <div className='w-[350px] h-20 bg-[#FFFFFF]  rounded-lg border-[1px] border-[#FFECF1] mb-2 flex justify-start p-2 gap-5' style={{ backgroundImage: "url('../../images/pattern.svg')", backgroundRepeat: "no-repeat", backgroundSize: "contain", backgroundPosition: "right" }} >
-              <div className='w-20 bg-red-400 object-cover overflow-hidden'>
-                <img src="https://csip.fieindia.org/images/activity/image-banner.jpg" alt='logo' className='w-full h-full scale-125' />
+      <div className="pl-10 p-6 max-w-7xl w-full h-screen bg-white">
+        {allCurriculum === "inProcess" ? 
+        <>
+        <div className='flex flex-wrap gap-5'>  
+          <div className='w-[350px] bg-white shadow-md p-2 rounded-lg border-[1px] border-[#FFECF1]'>
+              <div role="status" className="animate-pulse w-full mb-2">
+                  <div className="h-2 bg-gray-200 rounded-full "></div>
+                  <div className="h-2 bg-gray-200 rounded-full  mt-2"></div>
+                  <span className="sr-only">Loading...</span>
               </div>
-              <div className='text-sm flex  flex-col items-start gap-2 font-medium'> {ele.name}  <button onClick={() => handleClick(ele)} className=' text-xs text-[#9779FF] hover:text-[#8d6eff]'> View Curriculum</button></div>
-            </div>
-          })
-        }
+              <div role="status" className="animate-pulse w-full mb-2">
+                  <div className="h-2 bg-gray-200 rounded-full "></div>
+                  <span className="sr-only">Loading...</span>
+              </div>
+          </div>
+          <div className='w-[350px] bg-white shadow-md p-2 rounded-lg border-[1px] border-[#FFECF1]'>
+              <div role="status" className="animate-pulse w-full mb-2">
+                  <div className="h-2 bg-gray-200 rounded-full "></div>
+                  <div className="h-2 bg-gray-200 rounded-full  mt-2"></div>
+                  <span className="sr-only">Loading...</span>
+              </div>
+              <div role="status" className="animate-pulse w-full mb-2">
+                  <div className="h-2 bg-gray-200 rounded-full "></div>
+                  <span className="sr-only">Loading...</span>
+              </div>
+          </div>
+        </div>
+        </>
+        : allCurriculum.length && allCurriculum.length > 0 ? 
+        <>
+        <div className='flex flex-wrap gap-5'>  
+          {allCurriculum.map((ele, index) => {
+              return <div className='w-[350px] shadow-lg h-20 bg-[#FFFFFF]  rounded-lg border-[1px] border-[#FFECF1] mb-2 flex justify-start p-2 gap-5' style={{ backgroundImage: "url('../../images/pattern.svg')", backgroundRepeat: "no-repeat", backgroundSize: "contain", backgroundPosition: "right" }} >
+                <div className='w-20 bg-gray-100 object-cover overflow-hidden'>
+                  <img src="https://csip.fieindia.org/images/activity/image-banner.jpg" alt='logo' className='w-full h-full object-contain mix-blend-multiply' />
+                </div>
+                <div className='text-sm flex  flex-col items-start gap-2 font-medium'> {ele.name}  <button onClick={() => handleClick(ele)} className=' text-xs text-[#9779FF] hover:text-[#8d6eff]'> View Curriculum</button></div>
+              </div>
+          })}
+        </div>
+          </>: null}
+        
       </div>
     </>
   );
