@@ -184,7 +184,7 @@ const CardStudent = ({ activity }) => {
     
     return (
         <>
-        <button onClick={()=>GetDetails("pay_P85YWQ881JAIhJ")}>Test</button>
+        {/* <button onClick={()=>GetDetails("pay_P85YWQ881JAIhJ")}>Test</button> */}
             <div className="bg-white rounded-2xl overflow-hidden w-[300px] shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 hover:scale-105">
                 <div className="relative h-40 ">
                     {activity.image_assc ?
