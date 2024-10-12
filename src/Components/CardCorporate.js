@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { CalendarDays, Clock, ContactRound, Heart } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { encrypt } from '@/utils/cryptoUtils';
 import useFormattedDate from '@/hooks/useDateFormate';
 import DefaultIMG from '/public/images/image-banner.jpg';
 import DefaultLogo from '/public/images/images.png';
@@ -16,9 +17,10 @@ const CardCorporate = ({ activity }) => {
     };
 
     const handleClick = (activity) => {
+        const encryptedId = encrypt(activity._id);
         router.push({
-            pathname: '/landing',
-            query: { item: JSON.stringify(activity._id) }
+          pathname: '/landing',
+          query: { item: encryptedId }
         });
     };
 

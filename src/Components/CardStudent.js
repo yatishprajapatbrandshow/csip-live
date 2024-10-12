@@ -8,10 +8,10 @@ import { applyTrigger } from '../../redux/actions/triggerSlice';
 import { API_URL } from '@/Config/Config';
 import { useRouter } from 'next/router';
 import useRazorpay from '@/hooks/useRazorpay';
+import { encrypt } from '@/utils/cryptoUtils';
 import useFormattedDate from '@/hooks/useDateFormate';
 import DefaultIMG from '/public/images/image-banner.jpg';
 import DefaultLogo from '/public/images/images.png';
-
 
 const CardStudent = ({ activity }) => {
     const router = useRouter();
@@ -23,6 +23,15 @@ const CardStudent = ({ activity }) => {
     const toggleHeart = () => {
         setIsToggled(!isToggled);
     };
+
+    const handleClick = (activity) => {
+        const encryptedId = encrypt(activity._id);
+        router.push({
+          pathname: '/landing',
+          query: { item: encryptedId }
+        });
+    };
+
     const handleApply = async () => {
         console.log(activity);
 
