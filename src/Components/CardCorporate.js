@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { CalendarDays, Clock, ContactRound, Heart } from 'lucide-react';
 import { useRouter } from 'next/router';
 
-const Card = ({ activity }) => {
+const CardCorporate = ({ activity }) => {
     const router = useRouter();
     const [isToggled, setIsToggled] = useState(false);
 
@@ -81,4 +81,4 @@ const Card = ({ activity }) => {
     );
 };
 
-export default Card;
+export default CardCorporate;

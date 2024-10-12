@@ -1,15 +1,19 @@
 'use client';
 
 import React from 'react'
-import Card from './CardStudent'
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Navigation, Autoplay } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import CardStudent from './CardStudent';
+import CardCorporate from './CardCorporate';
+import { useFetchActivities } from '@/hooks/useFetchActivities';
 
-const Activities = ({ cardData, title }) => {
-    const showNavigation = cardData?.length >= 6;
+const Activities = ({ cardData, title, activityData }) => {
+    const { activities } = useFetchActivities();
+    const showNavigation = activities?.length >= 6 && cardData?.length >= 6;
+
     return (
         <>
             <section>
@@ -61,19 +65,30 @@ const Activities = ({ cardData, title }) => {
                                 1750: {
                                     slidesPerView: 6,
                                 },
-                            }}
-                        >
-                            {cardData?.map((activity) => (
-                                <SwiperSlide key={activity.id}>
-                                    <div className='w-max mx-auto'>
-                                        <Card activity={activity} />
-                                    </div>
-                                </SwiperSlide>
-                            ))}
+                            }}>
+                            {activityData && Array.isArray(activities) && activities.length ? (
+                                activities.map((activityItem) => (
+                                    <SwiperSlide key={activityItem.id}>
+                                        <div className='w-max mx-auto'>
+                                            <CardCorporate key={activityItem.id} activity={activityItem} />
+                                        </div>
+                                    </SwiperSlide>
+                                ))
+                            ) : (
+                                Array.isArray(cardData) && cardData.length ? (
+                                    cardData.map((activity) => (
+                                        <SwiperSlide key={activity.id}>
+                                            <div className='w-max mx-auto'>
+                                                <CardStudent activity={activity} />
+                                            </div>
+                                        </SwiperSlide>
+                                    ))
+                                ) : null // Optionally handle the case where both arrays are empty
+                            )}
                         </Swiper>
                     </div>
                 </div>
-            </section>
+            </section >
         </>
     )
 }

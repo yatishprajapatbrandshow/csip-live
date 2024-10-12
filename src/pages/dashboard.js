@@ -64,6 +64,7 @@ export default function DashboardCombind() {
     const completedActivitiesCount = useCountUp(dashboardData?.completedActivities?.length || 0);
     const totalScoreCount = useCountUp(dashboardData?.totalScore || 0); // Assuming totalScore is a number
 
+
     const fetchDashboardData = async () => {
         if (!userData?.sid) return;
         try {
@@ -136,7 +137,7 @@ export default function DashboardCombind() {
 
         setLoading(true);
         try {
-            const response = await fetch("https://csip-backend.onrender.com/topic/get", {
+            const response = await fetch(`${API_URL}/topic/get`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -420,6 +421,8 @@ export default function DashboardCombind() {
                 </div>
             </div>
             <CommentsSlider commentsData={commentsData} />
+
+            <Activities title="Activity" activityData={true} />
             <Activities title="Recommended Activity" cardData={recommendedActivities} />
             <Activities title="New Activity" cardData={newActivities} />
         </>

@@ -3,6 +3,7 @@
 import { Boxes, ChartNoAxesCombined, Clapperboard, X } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
+import { API_URL } from '@/Config/Config';
 
 const cardData = [
     {
@@ -138,20 +139,18 @@ const landing = () => {
 
     const fetchAllCurriculum = async () => {
 
+
         try {
-            const response = await fetch(`${API_URL}activity/get-by-id=${id}`, {
+            const response = await fetch(`${API_URL}activity/get-by-id?_id=${id}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 method: "GET",
             });
 
-            console.log("step 3");
-
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
-            console.log("step 4");
 
             const responseData = await response.json();
             console.log(responseData);
@@ -160,7 +159,7 @@ const landing = () => {
                 setAllCurriculum(responseData.data);
             }
         } catch (error) {
-            // setError("Failed to fetch activities.");
+            console.error("Error:", error);
         }
     };
 
@@ -181,12 +180,19 @@ const landing = () => {
         document.body.style.overflow = '';
     };
 
+    const { name = '', activity_category, activity_type, amount, case_scenario, case_scenario_title, corporate_hierarchy_overview, image_assc, objective, short_name, short_desc, } = allCurriculum;
+
+    const words = name.split(' ');
+    const half = Math.ceil(words.length / 2);
+    const firstHalf = words.slice(0, half).join(' ');
+    const secondHalf = words.slice(half).join(' ');
+
     return (
         <>
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-4 pb-16 pt-20 lg:pt-32 grid grid-cols-1 lg:grid-cols-2 gap-5">
-                <div>
-                    <h1 className="max-w-4xl font-montserrat2 max-sm:text-3xl text-5xl tracking-tight text-slate-900 sm:text-7xl">
-                        Step Into the
+            <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-4 pb-16 pt-20 lg:pt-32 grid grid-cols-12 gap-5">
+                <div className='col-span-8'>
+                    <h1 className="max-w-4xl font-montserrat2 max-sm:text-3xl tracking-tight text-slate-900 sm:text-5xl">
+                        {firstHalf}{" "}
                         <span className="relative whitespace-nowrap text-blue-600">
                             <svg
                                 aria-hidden="true"
@@ -196,7 +202,7 @@ const landing = () => {
                             >
                                 <path d="M203.371.916c-26.013-2.078-76.686 1.963-124.73 9.946L67.3 12.749C35.421 18.062 18.2 21.766 6.004 25.934 1.244 27.561.828 27.778.874 28.61c.07 1.214.828 1.121 9.595-1.176 9.072-2.377 17.15-3.92 39.246-7.496C123.565 7.986 157.869 4.492 195.942 5.046c7.461.108 19.25 1.696 19.17 2.582-.107 1.183-7.874 4.31-25.75 10.366-21.992 7.45-35.43 12.534-36.701 13.884-2.173 2.308-.202 4.407 4.442 4.734 2.654.187 3.263.157 15.593-.78 35.401-2.686 57.944-3.488 88.365-3.143 46.327.526 75.721 2.23 130.788 7.584 19.787 1.924 20.814 1.98 24.557 1.332l.066-.011c1.201-.203 1.53-1.825.399-2.335-2.911-1.31-4.893-1.604-22.048-3.261-57.509-5.556-87.871-7.36-132.059-7.842-23.239-.254-33.617-.116-50.627.674-11.629.54-42.371 2.494-46.696 2.967-2.359.259 8.133-3.625 26.504-9.81 23.239-7.825 27.934-10.149 28.304-14.005.417-4.348-3.529-6-16.878-7.066Z"></path>
                             </svg>
-                            <span className="relative">Corporate World</span>
+                            <span className="relative">{secondHalf}</span>
                         </span>
                     </h1>
                     <p className="mt-8 max-w-2xl text-lg tracking-tight text-slate-700 font-montserrat2">Empower Your Career with Real-World Business Skills</p>
@@ -208,7 +214,7 @@ const landing = () => {
                         </a>
                     </div>
                 </div>
-                <div>
+                <div className='col-span-4'>
                     <img className='' src="/images/girl.jpg" alt="course" />
                 </div>
                 {/* <div className="mt-36 lg:mt-44">
@@ -286,7 +292,7 @@ const landing = () => {
                 </div> */}
             </div>
             <div className="mt-16 px-6 lg:px-8">
-                <div className="mx-auto max-w-2xl lg:max-w-7xl">
+                <div className="mx-auto max-w-2xl lg:max-w-[1400px]">
                     <h1 className="text-pretty text-3xl font-montserrat2 tracking-tighter text-gray-950 data-[dark]:text-white sm:text-6xl">
                         Enhance Skills for Future Success
                     </h1>
@@ -298,7 +304,7 @@ const landing = () => {
             <div className="relative py-24">
                 <div className="absolute inset-x-2 bottom-0 top-48 rounded-4xl ring-1 ring-inset ring-black/5 bg-[linear-gradient(115deg,var(--tw-gradient-stops))] from-[#fff1be] from-[28%] via-[#ee87cb] via-[70%] to-[#b060ff] sm:bg-[linear-gradient(145deg,var(--tw-gradient-stops))]"></div>
                 <div className="relative px-6 lg:px-8">
-                    <div className="mx-auto max-w-2xl lg:max-w-7xl">
+                    <div className="mx-auto max-w-2xl lg:max-w-[1400px]">
                         <div className="relative">
                             <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                                 {cardData.map((card) => (
@@ -392,7 +398,7 @@ const landing = () => {
                                             <g className="origin-center scale-100 transition duration-500 motion-safe:group-hover:scale-105">
                                                 <foreignObject width="655" height="680">
                                                     <img
-                                                        alt=""
+                                                        alt="img"
                                                         loading="lazy"
                                                         width="2400"
                                                         height="3000"
@@ -469,7 +475,7 @@ const landing = () => {
                                                     <div className="mt-1 font-montserrat2 text-sm text-slate-500">{testimonial.position}</div>
                                                 </div>
                                                 <div className="overflow-hidden rounded-full bg-slate-50">
-                                                    <img alt="" loading="lazy" width="56" height="56" decoding="async" className="h-14 w-14 object-cover" src={testimonial.imgSrc} />
+                                                    <img alt="img" loading="lazy" width="56" height="56" decoding="async" className="h-14 w-14 object-cover" src={testimonial.imgSrc} />
                                                 </div>
                                             </figcaption>
                                         </figure>
@@ -494,7 +500,7 @@ const landing = () => {
                                                     <div className="mt-1 font-montserrat2 text-sm text-slate-500">{testimonial.position}</div>
                                                 </div>
                                                 <div className="overflow-hidden rounded-full bg-slate-50">
-                                                    <img alt="" loading="lazy" width="56" height="56" decoding="async" className="h-14 w-14 object-cover" src={testimonial.imgSrc} />
+                                                    <img alt="img" loading="lazy" width="56" height="56" decoding="async" className="h-14 w-14 object-cover" src={testimonial.imgSrc} />
                                                 </div>
                                             </figcaption>
                                         </figure>
@@ -519,7 +525,7 @@ const landing = () => {
                                                     <div className="mt-1 font-montserrat2 text-sm text-slate-500">{testimonial.position}</div>
                                                 </div>
                                                 <div className="overflow-hidden rounded-full bg-slate-50">
-                                                    <img alt="" loading="lazy" width="56" height="56" decoding="async" className="h-14 w-14 object-cover" src={testimonial.imgSrc} />
+                                                    <img alt="img" loading="lazy" width="56" height="56" decoding="async" className="h-14 w-14 object-cover" src={testimonial.imgSrc} />
                                                 </div>
                                             </figcaption>
                                         </figure>
@@ -530,8 +536,6 @@ const landing = () => {
                     </ul>
                 </div>
             </section>
-
-
         </>
     )
 }

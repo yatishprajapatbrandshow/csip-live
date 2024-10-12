@@ -7,44 +7,54 @@ import { useDispatch, useSelector } from 'react-redux';
 import { applyTrigger } from '../../redux/actions/triggerSlice';
 import { API_URL } from '@/Config/Config';
 import { useRouter } from 'next/router';
+<<<<<<< HEAD
 import DefaultImage from 'image/image-banner.jpg'
+=======
+import useRazorpay from '@/hooks/useRazorpay';
+>>>>>>> f4769d4795d40258a0dbe5b8a6d7ab669eae4e4c
 
-const Card = ({ activity }) => {
+const CardStudent = ({ activity }) => {
     const router = useRouter();
     const dispatch = useDispatch();
     const userData = useSelector((state) => state.session.userData);
     const [isToggled, setIsToggled] = useState(false);
+    const { initiatePayment } = useRazorpay();
+
     const toggleHeart = () => {
         setIsToggled(!isToggled);
     };
     const handleApply = async () => {
+        console.log(activity);
+        
+    
+        if (activity?.activity_category === "DIRECT") {
 
-        if (!userData?.sid) return;
-        const payload = {
-            participantId: userData?.sid,
-            activityId: activity?.sid
-        }
-        try {
-            const response = await fetch(`${API_URL}activity/apply`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                method: "POST",
-                body: JSON.stringify(payload),
-            });
-            const responseData = await response.json();
-            console.log(responseData);
-            if (responseData.status === true) {
-                dispatch(applyTrigger());
-                alert(responseData?.message)
-            } else {
-                alert(responseData?.message)
+            if (!userData?.sid) return;
+            const payload = {
+                participantId: userData?.sid,
+                activityId: activity?.sid
             }
-        } catch (error) {
-            console.error("Error:", error);
+            
+            try {
+                const response = await fetch(`${API_URL}activity/apply`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    method: "POST",
+                    body: JSON.stringify(payload),
+                });
+                const responseData = await response.json();
+                console.log(responseData);
+                if (responseData.status === true) {
+                    dispatch(applyTrigger());
+                    await initiatePayment(activity.amount, responseData.orderId);
+                } else {
+                    alert(responseData?.message)
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
         }
-
-        console.log("Activity ------ ",activity);
         
     }
     return (
@@ -101,7 +111,7 @@ const Card = ({ activity }) => {
                     <button onClick={() => router.push('/landing')} className="bg-purple-500 w-full text-white hover:bg-purple-600 transition-colors flex justify-center items-center">
                         View Activity
                     </button>
-                    <button onClick={() => { handleApply() }} className="bg-gray-200 w-full text-gray-800 hover:bg-gray-300 transition-colors">
+                    <button onClick={handleApply} className="bg-gray-200 w-full text-gray-800 hover:bg-gray-300 transition-colors">
                         Apply Now
                     </button>
                 </div>
@@ -110,4 +120,4 @@ const Card = ({ activity }) => {
     );
 };
 
-export default Card;
+export default CardStudent;
