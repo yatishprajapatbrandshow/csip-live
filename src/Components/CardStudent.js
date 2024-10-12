@@ -77,7 +77,7 @@ const CardStudent = ({ activity }) => {
                             objectFit="cover"
                             className="w-full h-full object-cover"
                         />
-                        : 
+                        :
                         <Image
                             src={DefaultIMG}
                             alt={activity.title}
@@ -85,7 +85,7 @@ const CardStudent = ({ activity }) => {
                             objectFit="cover"
                             className="w-full h-full object-cover"
                         />
-                        }
+                    }
                     <div className="absolute top-2 right-2 bg-white rounded-full p-1">
                         <ContactRound className="w-4 h-4" />
                         <span className="text-xs font-semibold ml-1">{activity?.views}</span>
@@ -95,7 +95,7 @@ const CardStudent = ({ activity }) => {
                     </div>
                     <div className="absolute -bottom-4 left-2 bg-white rounded-lg shadow-lg">
                         <small className="p-2 border-b border-b-gray-200">Added By:</small>
-                        {activity.companyImg ? 
+                        {activity.companyImg ?
                             <Image
                                 src={activity.companyImg}
                                 alt={`${activity.addedBy} logo`}
@@ -103,7 +103,7 @@ const CardStudent = ({ activity }) => {
                                 height={50}
                                 className="object-cover mx-auto"
                             />
-                            : 
+                            :
                             <Image
                                 src={DefaultLogo}
                                 alt={`${activity.addedBy} logo`}
