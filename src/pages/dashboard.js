@@ -474,7 +474,7 @@ export default function DashboardCombind() {
                 <Activities title="Activity" activityData={true} />
                 <Activities title="Favourite Activity" cardData={favActivities} />
                 <Activities title="Recommended Activity" cardData={recommendedActivities} />
-                <Activities title="New Activity" cardData={newActivities} />
+                <Activities title="New Activity" bgDesign={"Full"} cardData={newActivities} />
             </div>
         </>
     );

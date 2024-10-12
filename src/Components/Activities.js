@@ -10,7 +10,7 @@ import CardStudent from './CardStudent';
 import CardCorporate from './CardCorporate';
 import { useFetchActivities } from '@/hooks/useFetchActivities';
 
-const Activities = ({ cardData, title, activityData }) => {
+const Activities = ({ cardData, title, activityData, bgDesign }) => {
     const { activities } = useFetchActivities();
     console.log(activities);
 
@@ -19,7 +19,11 @@ const Activities = ({ cardData, title, activityData }) => {
     console.log(cardData)
     return (
         <>
-            <section className='mb-20' style={{ backgroundImage: "url('../../images/pattern.svg')", backgroundRepeat: "no-repeat", backgroundSize: "contain", backgroundPosition: "right" }}>
+        {/* {
+            
+        } */}
+            <section className={`mb-20 ${bgDesign === "Full" ? "bg-BGRec bg-[length:40px_40px]" : "bg-pattern bg-no-repeat bg-[length:400px_400px] bg-right"}`}>
+                
                 <h2 className='text-3xl '>{title}</h2>
                 <div className='p-6 px-0 flex flex-wrap gap-5'>
                     {activityData && Array.isArray(activities) && activities.length ? (
