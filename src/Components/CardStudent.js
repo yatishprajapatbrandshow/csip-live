@@ -7,11 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { applyTrigger } from '../../redux/actions/triggerSlice';
 import { API_URL } from '@/Config/Config';
 import { useRouter } from 'next/router';
-<<<<<<< HEAD
-import DefaultImage from 'image/image-banner.jpg'
-=======
 import useRazorpay from '@/hooks/useRazorpay';
->>>>>>> f4769d4795d40258a0dbe5b8a6d7ab669eae4e4c
 
 const CardStudent = ({ activity }) => {
     const router = useRouter();
