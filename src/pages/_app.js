@@ -7,17 +7,17 @@ import { Roboto } from 'next/font/google';
 
 const roboto = Roboto({
   subsets: ['latin'],
-  weight: ['400', '500', '700'],
+  weight: ['100', '300', '400', '500', '700', '900'],
   display: 'swap',
 });
 
 function MyApp({ Component, pageProps }) {
   return (
-    <div className="bg-white">
     <Provider store={store}>
-      <Component {...pageProps} />
+      <div className={`${roboto.className} bg-white px-10`}>
+        <Component {...pageProps} />
+      </div>
     </Provider>
-    </div>
   );
 }
 

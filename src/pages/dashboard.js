@@ -137,7 +137,7 @@ export default function DashboardCombind() {
 
         setLoading(true);
         try {
-            const response = await fetch(`${API_URL}/topic/get`, {
+            const response = await fetch(`${API_URL}topic/get`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -274,12 +274,37 @@ export default function DashboardCombind() {
     }
 
 
+    const fetchActivityCurriculumStatus = async () => {
+        const participantId = userData?.sid;
+ 
+        try {
+            const response = await fetch(`${API_URL}dashboardInfo/getActivity-curriculum?participant_id=${participantId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+ 
+            const responseData = await response.json();
+            console.log(responseData);
+            if (responseData.status === true) {
+                // setActivityCurriculumStatus(responseData?.data?.percentage);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+
 
     return (
         <>
             <Header />
             {/* <Dashboard /> */}
-            <div className="relative">
+            <div className="relative max-w-[1500px] mx-auto w-full">
                 <div className="p-6 bg-white space-y-6 font-sans">
                     <div className="grid grid-cols-12 gap-4">
                         <div className="bg-pink-200 p-4 rounded-lg col-span-4 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
@@ -419,12 +444,11 @@ export default function DashboardCombind() {
                     </div>
                     <ToastContainer position="top-right" autoClose={1000} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
                 </div>
+                <CommentsSlider commentsData={commentsData} />
+                <Activities title="Activity" activityData={true} />
+                <Activities title="Recommended Activity" cardData={recommendedActivities} />
+                <Activities title="New Activity" cardData={newActivities} />
             </div>
-            <CommentsSlider commentsData={commentsData} />
-
-            <Activities title="Activity" activityData={true} />
-            <Activities title="Recommended Activity" cardData={recommendedActivities} />
-            <Activities title="New Activity" cardData={newActivities} />
         </>
     );
 }
