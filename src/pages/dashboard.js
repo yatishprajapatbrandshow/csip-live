@@ -291,7 +291,7 @@ export default function DashboardCombind() {
             const responseData = await response.json();
             console.log(responseData);
             if (responseData.status === true) {
-                setActivityCurriculumStatus(responseData?.data?.percentage);
+                // setActivityCurriculumStatus(responseData?.data?.percentage);
             }
         } catch (error) {
             console.error("Error:", error);
