@@ -21,7 +21,7 @@ const TopicModal = ({ isOpen, onClose, fetchTopicData, fetchDashboardData, showT
 
     const onSearch = async (term) => {
         try {
-            const response = await fetch(`${API_URL}/topic`, {
+            const response = await fetch(`${API_URL}topic`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,6 +29,7 @@ const TopicModal = ({ isOpen, onClose, fetchTopicData, fetchDashboardData, showT
                 body: JSON.stringify({ TopicSearch: term }),
             });
 
+            console.log(response);
             if (response.ok) {
                 const data = await response.json();
                 console.log('Data:', data);
@@ -104,7 +105,7 @@ const TopicModal = ({ isOpen, onClose, fetchTopicData, fetchDashboardData, showT
         
     // const APIURL 
         try {
-            const response = await fetch(`${API_URL}/topic/add`, {
+            const response = await fetch(`${API_URL}topic/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

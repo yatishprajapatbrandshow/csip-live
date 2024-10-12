@@ -40,7 +40,6 @@ const CardStudent = ({ activity }) => {
                     body: JSON.stringify(payload),
                 });
                 const responseData = await response.json();
-                console.log(responseData);
                 if (responseData.status === true) {
                     dispatch(applyTrigger());
                     await initiatePayment(activity.amount, responseData.orderId);
