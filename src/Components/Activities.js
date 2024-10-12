@@ -15,10 +15,8 @@ const Activities = ({ cardData, title, activityData }) => {
     console.log(activities);
 
     const showNavigation = activities?.length >= 6 && cardData?.length >= 6;
-<<<<<<< HEAD
-=======
+
     console.log(cardData)
->>>>>>> 6a345f0dd8e386c43d961cac09e36165fa4588ac
     return (
         <>
             <section className='mb-20' style={{ backgroundImage: "url('../../images/pattern.svg')", backgroundRepeat: "no-repeat", backgroundSize: "contain", backgroundPosition: "right" }}>
