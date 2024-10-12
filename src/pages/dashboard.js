@@ -445,7 +445,7 @@ export default function DashboardCombind() {
                     <ToastContainer position="top-right" autoClose={1000} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
                 </div>
                 <CommentsSlider commentsData={commentsData} />
-                <Activities title="Activity" activityData={true} />
+                <Activities title="Activity"  activityData={true} />
                 <Activities title="Recommended Activity" cardData={recommendedActivities} />
                 <Activities title="New Activity" cardData={newActivities} />
             </div>
