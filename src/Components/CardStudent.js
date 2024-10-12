@@ -8,6 +8,7 @@ import { applyTrigger } from '../../redux/actions/triggerSlice';
 import { API_URL } from '@/Config/Config';
 import { useRouter } from 'next/router';
 import useRazorpay from '@/hooks/useRazorpay';
+import { encrypt } from '@/utils/cryptoUtils';
 
 const CardStudent = ({ activity }) => {
     const router = useRouter();
@@ -19,10 +20,19 @@ const CardStudent = ({ activity }) => {
     const toggleHeart = () => {
         setIsToggled(!isToggled);
     };
+
+    const handleClick = (activity) => {
+        const encryptedId = encrypt(activity._id);
+        router.push({
+          pathname: '/landing',
+          query: { item: encryptedId }
+        });
+    };
+
     const handleApply = async () => {
         console.log(activity);
-        
-    
+
+
         if (activity?.activity_category === "DIRECT") {
 
             if (!userData?.sid) return;
@@ -30,7 +40,7 @@ const CardStudent = ({ activity }) => {
                 participantId: userData?.sid,
                 activityId: activity?.sid
             }
-            
+
             try {
                 const response = await fetch(`${API_URL}activity/apply`, {
                     headers: {
@@ -50,7 +60,7 @@ const CardStudent = ({ activity }) => {
                 console.error("Error:", error);
             }
         }
-        
+
     }
     return (
         <>
@@ -103,7 +113,7 @@ const CardStudent = ({ activity }) => {
                     </div>
                 </div>
                 <div className="flex justify-between h-12 border-t font-gilMedium border-gray-300">
-                    <button onClick={() => router.push('/landing')} className="bg-purple-500 w-full text-white hover:bg-purple-600 transition-colors flex justify-center items-center">
+                    <button onClick={() => handleClick(activity)} className="bg-purple-500 w-full text-white hover:bg-purple-600 transition-colors flex justify-center items-center">
                         View Activity
                     </button>
                     <button onClick={handleApply} className="bg-gray-200 w-full text-gray-800 hover:bg-gray-300 transition-colors">

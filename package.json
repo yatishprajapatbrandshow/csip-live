@@ -13,6 +13,8 @@
     "@heroicons/react": "^2.1.5",
     "@next/font": "^14.2.14",
     "@reduxjs/toolkit": "^2.2.7",
+    "bcryptjs": "^2.4.3",
+    "crypto-js": "^4.2.0",
     "formik": "^2.4.6",
     "jodit-react": "^4.1.2",
     "lucide-react": "^0.446.0",

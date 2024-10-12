@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { CalendarDays, Clock, ContactRound, Heart } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { encrypt } from '@/utils/cryptoUtils';
 
 const CardCorporate = ({ activity }) => {
     const router = useRouter();
@@ -14,11 +15,12 @@ const CardCorporate = ({ activity }) => {
     };
 
     const handleClick = (activity) => {
+        const encryptedId = encrypt(activity._id);
         router.push({
           pathname: '/landing',
-          query: { item: JSON.stringify(activity._id) }
+          query: { item: encryptedId }
         });
-      };
+    };
 
     return (
         <div className="bg-[#f0f0f1] rounded-2xl overflow-hidden w-72  shadow-[rgba(13,_38,_76,_0.19)_0px_0px_10px]">
