@@ -18,7 +18,7 @@ const Activities = ({ cardData, title, activityData }) => {
     console.log(cardData)
     return (
         <>
-            <section>
+            <section className='mb-20' style={{ backgroundImage: "url('../../images/pattern.svg')", backgroundRepeat: "no-repeat", backgroundSize: "contain", backgroundPosition: "right" }}>
                 <h2 className='text-3xl '>{title}</h2>
                 <div className='p-6 px-0 flex flex-wrap gap-5'>
                     {activityData && Array.isArray(activities) && activities.length ? (
