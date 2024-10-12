@@ -180,8 +180,8 @@ export default function DashboardCombind() {
                 body: JSON.stringify(datatSend),
             });
 
-            const responseData = response.json()
-
+            const responseData = await response.json()
+            console.log(responseData)
             if(responseData.status === true){
                 alert("topics removed successfully")
             }else{

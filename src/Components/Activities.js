@@ -13,7 +13,6 @@ import { useFetchActivities } from '@/hooks/useFetchActivities';
 const Activities = ({ cardData, title, activityData }) => {
     const { activities } = useFetchActivities();
     const showNavigation = activities?.length >= 6 && cardData?.length >= 6;
-console.log(cardData)
     return (
         <>
             <section>
