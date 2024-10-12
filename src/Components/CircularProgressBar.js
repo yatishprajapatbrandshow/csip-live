@@ -1,5 +1,5 @@
 export const CircularProgressBar = ({ value, text, color }) => (
-    <div className="relative w-24 h-24 font-gilSemiBold">
+    <div className="relative w-24 h-24 ">
       <svg className="w-full h-full" viewBox="0 0 100 100">
         <circle
           className="text-gray-200 stroke-current"

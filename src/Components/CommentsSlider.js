@@ -8,7 +8,6 @@ import { Navigation, Autoplay } from "swiper/modules";
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
 const CommentsSlider = ({ commentsData }) => {
-    console.log(commentsData);
 
     const showNavigation = commentsData?.length >= 3;
 

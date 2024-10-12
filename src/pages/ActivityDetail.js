@@ -8,7 +8,7 @@ const ActivityDetail = () => {
     return (
         <section className='bg-[#f0f0f0] w-full h-screen'>
             <div className="p-6">
-                <Link href="/dashboard" className="flex items-center font-gilSemiBold mb-6">
+                <Link href="/dashboard" className="flex items-center  mb-6">
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Go Back
                 </Link>

@@ -56,10 +56,10 @@ const Activities = ({ cardData, title }) => {
                                     slidesPerView: 3,
                                 },
                                 1450: {
-                                    slidesPerView: 4,
+                                    slidesPerView: 5,
                                 },
                                 1750: {
-                                    slidesPerView: 5,
+                                    slidesPerView: 6,
                                 },
                             }}
                         >

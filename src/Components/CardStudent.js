@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { applyTrigger } from '../../redux/actions/triggerSlice';
 import { API_URL } from '@/Config/Config';
 import { useRouter } from 'next/router';
+import DefaultImage from 'image/image-banner.jpg'
 
 const Card = ({ activity }) => {
     const router = useRouter();
@@ -68,7 +69,7 @@ const Card = ({ activity }) => {
                         <button onClick={toggleHeart}><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill={isToggled ? "red" : "#fff"} stroke="red" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg></button>
                     </div>
                     <div className="absolute bottom-2 left-2 px-4 py-2 bg-white leading-none rounded-xl overflow-hidden shadow-[rgba(13,_38,_76,_0.19)_0px_0px_10px]">
-                        <small className="font-gilSemiBold">Added By:</small>
+                        <small className="">Added By:</small>
                         <Image
                             src={activity.companyImg}
                             alt={`${activity.addedBy} logo`}
@@ -79,7 +80,7 @@ const Card = ({ activity }) => {
                     </div>
                 </div>
                 <div className="p-4">
-                    <h2 className="text-[15px] font-gilSemiBold mb-2">{activity.title}</h2>
+                    <h2 className="text-[15px]  mb-2">{activity.title}</h2>
                     <div className="flex items-center text-sm font-gilMedium text-gray-600 mb-2 border-t border-gray-300 pt-2">
                         <Clock className="w-4 h-4 mr-1" />
                         <span>Start date: {activity.activity_start_date}</span>

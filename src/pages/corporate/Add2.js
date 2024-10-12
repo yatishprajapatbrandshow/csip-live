@@ -408,16 +408,16 @@ const Add = () => {
 
                 <div className="flex justify-between">
                   {step > 0 && (
-                    <button type="button" onClick={prevStep} className="font-gilSemiBold inline-flex py-2 px-4 bg-gray-500 text-white rounded-md">
+                    <button type="button" onClick={prevStep} className=" inline-flex py-2 px-4 bg-gray-500 text-white rounded-md">
                       Previous
                     </button>
                   )}
                   {step === Object.keys(steps).length ? (
-                    <button type="button" onClick={() => nextStep(values)} disabled={isSubmitting} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
+                    <button type="button" onClick={() => nextStep(values)} disabled={isSubmitting} className=" inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
                       Submit
                     </button>
                   ) : (
-                    <button type="button" onClick={() => nextStep(values)} className="font-gilSemiBold inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
+                    <button type="button" onClick={() => nextStep(values)} className=" inline-flex py-2 px-4 bg-blue-500 text-white rounded-md">
                       Next
                     </button>
                   )}

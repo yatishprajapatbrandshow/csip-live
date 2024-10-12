@@ -49,6 +49,7 @@ export default function DashboardCombind() {
     const [dashboardData, setDashboardData] = useState([]);
     const [commentsData, setCommentsData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [ProfileStatus, setProfileStatus] = useState("");
 
     const isTriggeredApply = useSelector((state) => state.trigger.applyTrigger);
     const userData = useSelector((state) => state.session.userData);
@@ -65,7 +66,6 @@ export default function DashboardCombind() {
 
     const fetchDashboardData = async () => {
         if (!userData?.sid) return;
-
         try {
             const response = await fetch(`${API_URL}dashboardInfo?participant_id=${userData?.sid}`, {
                 headers: {
@@ -80,7 +80,6 @@ export default function DashboardCombind() {
 
             const responseData = await response.json();
             if (responseData.status === true) {
-                console.log("DashboardData = ", responseData);
                 setDashboardData(responseData?.data)
             }
         } catch (error) {
@@ -102,7 +101,6 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
-            console.log("New Activities = ", responseData);
             if (responseData.status === true) {
                 setNewActivities(responseData.data);
             }
@@ -110,6 +108,7 @@ export default function DashboardCombind() {
             console.error("Error:", error);
         }
     }
+
     const fetchRecommenedActivities = async () => {
         try {
             const APIURL = userData?.sid
@@ -124,7 +123,6 @@ export default function DashboardCombind() {
             });
 
             const responseData = await response.json();
-            console.log("Recommended Activities = ", responseData);
             if (responseData.status === true) {
                 setRecommendedActivities(responseData.data);
             }
@@ -153,11 +151,9 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
-            console.log("Topic Data = ", responseData);
 
             if (responseData.status === true) {
                 setTopicData(responseData.data);
-                console.log(responseData.data);
             }
         } catch (error) {
             console.error("Error:", error);
@@ -212,7 +208,6 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
-            console.log("CommentData = ", responseData);
             if (responseData.status === true) {
                 setCommentsData(responseData.data);
             }
@@ -229,6 +224,7 @@ export default function DashboardCombind() {
             fetchRecommenedActivities();
             fetchTopicData();
             fetchCommentsData();
+            fetchProfileStatus();
         }
     }, [userData]);
 
@@ -243,13 +239,40 @@ export default function DashboardCombind() {
     };
 
     const showToast = (message, type) => {
-        console.log("Toast called with message:", message);  // Logging for debugging
         if (type === 'success') {
             toast.success(message);
         } else if (type === 'error') {
             toast.error(message);
         }
     };
+
+
+    const fetchProfileStatus = async () => {
+        const participantId = userData?.sid;
+
+        try {
+            const response = await fetch(`${API_URL}register/get?participant_id=${participantId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const responseData = await response.json();
+            console.log(responseData);
+            if (responseData.status === true) {
+                setProfileStatus(responseData.data);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+
 
     return (
         <>
@@ -262,7 +285,7 @@ export default function DashboardCombind() {
                             <div className="flex items-center justify-between hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <div>
                                     <h2 className="text-3xl  text-purple-800">86<sup className="text-[17px]">%</sup></h2>
-                                    <p className="text-purple-600 font-gilSemiBold">Transformed!</p>
+                                    <p className="text-purple-600 ">Transformed!</p>
                                     <p className="text-sm text-purple-500 font-gilMedium">You've successfully mimicked a new form!</p>
                                 </div>
                                 <img
@@ -344,11 +367,13 @@ export default function DashboardCombind() {
                  
 
                     <div className="grid grid-cols-5 gap-4">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 col-span-2">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 col-span-2 h-max">
                             <div className="bg-purple-100 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <h3 className="text-lg  text-purple-800 mb-2">Profile Status</h3>
                                 <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                                    <CircularProgressBar value={16} text="16%" color="text-pink-500" />
+                                    {ProfileStatus ? 
+                                    <CircularProgressBar value={ProfileStatus.profilePercentage} text={`${ProfileStatus.profilePercentage}%`} color="text-pink-500" />
+                                    : null}
                                 </div>
                                 <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
                             </div>
@@ -379,7 +404,7 @@ export default function DashboardCombind() {
                                         <li className="text-purple-800">No topics found</li>
                                     ) : (
                                         topicData.map((topic, index) => (
-                                            <li key={index} className="bg-purple-200 text-purple-800 px-2 py-1 rounded flex items-center gap-1 font-gilSemiBold text-[15px] hover:drop-shadow-md">
+                                            <li key={index} className="bg-purple-200 text-purple-800 px-2 py-1 rounded flex items-center gap-1  text-[15px] hover:drop-shadow-md">
                                                 {topic?.topic}
                                                 <SquareX onClick={() => handleRemoveTopic(topic.sid)} className="cursor-pointer hover:text-purple-700 text-purple-500 w-5 h-5" />
                                             </li>
