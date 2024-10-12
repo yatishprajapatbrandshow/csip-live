@@ -13,6 +13,7 @@ export const useFetchActivities = () => {
 
         setLoading(true);
         setError(null);
+        console.log(userData.sid)
 
         try {
             const response = await fetch(`${API_URL}activity/applied?participantId=${userData.sid}`, {
@@ -21,12 +22,10 @@ export const useFetchActivities = () => {
                 },
                 method: 'GET',
             });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+            console.log(response)
 
             const responseData = await response.json();
+            console.log(responseData)
             if (responseData.status === true) {
                 setActivities(responseData.data);
             }

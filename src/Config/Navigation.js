@@ -35,19 +35,19 @@ export const MenuItemLinks = [
         { 
           name: 'View', 
           description: 'Gain insights into your academic traffic and performance metrics.', 
-          href: '/AllCurriculum', 
+          href: '/curriculum', 
           icon: ViewfinderCircleIcon 
         },
         { 
           name: 'Choose / Change', 
           description: 'Connect with third-party tools to customize your curriculum based on your needs.', 
-          href: '#', 
+          href: 'AllCurriculum', 
           icon: SquaresPlusIcon 
         },
         { 
           name: 'College Wise', 
           description: 'Engage with specific colleges to understand their offerings and expectations.', 
-          href: '#', 
+          href: 'ChooseCollege', 
           icon: AcademicCapIcon 
         },
       ],
@@ -61,13 +61,13 @@ export const MenuItemLinks = [
         { 
           name: 'Add', 
           description: 'Introduce new topics to enhance your learning experience.', 
-          href: '#', 
+          href: 'dashboard', 
           icon: FolderPlusIcon 
         },
         { 
           name: 'Remove', 
           description: 'Eliminate outdated topics to keep your curriculum relevant.', 
-          href: '#', 
+          href: 'dashboard', 
           icon: FolderMinusIcon 
         },
       ],
@@ -81,19 +81,19 @@ export const MenuItemLinks = [
         { 
           name: 'Applied', 
           description: 'View all topics you have applied your knowledge to in real scenarios.', 
-          href: '#', 
+          href: 'AppliedActivity', 
           icon: CursorArrowRippleIcon 
         },
         { 
           name: 'Search by Topic', 
           description: 'Find activities related to specific topics for better focus.', 
-          href: '#', 
+          href: '', 
           icon: DocumentMagnifyingGlassIcon 
         },
         { 
           name: 'Recommended', 
           description: 'Discover activities suggested based on your preferences and performance.', 
-          href: '#', 
+          href: 'RecomendedActivity', 
           icon: FolderOpenIcon 
         },
         { 
@@ -129,7 +129,7 @@ export const MenuItemLinks = [
         { 
           name: 'Payment Pending', 
           description: 'Review activities that have payments pending for successful enrollment.', 
-          href: '#', 
+          href: 'PaymentPending', 
           icon: CurrencyRupeeIcon 
         },
       ],

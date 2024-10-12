@@ -4,6 +4,7 @@ import { RedoDot } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getLocalStorageItem } from "@/Config/localstorage";
+import { API_URL } from "@/Config/Config";
 
 function Login() {
     const router = useRouter()
@@ -76,10 +77,11 @@ function Login() {
         if(!payload.email || !payload.password){
             alert("Please fill all feilds givven below")
         }
-
+        const APIURL = `${API_URL}login/login-with-email`
         try {
             // API call using fetch
-            const response = await fetch('https://csip-backend.onrender.com/login/login-with-email', {
+
+            const response = await fetch(APIURL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

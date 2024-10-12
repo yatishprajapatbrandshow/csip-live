@@ -1,4 +1,5 @@
 "use client";
+import { API_URL } from "@/Config/Config";
 import { useState } from "react";
 
 export default function AddActivity() {
@@ -89,9 +90,9 @@ export default function AddActivity() {
     }
 
 
-
+    const APIURL = `${API_URL}activity/add`;
     try {
-      const response = await fetch("https://csip-backend.onrender.com/activity/add", {
+      const response = await fetch(APIURL, {
         headers: {
           'Content-Type': 'application/json',
         },

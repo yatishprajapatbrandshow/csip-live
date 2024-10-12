@@ -12,11 +12,10 @@ import { useFetchActivities } from '@/hooks/useFetchActivities';
 
 const Activities = ({ cardData, title, activityData, bgDesign }) => {
     const { activities } = useFetchActivities();
-    console.log(activities);
+
 
     const showNavigation = activities?.length >= 6 && cardData?.length >= 6;
 
-    console.log(cardData)
     return (
         <>
         {/* {
