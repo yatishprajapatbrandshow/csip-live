@@ -1,5 +1,6 @@
 "use client";
 
+import { API_URL } from '@/Config/Config';
 import { Check } from 'lucide-react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -20,7 +21,7 @@ const TopicModal = ({ isOpen, onClose, fetchTopicData, fetchDashboardData, showT
 
     const onSearch = async (term) => {
         try {
-            const response = await fetch('https://csip-backend.onrender.com/topic/', {
+            const response = await fetch(`${API_URL}/topic`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -103,7 +104,7 @@ const TopicModal = ({ isOpen, onClose, fetchTopicData, fetchDashboardData, showT
 
 
         try {
-            const response = await fetch('https://csip-backend.onrender.com/topic/add', {
+            const response = await fetch(`${API_URL}/topic/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

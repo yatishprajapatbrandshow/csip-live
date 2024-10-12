@@ -7,19 +7,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { applyTrigger } from '../../redux/actions/triggerSlice';
 import { API_URL } from '@/Config/Config';
 import { useRouter } from 'next/router';
+import useRazorpay from '@/hooks/useRazorpay';
 
 const CardStudent = ({ activity }) => {
     const router = useRouter();
     const dispatch = useDispatch();
     const userData = useSelector((state) => state.session.userData);
     const [isToggled, setIsToggled] = useState(false);
+    const { initiatePayment } = useRazorpay();
 
     const toggleHeart = () => {
         setIsToggled(!isToggled);
     };
     const handleApply = async () => {
+        console.log(activity);
+        
     
-        if (activity?.activity_category === "Direct") {
+        if (activity?.activity_category === "DIRECT") {
 
             if (!userData?.sid) return;
             const payload = {
@@ -36,11 +40,10 @@ const CardStudent = ({ activity }) => {
                     body: JSON.stringify(payload),
                 });
                 const responseData = await response.json();
-                console.log(responseData.orderId);
-                
+                console.log(responseData);
                 if (responseData.status === true) {
                     dispatch(applyTrigger());
-                    alert(responseData?.message)
+                    await initiatePayment(activity.amount, responseData.orderId);
                 } else {
                     alert(responseData?.message)
                 }
@@ -48,6 +51,7 @@ const CardStudent = ({ activity }) => {
                 console.error("Error:", error);
             }
         }
+        
     }
     return (
         <>

@@ -398,7 +398,7 @@ const landing = () => {
                                             <g className="origin-center scale-100 transition duration-500 motion-safe:group-hover:scale-105">
                                                 <foreignObject width="655" height="680">
                                                     <img
-                                                        alt=""
+                                                        alt="img"
                                                         loading="lazy"
                                                         width="2400"
                                                         height="3000"
@@ -475,7 +475,7 @@ const landing = () => {
                                                     <div className="mt-1 font-montserrat2 text-sm text-slate-500">{testimonial.position}</div>
                                                 </div>
                                                 <div className="overflow-hidden rounded-full bg-slate-50">
-                                                    <img alt="" loading="lazy" width="56" height="56" decoding="async" className="h-14 w-14 object-cover" src={testimonial.imgSrc} />
+                                                    <img alt="img" loading="lazy" width="56" height="56" decoding="async" className="h-14 w-14 object-cover" src={testimonial.imgSrc} />
                                                 </div>
                                             </figcaption>
                                         </figure>
@@ -500,7 +500,7 @@ const landing = () => {
                                                     <div className="mt-1 font-montserrat2 text-sm text-slate-500">{testimonial.position}</div>
                                                 </div>
                                                 <div className="overflow-hidden rounded-full bg-slate-50">
-                                                    <img alt="" loading="lazy" width="56" height="56" decoding="async" className="h-14 w-14 object-cover" src={testimonial.imgSrc} />
+                                                    <img alt="img" loading="lazy" width="56" height="56" decoding="async" className="h-14 w-14 object-cover" src={testimonial.imgSrc} />
                                                 </div>
                                             </figcaption>
                                         </figure>
@@ -525,7 +525,7 @@ const landing = () => {
                                                     <div className="mt-1 font-montserrat2 text-sm text-slate-500">{testimonial.position}</div>
                                                 </div>
                                                 <div className="overflow-hidden rounded-full bg-slate-50">
-                                                    <img alt="" loading="lazy" width="56" height="56" decoding="async" className="h-14 w-14 object-cover" src={testimonial.imgSrc} />
+                                                    <img alt="img" loading="lazy" width="56" height="56" decoding="async" className="h-14 w-14 object-cover" src={testimonial.imgSrc} />
                                                 </div>
                                             </figcaption>
                                         </figure>

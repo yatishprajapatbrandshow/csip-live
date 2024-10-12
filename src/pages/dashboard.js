@@ -136,7 +136,7 @@ export default function DashboardCombind() {
 
         setLoading(true);
         try {
-            const response = await fetch("https://csip-backend.onrender.com/topic/get", {
+            const response = await fetch(`${API_URL}/topic/get`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
