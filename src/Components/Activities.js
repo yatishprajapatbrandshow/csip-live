@@ -12,10 +12,16 @@ import { useFetchActivities } from '@/hooks/useFetchActivities';
 
 const Activities = ({ cardData, title, activityData }) => {
     const { activities } = useFetchActivities();
+    console.log(activities);
+
     const showNavigation = activities?.length >= 6 && cardData?.length >= 6;
+<<<<<<< HEAD
+=======
+    console.log(cardData)
+>>>>>>> 6a345f0dd8e386c43d961cac09e36165fa4588ac
     return (
         <>
-            <section>
+            <section className='mb-20' style={{ backgroundImage: "url('../../images/pattern.svg')", backgroundRepeat: "no-repeat", backgroundSize: "contain", backgroundPosition: "right" }}>
                 <h2 className='text-3xl '>{title}</h2>
                 <div className='p-6 px-0 flex flex-wrap gap-5'>
                     {activityData && Array.isArray(activities) && activities.length ? (

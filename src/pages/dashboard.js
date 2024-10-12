@@ -45,11 +45,13 @@ export default function DashboardCombind() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newActivities, setNewActivities] = useState([])
     const [recommendedActivities, setRecommendedActivities] = useState([])
+    const [favActivities, setfavActivities] = useState([])
     const [topicData, setTopicData] = useState([]);
     const [dashboardData, setDashboardData] = useState([]);
     const [commentsData, setCommentsData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [ProfileStatus, setProfileStatus] = useState("");
+    const [ActivityCurriculumStatus, setActivityCurriculumStatus] = useState("");
 
     const isTriggeredApply = useSelector((state) => state.trigger.applyTrigger);
     const userData = useSelector((state) => state.session.userData);
@@ -63,6 +65,8 @@ export default function DashboardCombind() {
     const paymentPendingCount = useCountUp(dashboardData?.paymentPending?.length || 0);
     const completedActivitiesCount = useCountUp(dashboardData?.completedActivities?.length || 0);
     const totalScoreCount = useCountUp(dashboardData?.totalScore || 0); // Assuming totalScore is a number
+    const ProfileStatusCount = useCountUp(ProfileStatus?.profilePercentage || 0); // Assuming totalScore is a number
+    const ActivityCurriculumStatusCount = useCountUp(ActivityCurriculumStatus?.percentage || 0); // Assuming totalScore is a number
 
 
     const fetchDashboardData = async () => {
@@ -132,6 +136,26 @@ export default function DashboardCombind() {
         }
     }
 
+    const fetchFavoriteActivity = async () => {
+        try {
+            const APIURL = `${API_URL}favourite-activity/?participant_id=${userData?.sid}`
+
+            const response = await fetch(`${APIURL}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: "GET",
+            });
+
+            const responseData = await response.json();
+            if (responseData.status === true) {
+                setfavActivities(responseData.data);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
     const fetchTopicData = async () => {
         if (!userData?.sid) return;
 
@@ -181,10 +205,10 @@ export default function DashboardCombind() {
             });
 
             const responseData = await response.json()
-            console.log(responseData)
-            if(responseData.status === true){
+
+            if (responseData.status === true) {
                 alert("topics removed successfully")
-            }else{
+            } else {
                 alert("Something went wrong, please try again")
             }
         } catch (error) {
@@ -223,9 +247,11 @@ export default function DashboardCombind() {
             fetchDashboardData();
             fetchNewActivities();
             fetchRecommenedActivities();
+            fetchFavoriteActivity();
             fetchTopicData();
             fetchCommentsData();
             fetchProfileStatus();
+            fetchActivityCurriculumStatus();
         }
     }, [userData]);
 
@@ -276,7 +302,7 @@ export default function DashboardCombind() {
 
     const fetchActivityCurriculumStatus = async () => {
         const participantId = userData?.sid;
- 
+
         try {
             const response = await fetch(`${API_URL}dashboardInfo/getActivity-curriculum?participant_id=${participantId}`, {
                 method: 'GET',
@@ -287,17 +313,16 @@ export default function DashboardCombind() {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
- 
+
             const responseData = await response.json();
             console.log(responseData);
             if (responseData.status === true) {
-                // setActivityCurriculumStatus(responseData?.data?.percentage);
+                setActivityCurriculumStatus(responseData?.data?.percentage);
             }
         } catch (error) {
             console.error("Error:", error);
         }
     }
-
 
 
     return (
@@ -310,7 +335,7 @@ export default function DashboardCombind() {
                         <div className="bg-pink-200 p-4 rounded-lg col-span-4 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <div className="flex items-center justify-between hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <div>
-                                    <h2 className="text-3xl  text-purple-800">86<sup className="text-[17px]">%</sup></h2>
+                                    <h2 className="text-3xl  text-purple-800">{useCountUp(ProfileStatus?.profilePercentage || 0)}<sup className="text-[17px]">%</sup></h2>
                                     <p className="text-purple-600 ">Transformed!</p>
                                     <p className="text-sm text-purple-500 font-gilMedium">You've successfully mimicked a new form!</p>
                                 </div>
@@ -390,23 +415,23 @@ export default function DashboardCombind() {
                         </div>
                     </div>
 
-                 
+
 
                     <div className="grid grid-cols-5 gap-4">
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 col-span-2 h-max">
                             <div className="bg-purple-100 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <h3 className="text-lg  text-purple-800 mb-2">Profile Status</h3>
                                 <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                                    {ProfileStatus ? 
-                                    <CircularProgressBar value={ProfileStatus.profilePercentage} text={`${ProfileStatus.profilePercentage}%`} color="text-pink-500" />
-                                    : null}
+                                    {ProfileStatus ?
+                                        <CircularProgressBar value={ProfileStatusCount} text={`${ProfileStatusCount}%`} color="text-pink-500" />
+                                        : null}
                                 </div>
                                 <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
                             </div>
                             <div className="bg-purple-100 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <h3 className="text-lg  text-purple-800 mb-2">Activity/Curriculum</h3>
                                 <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                                    <CircularProgressBar value={70} text="70%" color="text-pink-500" />
+                                    <CircularProgressBar value={ActivityCurriculumStatusCount} text={`${ActivityCurriculumStatusCount}%`} color="text-pink-500" />
                                 </div>
                                 <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
                             </div>
@@ -446,6 +471,7 @@ export default function DashboardCombind() {
                 </div>
                 <CommentsSlider commentsData={commentsData} />
                 <Activities title="Activity" activityData={true} />
+                <Activities title="Favourite Activity" cardData={favActivities} />
                 <Activities title="Recommended Activity" cardData={recommendedActivities} />
                 <Activities title="New Activity" cardData={newActivities} />
             </div>
