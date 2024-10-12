@@ -471,10 +471,17 @@ export default function DashboardCombind() {
                     <ToastContainer position="top-right" autoClose={1000} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
                 </div>
                 <CommentsSlider commentsData={commentsData} />
-                <Activities title="Activity" activityData={true} />
-                <Activities title="Favourite Activity" cardData={favActivities} />
-                <Activities title="Recommended Activity" cardData={recommendedActivities} />
-                <Activities title="New Activity" bgDesign={"Full"} cardData={newActivities} />
+                {/* <Activities title="Activity" activityData={true} /> */}
+
+                {favActivities && Array.isArray(favActivities) && favActivities.length > 0 ? 
+                    <Activities title="Favourite Activity" cardData={favActivities} />
+                : null}
+                {recommendedActivities && Array.isArray(recommendedActivities) && recommendedActivities.length > 0 ? 
+                    <Activities title="Recommended Activity" cardData={recommendedActivities} />
+                : null}
+                {newActivities && Array.isArray(newActivities) && newActivities.length > 0 ? 
+                    <Activities title="New Activity" bgDesign={"Full"} cardData={newActivities} />
+                : null}
             </div>
         </>
     );

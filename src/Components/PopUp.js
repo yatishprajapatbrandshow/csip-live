@@ -7,43 +7,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import useRazorpay from '@/hooks/useRazorpay';
 import { BookCheck, BookX } from 'lucide-react';
 
-export default function PopUp({ onClose, activity }) {
+export default function PopUp({ onClose, activity, onSuccess }) {
   const { initiatePayment } = useRazorpay();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.session.userData);
 
-
-  const handleApply = async () => {
-    alert("Applying for activity")
-    if (activity?.activity_category === "MCQ") {
-
-      if (!userData?.sid) return;
-      const payload = {
-        participantId: userData?.sid,
-        activityId: activity?.sid
-      }
-
-      try {
-        const response = await fetch(`${API_URL}activity/apply`, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
-        const responseData = await response.json();
-        if (responseData.status === true) {
-          dispatch(applyTrigger());
-          await initiatePayment(activity.amount, responseData.orderId);
-        } else {
-          alert(responseData?.message)
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  }
-
+  
+  
   const handleCancel = () => {
     onClose();
   };
@@ -60,7 +30,7 @@ export default function PopUp({ onClose, activity }) {
         <div className="flex justify-center space-x-4">
           {/* Confirm Button */}
           <button
-            onClick={handleApply}
+              onClick={onSuccess}
             className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow-md transform transition-transform duration-200 hover:scale-105 active:scale-95"
           >
             <span className="flex items-center justify-center gap-1">

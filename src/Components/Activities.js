@@ -23,24 +23,25 @@ const Activities = ({ cardData, title, activityData, bgDesign }) => {
             
         } */}
             <section className={`mb-20 ${bgDesign === "Full" ? "bg-BGRec bg-[length:40px_40px]" : "bg-pattern bg-no-repeat bg-[length:400px_400px] bg-right"}`}>
-                
-                <h2 className='text-3xl '>{title}</h2>
-                <div className='p-6 px-0 flex flex-wrap gap-5'>
-                    {activityData && Array.isArray(activities) && activities.length ? (
-                        activities.map((activityItem) => (
-                            <div className='w-max'>
-                                <CardCorporate key={activityItem.id} activity={activityItem} />
-                            </div>
-                        ))
-                    ) : (
-                        Array.isArray(cardData) && cardData.length ? (
-                            cardData.map((activity) => (
+                <div className='bg-white/50 '>
+                    <h2 className='text-3xl '>{title}</h2>
+                    <div className='p-6 px-0 flex flex-wrap gap-5'>
+                        {activityData && Array.isArray(activities) && activities.length ? (
+                            activities.map((activityItem) => (
                                 <div className='w-max'>
-                                    <CardStudent activity={activity} />
+                                    <CardCorporate key={activityItem.id} activity={activityItem} />
                                 </div>
                             ))
-                        ) : null // Optionally handle the case where both arrays are empty
-                    )}
+                        ) : (
+                            Array.isArray(cardData) && cardData.length ? (
+                                cardData.map((activity) => (
+                                    <div className='w-max'>
+                                        <CardStudent activity={activity} />
+                                    </div>
+                                ))
+                            ) : null // Optionally handle the case where both arrays are empty
+                        )}
+                    </div>
                 </div>
             </section >
         </>

@@ -3,7 +3,11 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { CalendarDays, Clock, ContactRound, Heart } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { applyTrigger } from '../../redux/actions/triggerSlice';
+import { API_URL } from '@/Config/Config';
 import { useRouter } from 'next/router';
+import useRazorpay from '@/hooks/useRazorpay';
 import { encrypt } from '@/utils/cryptoUtils';
 import useFormattedDate from '@/hooks/useDateFormate';
 import DefaultIMG from '/public/images/image-banner.jpg';
@@ -12,25 +16,153 @@ import PopUp from './PopUp';
 
 const CardStudent = ({ activity }) => {
     const router = useRouter();
+    const dispatch = useDispatch();
+    const userData = useSelector((state) => state.session.userData);
     const [isToggled, setIsToggled] = useState(false);
+    const { initiatePayment } = useRazorpay();
     const [showPopup, setShowPopup] = useState(false);
 
     const toggleHeart = () => {
         setIsToggled(!isToggled);
     };
 
+    const handleClick = (activity) => {
+        const encryptedId = encrypt(activity._id);
+        router.push({
+            pathname: '/landing',
+            query: { item: encryptedId }
+        });
+    };
+
     const handlePopUp = () => {
         setShowPopup(true);
     };
 
-    const handleClick = (activity) => {
-        const encryptedId = encrypt(activity._id);
-        router.push({
-          pathname: '/landing',
-          query: { item: encryptedId }
-        });
+
+    const handleApply = async () => {
+        console.log("dfvhn")
+        console.log("sd", activity.activity_category);
+        if (activity?.activity_category === "DIRECT") {
+
+            if (!userData?.sid) return;
+            const payload = {
+                participantId: userData?.sid,
+                activityId: activity?.sid
+            }
+
+            console.log(payload);
+            try {
+                const response = await fetch(`${API_URL}activity/apply`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    method: "POST",
+                    body: JSON.stringify(payload),
+                });
+                const responseData = await response.json();
+                console.log(responseData);
+                if (responseData.status === true) {
+                    await handleCreateOrder();
+                } else {
+                    alert(responseData?.message)
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+    }
+
+
+
+    const handleCreateOrder = async () => {
+        console.log("Hit here1")
+        const payload = {
+            participantid: userData?.sid,
+            activityid: activity?.sid,
+            price: activity?.amount
+        }
+        try {
+            const response = await fetch(`${API_URL}order/create`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: "POST",
+                body: JSON.stringify(payload),
+            });
+            const responseData = await response.json();
+            console.log("Crrete order", responseData);
+
+            if (responseData.status === true) {
+                alert(responseData?.message)
+                const paymentData = await initiatePayment(activity.amount, responseData.orderId);
+                const paydata = await GetDetails(paymentData?.razorpay_payment_id);
+                await handleCreatePayment(responseData?.data, paydata);
+                dispatch(applyTrigger());
+            } else {
+                alert(responseData?.message)
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+    const GetDetails = async (PayID) => {
+        try {
+            const response = await fetch(`/api/razorpay?PayID=${PayID}`);
+            const data = await response.json();
+            if (data) {
+                return data
+            }
+        } catch (error) {
+            console.error("Error fetching data from API:", error);
+            return false
+        }
     };
 
+
+    const handleCreatePayment = async (orderData, PayData) => {
+        const payload = {
+            participantId: 287554,
+            activityId: 431950,
+            orderid: orderData.sid,
+            trans_date: new Date.now(),
+            paidAmount: PayData.amount,
+            tracking_id: PayData.acquirer_data.rrn || "",
+            bank_ref_no: "",
+            order_status: PayData.status || "",
+            failure_message: PayData.error_description || "",
+            payment_mode: PayData.method || "",
+            status_code: "200",
+            status_message:
+                PayData.status === "created" ? "Payment request initiated" :
+                    PayData.status === "authorized" ? "Payment approved, pending capture." :
+                        PayData.status === "captured" ? "Payment successfully processed" :
+                            PayData.status === "refunded" ? "Payment reversed, refunded." :
+                                PayData.status === "failed" ? "Payment attempt unsuccessful." : "",
+            status: PayData.status || "",
+            razorpayId: PayData.id || "",
+            currency: PayData.currency || ""
+        }
+        try {
+            const response = await fetch(`${API_URL}payment/create`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: "POST",
+                body: JSON.stringify(payload),
+            });
+            const responseData = await response.json();
+            console.log(responseData);
+
+            if (responseData.status === true) {
+                alert(responseData?.message)
+            } else {
+                alert(responseData?.message)
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
     return (
         <>
             <div className="bg-white rounded-2xl overflow-hidden w-[300px] shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 hover:scale-105">
@@ -104,7 +236,7 @@ const CardStudent = ({ activity }) => {
                     </button>
                 </div>
             </div>
-            {showPopup && <PopUp onClose={() => setShowPopup(false)} activity={activity} />}
+            {showPopup && <PopUp onClose={() => setShowPopup(false)} activity={activity} onSuccess={handleApply} />}
         </>
     );
 };
