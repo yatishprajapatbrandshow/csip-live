@@ -3,25 +3,24 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { CalendarDays, Clock, ContactRound, Heart } from 'lucide-react';
-import { useDispatch, useSelector } from 'react-redux';
-import { applyTrigger } from '../../redux/actions/triggerSlice';
-import { API_URL } from '@/Config/Config';
 import { useRouter } from 'next/router';
-import useRazorpay from '@/hooks/useRazorpay';
 import { encrypt } from '@/utils/cryptoUtils';
 import useFormattedDate from '@/hooks/useDateFormate';
 import DefaultIMG from '/public/images/image-banner.jpg';
 import DefaultLogo from '/public/images/images.png';
+import PopUp from './PopUp';
 
 const CardStudent = ({ activity }) => {
     const router = useRouter();
-    const dispatch = useDispatch();
-    const userData = useSelector((state) => state.session.userData);
     const [isToggled, setIsToggled] = useState(false);
-    const { initiatePayment } = useRazorpay();
+    const [showPopup, setShowPopup] = useState(false);
 
     const toggleHeart = () => {
         setIsToggled(!isToggled);
+    };
+
+    const handlePopUp = () => {
+        setShowPopup(true);
     };
 
     const handleClick = (activity) => {
@@ -32,39 +31,6 @@ const CardStudent = ({ activity }) => {
         });
     };
 
-    const handleApply = async () => {
-        console.log(activity);
-
-
-        if (activity?.activity_category === "DIRECT") {
-
-            if (!userData?.sid) return;
-            const payload = {
-                participantId: userData?.sid,
-                activityId: activity?.sid
-            }
-
-            try {
-                const response = await fetch(`${API_URL}activity/apply`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    method: "POST",
-                    body: JSON.stringify(payload),
-                });
-                const responseData = await response.json();
-                if (responseData.status === true) {
-                    dispatch(applyTrigger());
-                    await initiatePayment(activity.amount, responseData.orderId);
-                } else {
-                    alert(responseData?.message)
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-
-    }
     return (
         <>
             <div className="bg-white rounded-2xl overflow-hidden w-[300px] shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 hover:scale-105">
@@ -130,14 +96,15 @@ const CardStudent = ({ activity }) => {
                     </div>
                 </div>
                 <div className="flex justify-between h-11 border-t border-gray-300">
-                    <button onClick={() => router.push('/landing')} className="bg-purple-500 text-sm w-full text-white hover:bg-purple-600 transition-colors flex justify-center items-center">
+                    <button onClick={() => handleClick(activity)} className="bg-purple-500 text-sm w-full text-white hover:bg-purple-600 transition-colors flex justify-center items-center">
                         View Activity
                     </button>
-                    <button onClick={handleApply} className="bg-gray-200 w-full text-gray-800 text-sm hover:bg-gray-300 transition-colors">
+                    <button onClick={handlePopUp} className="bg-gray-200 w-full text-gray-800 text-sm hover:bg-gray-300 transition-colors">
                         Apply Now
                     </button>
                 </div>
             </div>
+            {showPopup && <PopUp onClose={() => setShowPopup(false)} activity={activity} />}
         </>
     );
 };

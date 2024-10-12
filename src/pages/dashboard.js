@@ -191,7 +191,7 @@ export default function DashboardCombind() {
 
         const datatSend = {
             participant_id: userData?.sid,
-            TopicsList: [`"${topicId}"`],
+            TopicsList: [`${topicId}`],
         }
         const APIURL = `${API_URL}topic/remove`
 
@@ -208,6 +208,7 @@ export default function DashboardCombind() {
 
             if (responseData.status === true) {
                 alert("topics removed successfully")
+                fetchTopicData();
             } else {
                 alert("Something went wrong, please try again")
             }

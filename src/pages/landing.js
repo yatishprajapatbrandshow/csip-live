@@ -80,7 +80,6 @@ const landing = () => {
 
 
     const fetchAllCurriculum = async () => {
-
         setLoader(true);
         const APIURL = `${API_URL}activity/get-by-id?_id=${id}`;
         console.log(APIURL);
