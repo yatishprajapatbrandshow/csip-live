@@ -13,13 +13,16 @@ import useFormattedDate from '@/hooks/useDateFormate';
 import DefaultIMG from '/public/images/image-banner.jpg';
 import DefaultLogo from '/public/images/images.png';
 import PopUp from './PopUp';
+import Registration from '../function/Registration';
+import CreateOrder from '../function/CreateOrder';
+import Razorpay from '../function/initiatePayment';
 
 const CardStudent = ({ activity }) => {
     const router = useRouter();
     const dispatch = useDispatch();
     const userData = useSelector((state) => state.session.userData);
     const [isToggled, setIsToggled] = useState(false);
-    const { initiatePayment } = useRazorpay();
+    // const { initiatePayment } = useRazorpay();
     const [showPopup, setShowPopup] = useState(false);
 
     const toggleHeart = () => {
@@ -40,96 +43,56 @@ const CardStudent = ({ activity }) => {
 
 
     const handleApply = async () => {
-        console.log("dfvhn")
-        console.log("sd", activity.activity_category);
-        if (activity?.activity_category === "DIRECT") {
-
-            if (!userData?.sid) return;
-            const payload = {
-                participantId: userData?.sid,
-                activityId: activity?.sid
+        console.log("step 1 sucess")
+        try{
+            const register = await Registration(activity, userData)
+            console.log(register)
+            if(register &&  register.status){
+                OrderCreate()
             }
-
-            console.log(payload);
-            try {
-                const response = await fetch(`${API_URL}activity/apply`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    method: "POST",
-                    body: JSON.stringify(payload),
-                });
-                const responseData = await response.json();
-                console.log(responseData);
-                if (responseData.status === true) {
-                    await handleCreateOrder();
-                } else {
-                    alert(responseData?.message)
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
+        }catch(error){
+            console.log(error)
         }
+    }
 
+    const OrderCreate = async () => {
+        try{
+            const order = await CreateOrder(activity, userData)
+            if(order && order.status){
+                console.log(order)
+                initiatePayment()
+            }
+        }catch(error){
+            console.log(error)
+        }
+    }
+
+    const initiatePayment = async () => {
+        try{
+            const Payment = await Razorpay(activity, userData)
+            if(Payment){
+                GetDetails("pay_P8osHZXRb09Oy8")
+            }
+        }catch(error){
+            console.log(error)
+        }
     }
 
 
 
-    const handleCreateOrder = async () => {
-        console.log("Hit here1");
-    
-        const payload = {
-            participantid: userData?.sid,
-            activityid: activity?.sid,
-            price: activity?.amount,
-        };
-    
-        try {
-            const response = await fetch(`${API_URL}order/create`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                method: "POST",
-                body: JSON.stringify(payload),
-            });
-    
-            const responseData = await response.json();
-    
-            if (responseData.status === true) {
-                alert(responseData?.message);
-    
-                // Wait for initiatePayment to resolve
-                const paymentData = await initiatePayment(activity.amount, responseData.orderId);
-    
-                if (paymentData?.razorpay_payment_id) {
-                    // Get paydata once paymentData is fully resolved
-                    const paydata = await GetDetails(paymentData.razorpay_payment_id);
-    
-                    // Handle payment creation with resolved paydata
-                    await handleCreatePayment(responseData?.data, paydata);
-                    
-                    // Dispatch the trigger after all steps are completed
-                    dispatch(applyTrigger());
-                } else {
-                    console.error("Error: Payment initiation failed.");
-                }
-            } else {
-                alert(responseData?.message);
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
-    
+    // Wait for initiatePayment to resolve
+    // const paymentData = await initiatePayment(activity.amount, responseData.orderId);
+    // const paydata = await GetDetails(paymentData.razorpay_payment_id);
+    // await handleCreatePayment(responseData?.data, paydata);
+    // dispatch(applyTrigger());
 
-    const GetDetails = async (PayID) => {
-        console.log(PayID)
+    const GetDetails = async (Payment) => {
+        console.log(Payment.razorpay_payment_id);
         try {
-            const response = await fetch(`/api/razorpay?PayID=${PayID}`);
+            const response = await fetch(`/api/razorpay?PayID=${Payment}`);
             const data = await response.json();
-            console.log(data);
-            if (data) {
-                return data
+            if(data){
+                console.log(data);
             }
         } catch (error) {
             console.error("Error fetching data from API:", error);
@@ -139,10 +102,9 @@ const CardStudent = ({ activity }) => {
 
 
     const handleCreatePayment = async (orderData, PayData) => {
-        console.log("orderData", orderData);
         const payload = {
-            participantId: 287554,
-            activityId: 431950,
+            participantId: userData?.sid,
+            activityId: activity?.sid,
             orderid: orderData.sid,
             trans_date: new Date.now(),
             paidAmount: PayData.amount,

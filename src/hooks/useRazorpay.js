@@ -15,9 +15,9 @@ const useRazorpay = () => {
         await loadRazorpayScript();
 
         const options = {
-            key: 'rzp_test_bJShg4py6mnQe0', // Replace with your Razorpay key
-            // key: 'rzp_live_CDDk2KEJwzL6j1', // Replace with your Razorpay key
-            amount: 1 * 100, // Amount in paisa
+            key: 'rzp_test_bJShg4py6mnQe0', 
+            // key: 'rzp_live_CDDk2KEJwzL6j1',
+            amount: 1 * 100,
             currency: 'INR',
             name: 'Your Company Name',
             description: 'Activity Payment',
