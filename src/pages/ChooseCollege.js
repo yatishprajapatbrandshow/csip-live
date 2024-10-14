@@ -46,7 +46,7 @@ function ChooseCollege() {
     console.log(value);
 
     try {
-      const response = await fetch(`${API_URL_LOCAL}college/?name=${value}&limit=12`, {
+      const response = await fetch(`${API_URL}college/?name=${value}&limit=12`, {
         headers: {
           'Content-Type': 'application/json',
         },
