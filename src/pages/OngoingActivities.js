@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { API_URL_LOCAL } from "@/Config/Config";
 
 
-const AppliedActivity = () => {
+const OngoingActivity = () => {
     const userData = useSelector((state) => state.session.userData);
     const [ongoingActivity, setOngoingActivity] = useState([]);
     const fetchRecomentedActivities = async () => {
@@ -56,4 +56,4 @@ const AppliedActivity = () => {
     )
 }
 
-export default AppliedActivity
+export default OngoingActivity
