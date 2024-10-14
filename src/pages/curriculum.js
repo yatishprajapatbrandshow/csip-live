@@ -4,14 +4,14 @@ import React, { useEffect, useState } from 'react';
 import { API_URL, API_URL_LOCAL } from '@/Config/Config';
 import { useSelector } from 'react-redux';
 import Header from '@/Components/Header';
-
+import { useRouter } from 'next/router';
 function Curriculum() {
   const [CurriculumData, setCurriculumData] = useState();
   const [groupsData, setGroupData] = useState([]);
   const [curriId, setcurriId] = useState(0);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const router = useRouter();
   const userData = useSelector((state) => state.session.userData);
 
   const fetchCurriculumID = async () => {
@@ -94,7 +94,7 @@ function Curriculum() {
     <>
       <Header />
       <div className="pl-10 p-6 bg-[#F0F0F0] w-full">
-        <div className='flex items-center gap-2 mb-4 '><Undo2 className='w-5 h-5' />Go Back</div>
+      <div className='flex items-center gap-2 mb-4 cursor-pointer ' onClick={() => router.back()}><Undo2 className='w-5 h-5' />Go Back</div>
         <div className='bg-white  w-full p-6'>
           <h1 className="text-3xl font-gilBold mb-6">Curriculum</h1>
           <h5 className="text-sm text-gray-700 mb-3">{CurriculumData?.name}</h5>

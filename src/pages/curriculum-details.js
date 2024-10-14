@@ -136,6 +136,7 @@ function Curriculum() {
     <>
       <Header />
       <div className="bg-white w-full max-w-6xl mx-auto shadow-xl mt-10">
+      <div className='flex items-center gap-2 mb-4 cursor-pointer ' onClick={() => router.back()}><Undo2 className='w-5 h-5' />Go Back</div>
         {
           loading ? <div className='text-center'>Loading ....</div> :
             <div className='bg-white w-full '>

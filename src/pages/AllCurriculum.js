@@ -49,6 +49,10 @@ function AllCurriculum() {
     <>
       <Header />
       <div className="pl-10 p-6 max-w-7xl w-full h-screen bg-white">
+        <button onClick={() => router.back()} className="flex items-center  mb-6">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Go Back
+        </button>
         {allCurriculum === "inProcess" ?
           <>
             <div className='flex flex-wrap gap-5'>
