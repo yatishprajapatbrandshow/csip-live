@@ -83,12 +83,18 @@ function ChooseCollege() {
         <h2 className='my-10 text-4xl font-gilBold  '>
           Search College
         </h2>
-        <input
-          type="text"
-          onChange={onSearchChange}
-          placeholder="Search..."
-          className="w-full max-w-md p-2 border rounded-md focus:outline-none"
-        />
+        <div className='flex flex-col gap-2'>
+          <label htmlFor='college' className='font-gilMedium text-xl '>
+            College Name
+          </label>
+          <input
+            id='college'
+            type="text"
+            onChange={onSearchChange}
+            placeholder="Search..."
+            className="w-full max-w-md p-2 border rounded-md focus:outline-none"
+          />
+        </div>
         <div>
           <div className='w-full h-max mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
             {
