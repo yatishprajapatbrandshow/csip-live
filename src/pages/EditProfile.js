@@ -7,37 +7,7 @@ import { useEffect, useState } from "react";
 export default function EditProfile() {
   const [userProfileData, setUserProfileData] = useState({});
   const [file, setFile] = useState(null);
-  const [uploadStatus, setUploadStatus] = useState('');
   const [fileUrl, setFileUrl] = useState('');
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
-  const handleUpload = async () => {
-    if (!file) {
-      setUploadStatus('Please select a file first.');
-      return;
-    }
-    console.log(file);
-
-    const formData = new FormData();
-    formData.append('fileUp', file); // Append the file to the form data
-
-    for (const [key, value] of formData.entries()) {
-      console.log(key, value); // This will log the key-value pairs in the FormData
-    }
-
-    try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData, // Send the FormData object
-      });
-
-      const result = await response.json();
-      console.log(result);
-    } catch (error) {
-      console.log("error here", error);
-    }
-  };
   const [activeLink, setActivelink] = useState(1);
   const [formData, setFormData] = useState({
     sid: "",
@@ -57,13 +27,41 @@ export default function EditProfile() {
     retypePassword: "",
     participantpic: "",
   });
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+    if (file) {
+      handleUpload()
+    }
+  };
+  const handleUpload = async () => {
+    if (!file) {
+      alert('Please select a file first.');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('fileUp', file); // Append the file to the form data
 
+    for (const [key, value] of formData.entries()) {
+      console.log(key, value); // This will log the key-value pairs in the FormData
+    }
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData, // Send the FormData object
+      });
+
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.log("error here", error);
+    }
+  };
   // Fetch user profile data from local storage on component mount
   useEffect(() => {
     const userData = getLocalStorageItem('userData');
     if (userData) {
       console.log(userData);
-
       setUserProfileData(userData);
       setFormData(userData); // Directly populate formData with userProfileData
     }
@@ -139,8 +137,6 @@ export default function EditProfile() {
     updateProfile();
   };
   const updateProfile = async () => {
-
-
     const payload = {
       sid: formData?.sid || "",
       name: formData?.name || "",
@@ -282,6 +278,7 @@ export default function EditProfile() {
 
                       {/* Button to trigger file input */}
                       <button
+                        type="button"
                         onClick={() => document.getElementById('profile-image-input').click()}
                         className="px-4 py-2 bg-gray-600 text-white rounded-full hover:bg-gray-700"
                       >
