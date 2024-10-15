@@ -15,7 +15,7 @@ function PaymentPending() {
 
     const fetchRecomentedActivities = async () => {
         try {
-            const response = await fetch(`${API_URL_LOCAL}payment/pending?participant_id=${userData?.sid}`, {
+            const response = await fetch(`${API_URL}payment/pending?participant_id=${userData?.sid}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

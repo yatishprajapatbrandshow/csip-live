@@ -72,7 +72,7 @@ export default function DashboardCombind() {
     const fetchDashboardData = async () => {
         if (!userData?.sid) return;
         try {
-            const response = await fetch(`${API_URL_LOCAL}dashboardInfo?participant_id=${userData?.sid}`, {
+            const response = await fetch(`${API_URL}dashboardInfo?participant_id=${userData?.sid}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
