@@ -82,16 +82,65 @@ export default function EditProfile() {
   const handleSaveChanges = (e) => {
     e.preventDefault();
     // Validation logic (example: email format, passwords match, etc.)
-    if (activeLink === 2 && formData.newPassword !== formData.retypePassword) {
-      alert('Passwords do not match!');
-      return;
+    if (activeLink === 2) {
+      // Ensure all required passwords are present
+      if (!formData?.oldPassword || formData.oldPassword.trim() === '') {
+        alert('Old Password is required');
+        return;
+      }
+
+      if (!formData?.newPassword || formData.newPassword.trim() === '') {
+        alert('New Password is required');
+        return;
+      }
+
+      if (!formData?.retypePassword || formData.retypePassword.trim() === '') {
+        alert('Please retype your new Password');
+        return;
+      }
+
+      // Check if new password and retype password match
+      if (formData.newPassword !== formData.retypePassword) {
+        alert('New Password and Retyped Password must be the same');
+        return;
+      }
+
+      // Add any additional validation conditions as needed
+      // For example: Password strength check
+      if (formData.newPassword.length < 8) {
+        alert('New Password must be at least 8 characters long');
+        return;
+      }
+
+      if (!/[A-Z]/.test(formData.newPassword)) {
+        alert('New Password must contain at least one uppercase letter');
+        return;
+      }
+
+      if (!/[a-z]/.test(formData.newPassword)) {
+        alert('New Password must contain at least one lowercase letter');
+        return;
+      }
+
+      if (!/[0-9]/.test(formData.newPassword)) {
+        alert('New Password must contain at least one number');
+        return;
+      }
+
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.newPassword)) {
+        alert('New Password must contain at least one special character');
+        return;
+      }
     }
+
     console.log(formData);
     // Save updated profile to local storage
     setLocalStorageItem('userData', formData); // Assuming setLocalStorageItem updates the user data
     updateProfile();
   };
   const updateProfile = async () => {
+
+
     const payload = {
       sid: formData?.sid || "",
       name: formData?.name || "",
@@ -122,6 +171,7 @@ export default function EditProfile() {
       const responseData = await response.json();
       if (responseData.status === true) {
         alert(responseData?.message)
+        // setFormData({...formData,[newPassword]:"",[retypePassword]:""})
       } else {
         alert(responseData?.message)
       }
