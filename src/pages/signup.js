@@ -1,15 +1,16 @@
 import Login from '@/Components/Login'
+import SignupForm from '@/Components/SignUp'
 import SmallFooter from '@/Components/SmallFooter'
 
-function LoginPage() {
+function SignupPage() {
     return (
         <div className='w-full h-full bg-[#4E54C8]'>
-            <div className='w-full h-[90vh] bg-[#4E54C8] flex justify-center items-center px-1'>
-                <Login />
+            <div className='w-full h-[90vh] bg-[#4E54C8] flex justify-center items-center px-2'>
+                <SignupForm />
             </div>
             <SmallFooter />
         </div>
     )
 }
 
-export default LoginPage
+export default SignupPage
