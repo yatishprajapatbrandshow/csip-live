@@ -89,6 +89,7 @@ const Header = ({ session = false }) => {
     //     return () => clearInterval(timer);
     // }, []);
     const handleRegisterClick = () => {
+        router.push('/signup')
         const formElement = document.getElementById('signupForm'); // Get the signup form by its ID
         if (formElement) {
           formElement.scrollIntoView({ behavior: 'smooth' }); // Scroll smoothly to the form

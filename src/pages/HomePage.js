@@ -70,9 +70,9 @@ function HomePage() {
                         </div>
                     </div>
                 </section>
-                <section className='h-[80vh] flex justify-center items-center max-sm:w-full' id='signupForm'>
+                {/* <section className='h-[80vh] flex justify-center items-center max-sm:w-full' id='signupForm'>
                     <SignUp />
-                </section>
+                </section> */}
             </main>
             <Footer />
         </div>

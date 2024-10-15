@@ -1,7 +1,7 @@
 import React from 'react'
 function SmallFooter() {
     return (
-        <div className='bg-[#F0F0F0] h-20 w-full flex justify-center items-center gap-10'>
+        <div className='bg-[#F0F0F0] h-20 w-full flex justify-center items-center max-lg:flex-wrap max-lg:gap-5 gap-10 '>
             <span>FIE © 2024 created by <a
                 className="text-[#4E54C8] hover:text-[#666ef7]"
                 href="https://www.brandshow.in/"
