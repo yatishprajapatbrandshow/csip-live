@@ -186,7 +186,7 @@ export default function EditProfile() {
                         </select>
                       </div>
                       <div>
-                        <label htmlFor="aadhar_number" className="block text-sm font-medium text-gray-700 mb-1">aadhar_number Number</label>
+                        <label htmlFor="aadhar_number" className="block text-sm font-medium text-gray-700 mb-1">Aadhar Number</label>
                         <input onChange={handleInputChange} type="text" id="aadhar_number" name="aadhar_number" value={formData.aadhar_number} className="w-full p-2 border rounded" placeholder="Type Here" />
                       </div>
                     </div>
