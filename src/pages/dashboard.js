@@ -72,7 +72,7 @@ export default function DashboardCombind() {
     const fetchDashboardData = async () => {
         if (!userData?.sid) return;
         try {
-            const response = await fetch(`${API_URL}dashboardInfo?participant_id=${userData?.sid}`, {
+            const response = await fetch(`${API_URL_LOCAL}dashboardInfo?participant_id=${userData?.sid}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -386,7 +386,7 @@ export default function DashboardCombind() {
                                 <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{activityAppliedCount}</div>
                                 <p className="text-sm ">Activity Applied</p>
                             </div>
-                            <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                            <div onClick={() => router.push('/OngoingActivities')} className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5 cursor-pointer">
                                 <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{ongoingActivitiesCount}</div>
                                 <p className="text-sm ">Ongoing Activity</p>
                             </div>
@@ -473,15 +473,15 @@ export default function DashboardCombind() {
                 <CommentsSlider commentsData={commentsData} />
                 {/* <Activities title="Activity" activityData={true} /> */}
 
-                {favActivities && Array.isArray(favActivities) && favActivities.length > 0 ? 
+                {favActivities && Array.isArray(favActivities) && favActivities.length > 0 ?
                     <Activities title="Favourite Activity" cardData={favActivities} />
-                : null}
-                {recommendedActivities && Array.isArray(recommendedActivities) && recommendedActivities.length > 0 ? 
+                    : null}
+                {recommendedActivities && Array.isArray(recommendedActivities) && recommendedActivities.length > 0 ?
                     <Activities title="Recommended Activity" cardData={recommendedActivities} />
-                : null}
-                {newActivities && Array.isArray(newActivities) && newActivities.length > 0 ? 
+                    : null}
+                {newActivities && Array.isArray(newActivities) && newActivities.length > 0 ?
                     <Activities title="New Activity" bgDesign={"Full"} cardData={newActivities} />
-                : null}
+                    : null}
             </div>
         </>
     );
