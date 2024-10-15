@@ -48,6 +48,7 @@ function Curriculum() {
 
       const responseData = await response.json();
       if (responseData.status === true) {
+        console.log("User Mapped with this Curriculum : ", responseData.data[0].curriculum_id);
         setcurriId(responseData.data[0].curriculum_id);
       }
     } catch (error) {
@@ -80,10 +81,10 @@ function Curriculum() {
     }
   };
 
-
-
   const fetchCurriculumDetails = async (value) => {
-console.log("hit here")
+    if (!value) {
+      return;
+    }
     // Only append corporate_id if it's defined
     const APIURL = `${API_URL}curriculum/details?curriculum_sid=${value}`;
 
@@ -133,17 +134,17 @@ console.log("hit here")
 
   return (
     <>
-    <Header />
+      <Header />
       <div className="bg-white w-full max-w-6xl mx-auto shadow-xl mt-10">
+      <div className='flex items-center gap-2 mb-4 cursor-pointer ' onClick={() => router.back()}><Undo2 className='w-5 h-5' />Go Back</div>
         {
           loading ? <div className='text-center'>Loading ....</div> :
             <div className='bg-white w-full '>
               <h5 className="text-2xl p-2 px-4 uppercase rounded-t-lg text-white bg-blue-600 ">{CurriculumData?.name}</h5>
               <div className='p-10'>
-
                 {
-                  curriId !== clickedCurriculum?.sid &&
-                  <button onClick={() => handleClick(clickedCurriculum?.sid)} className='mb-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-purple-700 transition'>
+                  curriId !== clickedCurriculum &&
+                  <button onClick={() => handleClick(clickedCurriculum)} className='mb-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-purple-700 transition'>
                     Choose This Curriculum
                   </button>
                 }
