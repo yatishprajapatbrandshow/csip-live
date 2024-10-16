@@ -22,7 +22,7 @@ const AboutSlug = () => {
                 <ActivityHeader data={ActivityList} />
                 <div class="relative flex h-full flex-col px-4 pt-14 sm:px-6 lg:px-8 lg:ml-72 xl:ml-80">
                     <ActivityProcess slug={slug} data={ActivityList} />
-                    <footer class="mx-auto w-full mt-5">
+                    <footer class="mx-auto w-full mt-5 bg">
                         <div class="flex justify-between">
                             <button className='bg-slate-300 flex py-2 px-5 rounded-full flex-row-reverse'>
                                 Prev

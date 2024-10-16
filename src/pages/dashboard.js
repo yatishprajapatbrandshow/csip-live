@@ -7,7 +7,7 @@ import TopicModal from '@/Components/TopicModal';
 import { SquareX, Star } from 'lucide-react';
 import Activities from "@/Components/Activities";
 import { API_URL, API_URL_LOCAL } from "@/Config/Config";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Header from '@/Components/Header';
 import { useCountUp } from '@/hooks/useCountUp';
 import { useRouter } from 'next/router';
@@ -15,6 +15,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CommentsSlider from '@/Components/CommentsSlider';
 import { useFetchActivities } from '@/hooks/useFetchActivities';
+import { storeFavouriteActivity } from '../../redux/actions/favouriteActivitySlice';
 
 
 const reviews = [
@@ -54,6 +55,7 @@ export default function DashboardCombind() {
     const [ProfileStatus, setProfileStatus] = useState("");
     const [ActivityCurriculumStatus, setActivityCurriculumStatus] = useState("");
 
+    const dispatch = useDispatch();
     const isTriggeredApply = useSelector((state) => state.trigger.applyTrigger);
     const userData = useSelector((state) => state.session.userData);
     const openModal = () => setIsModalOpen(true);
@@ -110,7 +112,7 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
-            console.log("fetchNewActivities",responseData);
+
             if (responseData.status === true) {
                 setNewActivities(responseData.data);
             }
@@ -155,9 +157,13 @@ export default function DashboardCombind() {
             const responseData = await response.json();
             if (responseData.status === true) {
                 setfavActivities(responseData.data);
+                const ids = responseData.data.map(ele => ele?.sid);
+                dispatch(storeFavouriteActivity(ids));
             }
         } catch (error) {
             console.error("Error:", error);
+            dispatch(storeFavouriteActivity([]));
+            setfavActivities([])
         }
     }
 
@@ -247,7 +253,6 @@ export default function DashboardCombind() {
         }
     };
 
-
     useEffect(() => {
         if (userData?.sid) {
             fetchDashboardData();
@@ -263,6 +268,9 @@ export default function DashboardCombind() {
 
     useEffect(() => {
         fetchDashboardData();
+        fetchNewActivities();
+        fetchRecommenedActivities();
+        fetchFavoriteActivity();
     }, [isTriggeredApply])
 
     const getRandomWidth = () => {
@@ -329,6 +337,7 @@ export default function DashboardCombind() {
             console.error("Error:", error);
         }
     }
+
 
 
     return (
@@ -476,9 +485,9 @@ export default function DashboardCombind() {
                     <ToastContainer position="top-right" autoClose={1000} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
                 </div>
                 <CommentsSlider commentsData={commentsData} />
-                {activities ? 
+                {activities ?
                     <Activities title="Applied Activity" cardData={activities} />
-                : null}
+                    : null}
 
                 {favActivities && Array.isArray(favActivities) && favActivities.length > 0 ?
                     <Activities title="Favourite Activity" cardData={favActivities} />

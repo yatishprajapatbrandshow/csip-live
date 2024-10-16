@@ -12,9 +12,10 @@ export default function PopUp({ onClose, activity, onSuccess }) {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.session.userData);
 
-  
-  
+
+
   const handleCancel = () => {
+    dispatch(applyTrigger())
     onClose();
   };
 
@@ -30,7 +31,7 @@ export default function PopUp({ onClose, activity, onSuccess }) {
         <div className="flex justify-center space-x-4">
           {/* Confirm Button */}
           <button
-              onClick={onSuccess}
+            onClick={onSuccess}
             className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow-md transform transition-transform duration-200 hover:scale-105 active:scale-95"
           >
             <span className="flex items-center justify-center gap-1">

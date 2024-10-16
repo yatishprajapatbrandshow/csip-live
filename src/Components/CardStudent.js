@@ -17,6 +17,7 @@ import Registration from '../function/Registration';
 import CreateOrder from '../function/CreateOrder';
 import Razorpay from '../function/initiatePayment';
 import { setOrderID, getOrderID, removeOrderID } from '../../redux/actions/orderIdSlice';
+import { addFavouriteActivity, removeFavouriteActivity } from '../../redux/actions/favouriteActivitySlice';
 
 
 const CardStudent = ({ activity }) => {
@@ -27,13 +28,50 @@ const CardStudent = ({ activity }) => {
     // const { initiatePayment } = useRazorpay();
     const [showPopup, setShowPopup] = useState(false);
     const OrderDet = useSelector((state) => state.orderId.orderId);
-    let OrderDetNew ;
-    
+    const favouriteActivities = useSelector(
+        (state) => state.favouriteActivity.favouriteActivities // Accessing the state correctly
+    );
+    let OrderDetNew;
 
-    const toggleHeart = () => {
+
+    const toggleHeart = async (activity) => {
+        if (!activity) {
+            return
+        }
         setIsToggled(!isToggled);
-    };
+        console.log(activity?.sid);
 
+        try {
+            const response = await fetch(`${API_URL}favourite-activity/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    participant_id: userData?.sid,
+                    activity_id: activity?.sid
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const responseData = await response.json();
+            console.log(responseData);
+            
+            if (responseData.status === true) {
+                dispatch(applyTrigger())
+                if (responseData.status === true) {
+                    dispatch(addFavouriteActivity(activity.sid)); // Add to favorites
+                } else if (responseData.status === false) {
+                    dispatch(removeFavouriteActivity(activity.sid)); // Remove from favorites
+                }
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
 
     const handleClick = (activity) => {
         const encryptedId = encrypt(activity._id);
@@ -47,42 +85,41 @@ const CardStudent = ({ activity }) => {
         setShowPopup(true);
     };
 
-
     const handleApply = async () => {
-        try{
+        try {
             const register = await Registration(activity, userData)
-            if(register &&  register.status){
+            if (register && register.status) {
                 console.log("step 1")
                 OrderCreate()
             }
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
     }
 
     const OrderCreate = async () => {
 
-        try{
+        try {
             const order = await CreateOrder(activity, userData)
-            if(order && order.status){
+            if (order && order.status) {
                 console.log("step 2", order)
                 OrderDetNew = order?.data.sid;
                 dispatch(setOrderID(order?.data));
                 initiatePayment()
             }
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
     }
 
     const initiatePayment = async () => {
-        try{
+        try {
             const Payment = await Razorpay(activity, userData)
-            if(Payment){
+            if (Payment) {
                 console.log("step 3")
                 GetDetails("pay_P8osHZXRb09Oy8")
             }
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
     }
@@ -94,11 +131,11 @@ const CardStudent = ({ activity }) => {
     // dispatch(applyTrigger());
 
     const GetDetails = async (Payment) => {
-        
+
         try {
             const response = await fetch(`/api/razorpay?PayID=${Payment}`);
             const data = await response.json();
-            if(data){
+            if (data) {
                 console.log("step 4")
                 handleCreatePayment(data);
             }
@@ -146,6 +183,7 @@ const CardStudent = ({ activity }) => {
             console.log("step 5")
             if (responseData.status === true) {
                 alert(responseData?.message)
+                dispatch(applyTrigger())
                 setShowPopup(false)
             } else {
                 alert(responseData?.message)
@@ -154,10 +192,10 @@ const CardStudent = ({ activity }) => {
             console.error("Error:", error);
         }
     }
-    
+
     return (
         <>
-        {/* <button onClick={()=>handleCreatePayment()}>GetRedux</button> */}
+            {/* <button onClick={()=>handleCreatePayment()}>GetRedux</button> */}
             <div className="bg-white rounded-2xl overflow-hidden w-[300px] shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 hover:scale-105">
                 <div className="relative h-40 ">
                     {activity.image_assc ?
@@ -182,7 +220,7 @@ const CardStudent = ({ activity }) => {
                         <span className="text-xs font-semibold ml-1">{activity?.views}</span>
                     </div>
                     <div className="absolute top-2 left-2 p-1">
-                        <button onClick={toggleHeart}><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill={isToggled ? "red" : "#fff"} stroke="red" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg></button>
+                        <button onClick={() => toggleHeart(activity)}><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill={favouriteActivities.includes(activity?.sid) ? "red" : "#fff"} stroke="red" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg></button>
                     </div>
                     <div className="absolute -bottom-4 left-2 bg-white rounded-lg shadow-lg">
                         <small className="p-2 border-b border-b-gray-200">Added By:</small>
@@ -227,13 +265,13 @@ const CardStudent = ({ activity }) => {
                     {
                         activity?.paymentStatus === "pending" && activity?.status === 'Active' ? (
                             <button className="bg-gray-200 w-full text-gray-800 text-sm hover:bg-gray-300 transition-colors"
-                            onClick={()=> {OrderDetNew = activity.orderId, initiatePayment()}}
+                                onClick={() => { OrderDetNew = activity.orderId, initiatePayment() }}
                             >
                                 Pay Now
                             </button>
                         ) : activity?.paymentStatus === "success" && activity?.activityProgress === 'Paid' ? (
                             <button className="bg-gray-200 w-full text-gray-800 text-sm hover:bg-gray-300 transition-colors">
-                                Attempt 
+                                Attempt
                             </button>
                         ) : (
                             <button className="bg-gray-200 w-full text-gray-800 text-sm hover:bg-gray-300 transition-colors" onClick={handlePopUp}>
@@ -243,7 +281,7 @@ const CardStudent = ({ activity }) => {
                     }
                 </div>
             </div>
-            {showPopup && <PopUp onClose={() => {setShowPopup(false)}} activity={activity} onSuccess={handleApply} />}
+            {showPopup && <PopUp onClose={() => { setShowPopup(false) }} activity={activity} onSuccess={handleApply} />}
         </>
     );
 };
