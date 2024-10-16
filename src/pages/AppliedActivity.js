@@ -2,11 +2,11 @@ import { ArrowLeft } from "lucide-react"
 import Link from 'next/link'
 import Header from '@/Components/Header';
 import { useFetchActivities } from '@/hooks/useFetchActivities';
-import CardCorporate from "../Components/CardCorporate";
+import CardStudent from "../Components/CardStudent";
 
 
 const AppliedActivity = () => {
-    const { activities, loading, error } = useFetchActivities();
+    const { activities, Actloading, ActError } = useFetchActivities();
 
     return (
         <>
@@ -23,7 +23,7 @@ const AppliedActivity = () => {
 
                 <div className="flex flex-wrap justify-start gap-6">
                     {activities?.map((activity) => (
-                        <CardCorporate key={activity.id} activity={activity} />
+                        <CardStudent key={activity.id} activity={activity} />
                     ))}
                 </div>
             </div>

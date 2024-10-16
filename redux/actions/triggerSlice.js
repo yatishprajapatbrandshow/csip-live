@@ -10,9 +10,9 @@ const triggerSlice = createSlice({
         applyTrigger: (state, action) => {
             state.applyTrigger = !state.applyTrigger;  // Set to true or false
         },
-        // Reset applyTrigger to false (or any value as needed)
+        
         resetApplyTrigger: (state) => {
-            state.applyTrigger = false;  // Reset applyTrigger to false
+            state.applyTrigger = false;
         }
     },
 });

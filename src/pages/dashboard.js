@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CommentsSlider from '@/Components/CommentsSlider';
+import { useFetchActivities } from '@/hooks/useFetchActivities';
 
 
 const reviews = [
@@ -57,6 +58,7 @@ export default function DashboardCombind() {
     const userData = useSelector((state) => state.session.userData);
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+    const { activities, Actloading, ActError } = useFetchActivities();
 
     const topicStudyingCount = useCountUp(dashboardData?.topicStudying?.length || 0);
     const activityAppliedCount = useCountUp(dashboardData?.activityApplied?.length || 0);
@@ -93,8 +95,10 @@ export default function DashboardCombind() {
     }
 
     const fetchNewActivities = async () => {
+
+        const APIURL = `${API_URL}activity/get?participantId=${userData?.sid}`
         try {
-            const response = await fetch(`${API_URL}activity/list?limit=15&&date=true`, {
+            const response = await fetch(APIURL, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -106,6 +110,7 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
+            console.log("fetchNewActivities",responseData);
             if (responseData.status === true) {
                 setNewActivities(responseData.data);
             }
@@ -333,7 +338,7 @@ export default function DashboardCombind() {
             <div className="relative max-w-[1500px] mx-auto w-full">
                 <div className="p-6 bg-white space-y-6 font-sans">
                     <div className="grid grid-cols-12 gap-4">
-                        <div className="bg-pink-200 p-4 rounded-lg col-span-4 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                        <div className="bg-pink-200 p-4 rounded-lg col-span-4 max-lg:col-span-8 max-md:col-span-12 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <div className="flex items-center justify-between hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <div>
                                     <h2 className="text-3xl  text-purple-800">{useCountUp(ProfileStatus?.profilePercentage || 0)}<sup className="text-[17px]">%</sup></h2>
@@ -349,23 +354,23 @@ export default function DashboardCombind() {
                                 />
                             </div>
                         </div>
-                        <div className="bg-purple-200 col-span-2 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                        <div className="bg-purple-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <h3 className="text-lg  text-purple-800 mb-2">Activity Progress Chart</h3>
                             <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <CircularProgressBar value={90} text="90%" color="text-pink-500" />
                             </div>
                         </div>
-                        <div className="bg-blue-200 col-span-2 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                        <div className="bg-blue-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <h3 className="text-lg  text-purple-800 mb-2">Corporate Reviews</h3>
                             <ReviewSlider reviews={reviews} />
                         </div>
-                        <div className="bg-pink-200 col-span-2 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                        <div className="bg-pink-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <h3 className="text-lg  text-purple-800 mb-2">Points Earned</h3>
                             <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <CircularProgressBar value={62} text="62" color="text-pink-500" />
                             </div>
                         </div>
-                        <div className="bg-pink-200 col-span-2 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                        <div className="bg-pink-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <h3 className="text-lg  text-purple-800 mb-2">Corporate Skill Endorsement</h3>
                             <p className="text-sm text-purple-600 font-gilMedium">No Data to Generate Report</p>
                         </div>
@@ -380,38 +385,38 @@ export default function DashboardCombind() {
                         <div className="bg-[#dfccfa] p-4 rounded-lg col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <div className="text-3xl  bg-white  text-purple-800 w-10 flex justify-center">{topicStudyingCount}</div>
-                                <p className="text-sm ">Topic Studying</p>
+                                <p className="text-sm text-gray-800">Topic Studying</p>
                             </div>
                             <div onClick={() => router.push('/AppliedActivity')} className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5 cursor-pointer">
                                 <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{activityAppliedCount}</div>
-                                <p className="text-sm ">Activity Applied</p>
+                                <p className="text-sm sm text-gray-800">Activity Applied</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{ongoingActivitiesCount}</div>
-                                <p className="text-sm ">Ongoing Activity</p>
+                                <p className="text-sm sm text-gray-800">Ongoing Activity</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{submissionPendingCount}</div>
-                                <p className="text-sm ">Submission Pending</p>
+                                <p className="text-sm sm text-gray-800">Submission Pending</p>
                             </div>
                             <div onClick={() => router.push('/PaymentPending')} className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5 cursor-pointer">
                                 <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{paymentPendingCount}</div>
-                                <p className="text-sm ">Payment Pending</p>
+                                <p className="text-sm text-gray-800">Payment Pending</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{completedActivitiesCount}</div>
-                                <p className="text-sm ">Completed Activity</p>
+                                <p className="text-sm text-gray-800">Completed Activity</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{totalScoreCount}</div>
-                                <p className="text-sm ">Total Score</p>
+                                <p className="text-sm text-gray-800">Total Score</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">0</div>
-                                <p className="text-sm ">Skill Endorsement from Corporate</p>
+                                <p className="text-sm text-gray-800">Skill Endorsement from Corporate</p>
                             </div>
                             <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                                <p className="text-sm py-1.5">Leaderborad is Being Evaluated...</p>
+                                <p className="text-sm text-gray-800 py-1.5">Leaderborad is Being Evaluated...</p>
                             </div>
                         </div>
                     </div>
@@ -471,7 +476,9 @@ export default function DashboardCombind() {
                     <ToastContainer position="top-right" autoClose={1000} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
                 </div>
                 <CommentsSlider commentsData={commentsData} />
-                {/* <Activities title="Activity" activityData={true} /> */}
+                {activities ? 
+                    <Activities title="Applied Activity" cardData={activities} />
+                : null}
 
                 {favActivities && Array.isArray(favActivities) && favActivities.length > 0 ? 
                     <Activities title="Favourite Activity" cardData={favActivities} />

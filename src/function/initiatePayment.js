@@ -15,8 +15,8 @@ const Razorpay = (amount, orderId) => {
             if (!scriptLoaded) throw new Error('Razorpay SDK failed to load');
 
             const options = {
-                // key: 'rzp_test_bJShg4py6mnQe0',
-                key: 'rzp_live_CDDk2KEJwzL6j1',
+                key: 'rzp_test_bJShg4py6mnQe0',
+                // key: 'rzp_live_CDDk2KEJwzL6j1',
                 amount: amount * 100,
                 currency: 'INR',
                 name: 'Your Company Name',

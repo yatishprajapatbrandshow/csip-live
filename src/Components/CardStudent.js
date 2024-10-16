@@ -16,6 +16,8 @@ import PopUp from './PopUp';
 import Registration from '../function/Registration';
 import CreateOrder from '../function/CreateOrder';
 import Razorpay from '../function/initiatePayment';
+import { setOrderID, getOrderID, removeOrderID } from '../../redux/actions/orderIdSlice';
+
 
 const CardStudent = ({ activity }) => {
     const router = useRouter();
@@ -24,10 +26,14 @@ const CardStudent = ({ activity }) => {
     const [isToggled, setIsToggled] = useState(false);
     // const { initiatePayment } = useRazorpay();
     const [showPopup, setShowPopup] = useState(false);
+    const OrderDet = useSelector((state) => state.orderId.orderId);
+    let OrderDetNew ;
+    
 
     const toggleHeart = () => {
         setIsToggled(!isToggled);
     };
+
 
     const handleClick = (activity) => {
         const encryptedId = encrypt(activity._id);
@@ -43,11 +49,10 @@ const CardStudent = ({ activity }) => {
 
 
     const handleApply = async () => {
-        console.log("step 1 sucess")
         try{
             const register = await Registration(activity, userData)
-            console.log(register)
             if(register &&  register.status){
+                console.log("step 1")
                 OrderCreate()
             }
         }catch(error){
@@ -56,10 +61,13 @@ const CardStudent = ({ activity }) => {
     }
 
     const OrderCreate = async () => {
+
         try{
             const order = await CreateOrder(activity, userData)
             if(order && order.status){
-                console.log(order)
+                console.log("step 2", order)
+                OrderDetNew = order?.data.sid;
+                dispatch(setOrderID(order?.data));
                 initiatePayment()
             }
         }catch(error){
@@ -71,14 +79,13 @@ const CardStudent = ({ activity }) => {
         try{
             const Payment = await Razorpay(activity, userData)
             if(Payment){
+                console.log("step 3")
                 GetDetails("pay_P8osHZXRb09Oy8")
             }
         }catch(error){
             console.log(error)
         }
     }
-
-
 
     // Wait for initiatePayment to resolve
     // const paymentData = await initiatePayment(activity.amount, responseData.orderId);
@@ -87,12 +94,13 @@ const CardStudent = ({ activity }) => {
     // dispatch(applyTrigger());
 
     const GetDetails = async (Payment) => {
-        console.log(Payment.razorpay_payment_id);
+        
         try {
             const response = await fetch(`/api/razorpay?PayID=${Payment}`);
             const data = await response.json();
             if(data){
-                console.log(data);
+                console.log("step 4")
+                handleCreatePayment(data);
             }
         } catch (error) {
             console.error("Error fetching data from API:", error);
@@ -100,13 +108,13 @@ const CardStudent = ({ activity }) => {
         }
     };
 
-
-    const handleCreatePayment = async (orderData, PayData) => {
+    const handleCreatePayment = async (PayData) => {
+        console.log(OrderDetNew);
         const payload = {
             participantId: userData?.sid,
             activityId: activity?.sid,
-            orderid: orderData.sid,
-            trans_date: new Date.now(),
+            orderid: OrderDetNew,
+            trans_date: Date.now(),
             paidAmount: PayData.amount,
             tracking_id: PayData.acquirer_data.rrn || "",
             bank_ref_no: "",
@@ -124,6 +132,7 @@ const CardStudent = ({ activity }) => {
             razorpayId: PayData.id || "",
             currency: PayData.currency || ""
         }
+        console.log(payload)
         try {
             const response = await fetch(`${API_URL}payment/create`, {
                 headers: {
@@ -133,9 +142,11 @@ const CardStudent = ({ activity }) => {
                 body: JSON.stringify(payload),
             });
             const responseData = await response.json();
-
+            console.log(responseData)
+            console.log("step 5")
             if (responseData.status === true) {
                 alert(responseData?.message)
+                setShowPopup(false)
             } else {
                 alert(responseData?.message)
             }
@@ -146,7 +157,7 @@ const CardStudent = ({ activity }) => {
     
     return (
         <>
-        {/* <button onClick={()=>GetDetails("pay_P85YWQ881JAIhJ")}>Test</button> */}
+        {/* <button onClick={()=>handleCreatePayment()}>GetRedux</button> */}
             <div className="bg-white rounded-2xl overflow-hidden w-[300px] shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 hover:scale-105">
                 <div className="relative h-40 ">
                     {activity.image_assc ?
@@ -213,14 +224,29 @@ const CardStudent = ({ activity }) => {
                     <button onClick={() => handleClick(activity)} className="bg-purple-500 text-sm w-full text-white hover:bg-purple-600 transition-colors flex justify-center items-center">
                         View Activity
                     </button>
-                    <button onClick={handlePopUp} className="bg-gray-200 w-full text-gray-800 text-sm hover:bg-gray-300 transition-colors">
-                        Apply Now
-                    </button>
+                    {
+                        activity?.paymentStatus === "pending" && activity?.status === 'Active' ? (
+                            <button className="bg-gray-200 w-full text-gray-800 text-sm hover:bg-gray-300 transition-colors"
+                            onClick={()=> {OrderDetNew = activity.orderId, initiatePayment()}}
+                            >
+                                Pay Now
+                            </button>
+                        ) : activity?.paymentStatus === "success" && activity?.activityProgress === 'Paid' ? (
+                            <button className="bg-gray-200 w-full text-gray-800 text-sm hover:bg-gray-300 transition-colors">
+                                Attempt 
+                            </button>
+                        ) : (
+                            <button className="bg-gray-200 w-full text-gray-800 text-sm hover:bg-gray-300 transition-colors" onClick={handlePopUp}>
+                                Apply Now
+                            </button>
+                        )
+                    }
                 </div>
             </div>
-            {showPopup && <PopUp onClose={() => setShowPopup(false)} activity={activity} onSuccess={handleApply} />}
+            {showPopup && <PopUp onClose={() => {setShowPopup(false)}} activity={activity} onSuccess={handleApply} />}
         </>
     );
 };
 
 export default CardStudent;
+

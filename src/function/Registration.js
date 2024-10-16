@@ -2,14 +2,14 @@ import { API_URL } from "@/Config/Config";
 
 const handleApply = async (activity, userData) => {
     if (activity?.activity_category === "DIRECT") {
-
+        console.log(activity?.sid)
         if (!userData?.sid) return false;
 
         const payload = {
             participantId: userData?.sid,
             activityId: activity?.sid
         }
-        
+        console.log(`${API_URL}activity/apply`);
         try {
             const response = await fetch(`${API_URL}activity/apply`, {
                 headers: {
@@ -19,6 +19,7 @@ const handleApply = async (activity, userData) => {
                 body: JSON.stringify(payload),
             });
             const responseData = await response.json();
+            console.log(responseData);
                 if (responseData.status === true) {
                     return responseData
                 } else {

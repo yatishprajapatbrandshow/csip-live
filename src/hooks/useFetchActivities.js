@@ -5,8 +5,8 @@ import { API_URL } from '@/Config/Config';
 export const useFetchActivities = () => {
     const userData = useSelector((state) => state.session.userData);
     const [activities, setActivities] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [Actloading, setLoading] = useState(false);
+    const [ActError, setError] = useState(null);
 
     const fetchActivities = async () => {
         if (!userData?.sid) return;
@@ -25,7 +25,7 @@ export const useFetchActivities = () => {
             console.log(response)
 
             const responseData = await response.json();
-            console.log(responseData)
+            console.log("responseData", responseData)
             if (responseData.status === true) {
                 setActivities(responseData.data);
             }
@@ -43,6 +43,6 @@ export const useFetchActivities = () => {
         }
     }, [userData]);
 
-    return { activities, loading, error };
+    return { activities, Actloading, ActError };
 };
 

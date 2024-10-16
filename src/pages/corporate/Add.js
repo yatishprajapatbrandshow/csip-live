@@ -183,11 +183,11 @@ const Add = () => {
 
   return (
     <>
+        <Header />
       <section className="bg-bgForm bg-cover bg-center min-h-screen relative overflow-hidden">
       <div className="absolute bg-white/50 backdrop-blur-sm w-full h-full left-0 top-0" style={{
     clipPath: 'polygon(100% 35%, 0% 100%, 100% 100%)'
   }}/>
-    <Header />
      
       <div className="mx-auto pt-24 relative z-10 px-10 bg-white">
         <div className='grid grid-cols-4'>  
