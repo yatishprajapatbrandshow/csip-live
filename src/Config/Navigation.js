@@ -105,7 +105,7 @@ export const MenuItemLinks = [
       {
         name: 'Trending',
         description: 'Stay updated with activities that are currently popular among users.',
-        href: '#',
+        href: 'TrendingActivities',
         icon: ArrowTrendingUpIcon
       },
       {

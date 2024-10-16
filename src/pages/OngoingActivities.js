@@ -2,19 +2,19 @@
 import { ArrowLeft } from "lucide-react"
 import Link from 'next/link'
 import Header from '@/Components/Header';
-import CardCorporate from "../Components/CardCorporate";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { API_URL_LOCAL } from "@/Config/Config";
+import { API_URL, API_URL_LOCAL } from "@/Config/Config";
+import CardStudent from "@/Components/CardStudent";
 
 
 const OngoingActivity = () => {
     const userData = useSelector((state) => state.session.userData);
     const [ongoingActivity, setOngoingActivity] = useState([]);
-    const fetchRecomentedActivities = async () => {
+    const fetchOngoingActivities = async () => {
         if (!userData?.sid) return;
         try {
-            const response = await fetch(`${API_URL_LOCAL}activity/get-ongoing?participantId=${userData?.sid}`, {
+            const response = await fetch(`${API_URL}activity/get-ongoing?participantId=${userData?.sid}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -31,7 +31,7 @@ const OngoingActivity = () => {
     }
     useEffect(() => {
         if (userData?.sid) {
-            fetchRecomentedActivities();
+            fetchOngoingActivities();
         }
     },)
     return (
@@ -46,7 +46,7 @@ const OngoingActivity = () => {
 
                 <div className="flex flex-wrap justify-start gap-6">
                     {ongoingActivity?.map((activity) => (
-                        <CardCorporate key={activity.id} activity={activity} />
+                        <CardStudent key={activity.id} activity={activity} />
                     ))}
                 </div>
             </div>

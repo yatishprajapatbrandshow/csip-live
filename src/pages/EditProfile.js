@@ -7,37 +7,7 @@ import { useEffect, useState } from "react";
 export default function EditProfile() {
   const [userProfileData, setUserProfileData] = useState({});
   const [file, setFile] = useState(null);
-  const [uploadStatus, setUploadStatus] = useState('');
   const [fileUrl, setFileUrl] = useState('');
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
-  const handleUpload = async () => {
-    if (!file) {
-      setUploadStatus('Please select a file first.');
-      return;
-    }
-    console.log(file);
-
-    const formData = new FormData();
-    formData.append('fileUp', file); // Append the file to the form data
-
-    for (const [key, value] of formData.entries()) {
-      console.log(key, value); // This will log the key-value pairs in the FormData
-    }
-
-    try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData, // Send the FormData object
-      });
-
-      const result = await response.json();
-      console.log(result);
-    } catch (error) {
-      console.log("error here", error);
-    }
-  };
   const [activeLink, setActivelink] = useState(1);
   const [formData, setFormData] = useState({
     sid: "",
@@ -57,13 +27,41 @@ export default function EditProfile() {
     retypePassword: "",
     participantpic: "",
   });
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+    if (file) {
+      handleUpload()
+    }
+  };
+  const handleUpload = async () => {
+    if (!file) {
+      alert('Please select a file first.');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('fileUp', file); // Append the file to the form data
 
+    for (const [key, value] of formData.entries()) {
+      console.log(key, value); // This will log the key-value pairs in the FormData
+    }
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData, // Send the FormData object
+      });
+
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.log("error here", error);
+    }
+  };
   // Fetch user profile data from local storage on component mount
   useEffect(() => {
     const userData = getLocalStorageItem('userData');
     if (userData) {
       console.log(userData);
-
       setUserProfileData(userData);
       setFormData(userData); // Directly populate formData with userProfileData
     }
@@ -82,10 +80,57 @@ export default function EditProfile() {
   const handleSaveChanges = (e) => {
     e.preventDefault();
     // Validation logic (example: email format, passwords match, etc.)
-    if (activeLink === 2 && formData.newPassword !== formData.retypePassword) {
-      alert('Passwords do not match!');
-      return;
+    if (activeLink === 2) {
+      // Ensure all required passwords are present
+      if (!formData?.oldPassword || formData.oldPassword.trim() === '') {
+        alert('Old Password is required');
+        return;
+      }
+
+      if (!formData?.newPassword || formData.newPassword.trim() === '') {
+        alert('New Password is required');
+        return;
+      }
+
+      if (!formData?.retypePassword || formData.retypePassword.trim() === '') {
+        alert('Please retype your new Password');
+        return;
+      }
+
+      // Check if new password and retype password match
+      if (formData.newPassword !== formData.retypePassword) {
+        alert('New Password and Retyped Password must be the same');
+        return;
+      }
+
+      // Add any additional validation conditions as needed
+      // For example: Password strength check
+      if (formData.newPassword.length < 8) {
+        alert('New Password must be at least 8 characters long');
+        return;
+      }
+
+      if (!/[A-Z]/.test(formData.newPassword)) {
+        alert('New Password must contain at least one uppercase letter');
+        return;
+      }
+
+      if (!/[a-z]/.test(formData.newPassword)) {
+        alert('New Password must contain at least one lowercase letter');
+        return;
+      }
+
+      if (!/[0-9]/.test(formData.newPassword)) {
+        alert('New Password must contain at least one number');
+        return;
+      }
+
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.newPassword)) {
+        alert('New Password must contain at least one special character');
+        return;
+      }
     }
+
     console.log(formData);
     // Save updated profile to local storage
     setLocalStorageItem('userData', formData); // Assuming setLocalStorageItem updates the user data
@@ -110,9 +155,10 @@ export default function EditProfile() {
       r_password: formData?.retypePassword || "",
       participantpic: formData?.participantpic || ""
     }
-
+    console.log(payload);
+    
     try {
-      const response = await fetch(`${API_URL}register/update`, {
+      const response = await fetch(`${API_URL_LOCAL}register/update`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -122,6 +168,7 @@ export default function EditProfile() {
       const responseData = await response.json();
       if (responseData.status === true) {
         alert(responseData?.message)
+        // setFormData({...formData,[newPassword]:"",[retypePassword]:""})
       } else {
         alert(responseData?.message)
       }
@@ -186,7 +233,7 @@ export default function EditProfile() {
                         </select>
                       </div>
                       <div>
-                        <label htmlFor="aadhar_number" className="block text-sm font-medium text-gray-700 mb-1">aadhar_number Number</label>
+                        <label htmlFor="aadhar_number" className="block text-sm font-medium text-gray-700 mb-1">Aadhar Number</label>
                         <input onChange={handleInputChange} type="text" id="aadhar_number" name="aadhar_number" value={formData.aadhar_number} className="w-full p-2 border rounded" placeholder="Type Here" />
                       </div>
                     </div>
@@ -232,6 +279,7 @@ export default function EditProfile() {
 
                       {/* Button to trigger file input */}
                       <button
+                        type="button"
                         onClick={() => document.getElementById('profile-image-input').click()}
                         className="px-4 py-2 bg-gray-600 text-white rounded-full hover:bg-gray-700"
                       >
