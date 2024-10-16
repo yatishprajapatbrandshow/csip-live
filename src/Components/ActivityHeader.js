@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 
 const CommentsSlider = ({ data }) => {
     const router = useRouter();
-
+console.log(data)
 const menuItems = [
     { label: 'API', href: '/' },
     { label: 'Documentation', href: '/documentation' },
@@ -128,36 +128,32 @@ const menuItems = [
                     </div>
                     <nav class="hidden lg:mt-10 lg:block">
                         <ul role="list">
-                            {menuItems.map((item, index) => (
-                                <li key={index} className={item.subItems ? 'relative mt-6' : 'md:hidden'}>
-                                {item.subItems ? (
-                                    <>
-                                    <h2 className="text-xs font-semibold text-zinc-900 dark:text-white">{item.label}</h2>
-                                    <div className="relative mt-3 pl-2">
-                                        <ul role="list" className="border-l border-transparent">
-                                        {item.subItems.map((subItem, subIndex) => (
-                                            <li key={subIndex} className="relative">
-                                            <button
-                                                onClick={() => router.push(subItem.href)}
-                                                className="flex justify-between gap-2 py-1 pr-3 text-sm transition pl-4 text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+                            {data === "inProcess" ? 
+                            <div className='flex flex-col gap-5'>
+                                <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
+                                <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
+                                <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
+                                <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
+                                <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
+                                <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
+                            </div>
+                            : data ?
+                                Object.keys(data).map((key) => {
+                                    const formattedKey = key.replace(/[_-]/g, ' ');
+                                    return (
+                                    <li key={key} >
+                                        <button
+                                            onClick={() => router.push(`/activity/${key}`)}
+                                            className="block capitalize py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
                                             >
-                                                <span className="truncate">{subItem.label}</span>
-                                            </button>
-                                            </li>
-                                        ))}
-                                        </ul>
-                                    </div>
-                                    </>
-                                ) : (
-                                    <button
-                                    onClick={() => router.push(item.href)}
-                                    className="block py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
-                                    >
-                                    {item.label}
-                                    </button>
-                                )}
-                                </li>
-                            ))}
+                                        {formattedKey}
+                                        </button>
+                                    </li>
+        
+                                    );
+                                })
+                            : null}
+                            
                             <li className="sticky bottom-0 z-10 mt-6 min-[416px]:hidden">
                                 <button
                                 className="inline-flex gap-0.5 justify-center overflow-hidden text-sm font-medium transition rounded-full bg-zinc-900 py-1 px-3 text-white hover:bg-zinc-700 dark:bg-emerald-500 dark:text-white dark:hover:bg-emerald-400 w-full"

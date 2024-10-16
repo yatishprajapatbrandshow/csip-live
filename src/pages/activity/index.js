@@ -12,6 +12,7 @@ import Header from '@/Components/Header';
 import ActivityHeader from '@/Components/ActivityHeader';
 
 import { useRouter } from 'next/router';
+import { setLocalStorageItem } from '@/Config/localstorage';
 
 
 
@@ -20,9 +21,9 @@ import { useRouter } from 'next/router';
 export default function DashboardCombind() {
     const router = useRouter();
 
-
     const isTriggeredApply = useSelector((state) => state.trigger.applyTrigger);
     const userData = useSelector((state) => state.session.userData);
+    const [ActivityList, setActivityList] = useState("inProcess");
 
     const FetchActivityDetails = async () =>{
         
@@ -40,11 +41,17 @@ export default function DashboardCombind() {
                 body: JSON.stringify(datatoSend)
             })
             const data = await response.json();
-            console.log(data)
+            if(data.status === true){
+                setActivityList(data.data)
+                setLocalStorageItem('AttemptActivity', data.data);
+            }else{
+                setActivityList(false)
+            }
         }catch (error) {
             console.log("Error fetching activity details:", error);
         }
     }
+
     useEffect(() => {
         FetchActivityDetails();
     }, []);
@@ -52,7 +59,9 @@ export default function DashboardCombind() {
     return (
         <>
             <div className="relative max-w-[1500px] mx-auto w-full">
-              <ActivityHeader />
+                
+                <ActivityHeader data={ActivityList} />
+                
                 <div class="relative flex h-full flex-col px-4 pt-14 sm:px-6 lg:px-8 lg:ml-72 xl:ml-80">
                     <main class="flex-auto">
                         <article class="flex h-full flex-col pb-10 pt-16">
