@@ -155,9 +155,10 @@ export default function EditProfile() {
       r_password: formData?.retypePassword || "",
       participantpic: formData?.participantpic || ""
     }
-
+    console.log(payload);
+    
     try {
-      const response = await fetch(`${API_URL}register/update`, {
+      const response = await fetch(`${API_URL_LOCAL}register/update`, {
         headers: {
           'Content-Type': 'application/json',
         },
