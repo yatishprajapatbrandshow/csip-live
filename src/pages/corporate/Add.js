@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 // import JoditEditor from 'jodit-react';
 import dynamic from 'next/dynamic';
 import { API_URL } from "@/Config/Config";
@@ -20,7 +20,7 @@ const Add = () => {
   const userData = useSelector((state) => state.session.userData);
   const [formData, setFormData] = useState({});
   const [topics, setTopics] = useState([]);
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(4);
   const [name, setName] = useState('');
   const [shortName, setShortName] = useState('');
   const [objective, setObjective] = useState('');
@@ -41,7 +41,6 @@ const Add = () => {
   const [activityCategory, setActivityCategory] = useState('');
   const [activityType, setActivityType] = useState('');
   const [amount, setAmount] = useState('');
-  const [jobRolesAndDescription, setJobRolesAndDescription] = useState('');
   const [participantQuantity, setParticipantQuantity] = useState('');
   const [needApproval, setNeedApproval] = useState(false);
   const [activityStartDate, setActivityStartDate] = useState('');
@@ -53,6 +52,65 @@ const Add = () => {
   const [id, setId] = useState('');
 
   const dataFormStepData = ['Basic Information', 'Scenario and Description', 'Corporate Information', 'Media and Resources', 'Activity Details', 'Participant and Approval', 'Activity and Submission Dates'];
+  const [jobRolesAndDescription, setJobRolesAndDescription] = useState([
+    {
+      jobTitle: '',
+      jobRole: '',
+      description: '',
+      averageSalary: '',
+      employmentType: '',
+      skillsRequired: [''], // Initialize with one empty skill
+    }
+  ]);
+
+  // Function to handle changes in the input fields for each job role
+  const handleJobRoleChange = (index, field, value) => {
+    const newJobRoles = [...jobRolesAndDescription];
+    newJobRoles[index][field] = value; // Update the specific field for the job role
+    setJobRolesAndDescription(newJobRoles);
+  };
+
+  // Function to handle skill changes
+  const handleSkillChange = (index, skillIndex, value) => {
+    const newJobRoles = [...jobRolesAndDescription];
+    newJobRoles[index].skillsRequired[skillIndex] = value; // Update the specific skill
+    setJobRolesAndDescription(newJobRoles);
+  };
+
+  // Function to add a new skill field
+  const addSkillField = (index) => {
+    const newJobRoles = [...jobRolesAndDescription];
+    newJobRoles[index].skillsRequired.push(''); // Add an empty skill
+    setJobRolesAndDescription(newJobRoles);
+  };
+
+  // Function to remove a skill field
+  const removeSkillField = (index, skillIndex) => {
+    const newJobRoles = [...jobRolesAndDescription];
+    newJobRoles[index].skillsRequired.splice(skillIndex, 1); // Remove the skill
+    setJobRolesAndDescription(newJobRoles);
+  };
+
+  // Function to add a new job role
+  const addJobRoleField = () => {
+    setJobRolesAndDescription([
+      ...jobRolesAndDescription,
+      {
+        jobTitle: '',
+        jobRole: '',
+        description: '',
+        averageSalary: '',
+        employmentType: '',
+        skillsRequired: [''], // Initialize with one empty skill
+      }
+    ]);
+  };
+
+  // Function to check if the "Add New Job Role" button should be enabled
+  const canAddNewJobRole = () => {
+    return jobRolesAndDescription.every(jobRole => jobRole.jobTitle && jobRole.jobRole);
+  };
+
 
   const [toolsUsed, setToolsUsed] = useState([
     {
@@ -92,7 +150,10 @@ const Add = () => {
     const lastTool = toolsUsed[toolsUsed.length - 1];
     return lastTool.name.trim() !== '' && lastTool.category.trim() !== ''; // Only check required fields
   };
+  useEffect(() => {
+    console.log(jobRolesAndDescription);
 
+  }, [toolsUsed, jobRolesAndDescription])
   //   try {
   //     const response = await fetch(`${API_URL}activity/step`, {
   //       method: "POST",
@@ -455,7 +516,92 @@ const Add = () => {
                   </div>
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Job Roles and Description</label>
-                    <input type="text" name="job_roles_and_description" value={jobRolesAndDescription || ''} onChange={(e) => setJobRolesAndDescription(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+                    {jobRolesAndDescription.map((jobRole, index) => (
+                      <div key={index} className="mb-6 p-4 border rounded-md shadow-sm">
+                        <h4 className="font-medium text-lg mb-2">Job Role {index + 1}</h4>
+
+                        <label className="block text-sm font-medium text-gray-700">Job Title <span className="text-red-500">*</span></label>
+                        <input
+                          type="text"
+                          value={jobRole.jobTitle}
+                          onChange={(e) => handleJobRoleChange(index, 'jobTitle', e.target.value)}
+                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                          required
+                        />
+
+                        <label className="block text-sm font-medium text-gray-700 mt-2">Job Role <span className="text-red-500">*</span></label>
+                        <input
+                          type="text"
+                          value={jobRole.jobRole}
+                          onChange={(e) => handleJobRoleChange(index, 'jobRole', e.target.value)}
+                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                          required
+                        />
+
+                        <label className="block text-sm font-medium text-gray-700 mt-2">Description</label>
+                        <textarea
+                          value={jobRole.description}
+                          onChange={(e) => handleJobRoleChange(index, 'description', e.target.value)}
+                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                          rows="3"
+                        />
+
+                        <label className="block text-sm font-medium text-gray-700 mt-2">Average Salary</label>
+                        <input
+                          type="number"
+                          value={jobRole.averageSalary}
+                          onChange={(e) => handleJobRoleChange(index, 'averageSalary', e.target.value)}
+                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        />
+
+                        <label className="block text-sm font-medium text-gray-700 mt-2">Employment Type</label>
+                        <select
+                          value={jobRole.employmentType}
+                          onChange={(e) => handleJobRoleChange(index, 'employmentType', e.target.value)}
+                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        >
+                          <option value="">Select Employment Type</option>
+                          <option value="Full-Time">Full-Time</option>
+                          <option value="Part-Time">Part-Time</option>
+                          <option value="Contract">Contract</option>
+                        </select>
+
+                        <label className="block text-sm font-medium text-gray-700 mt-2">Skills Required</label>
+                        {jobRole.skillsRequired.map((skill, skillIndex) => (
+                          <div key={skillIndex} className="flex mb-2">
+                            <input
+                              type="text"
+                              value={skill}
+                              onChange={(e) => handleSkillChange(index, skillIndex, e.target.value)}
+                              className="mt-1 block w-full p-2 border border-gray-300 rounded-md mr-2"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeSkillField(index, skillIndex)}
+                              className="mt-1 p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={() => addSkillField(index)}
+                          className="mt-2 p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                        >
+                          Add Skill
+                        </button>
+                      </div>
+                    ))}
+
+                    <button
+                      type="button"
+                      onClick={addJobRoleField}
+                      className={`mt-4 p-2 ${canAddNewJobRole() ? 'bg-green-600' : 'bg-gray-300 cursor-not-allowed'} text-white rounded hover:bg-green-700`}
+                      disabled={!canAddNewJobRole()}
+                    >
+                      Add Another Job Role
+                    </button>
                   </div>
                   <button type="button" className="mt-4 p-2 bg-blue-600 text-white rounded">Submit</button>
                 </form>
