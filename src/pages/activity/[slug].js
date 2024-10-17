@@ -3,38 +3,85 @@ import { useRouter } from 'next/router';
 import ActivityProcess from '@/Components/ActivityProcess'
 import ActivityHeader from '@/Components/ActivityHeader'
 import { getLocalStorageItem } from "@/Config/localstorage";
+import { API_URL } from '@/Config/Config';
 
 const AboutSlug = () => {
   const router = useRouter();
   const { slug } = router.query;
   const [ActivityList, setActivityList] = useState("inProcess");
+  const [ActivityDetails, setActivityDetails] = useState("inProcess");
 
-    useEffect(() => {
-        const getAA = getLocalStorageItem("AttemptActivity")
-        if(getAA){
-            setActivityList(getAA);
+  const FetchActivityMenu = async () =>{
+        
+    const datatoSend = {
+        activityid: 431950,
+        type :"menu"
+    }
+    const APIURL =`${API_URL}activity-progress`
+
+    try{
+        const response = await fetch(APIURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(datatoSend)
+        })
+        const data = await response.json();
+        if(data.status === true){
+            setActivityList(data.data)
+        }else{
+            setActivityList(false)
         }
-    }, []);
+    }catch (error) {
+        console.log("Error fetching activity details:", error);
+    }
+}
+
+  const FetchActivityDetails = async (slug) =>{
+        if(slug){
+            const datatoSend = {
+                activityid: 431950,
+                step : slug,
+                type :"data"
+            }
+                console.log(datatoSend)
+            const APIURL =`${API_URL}activity-progress`
+        
+            try{
+                const response = await fetch(APIURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(datatoSend)
+                })
+                const data = await response.json();
+                console.log(data);
+                if(data.status === true){
+                    setActivityDetails(data.data)
+                }else{
+                    setActivityDetails(false)
+                }
+            }catch (error) {
+                console.log("Error fetching activity details:", error);
+            }
+        }
+}
+
+useEffect(() => {
+    FetchActivityMenu();
+    FetchActivityDetails(slug);
+}, [slug]);
+
+
 
   return (
     <div>
         <div className="relative max-w-[1500px] mx-auto w-full">
                 <ActivityHeader data={ActivityList} />
                 <div class="relative flex h-full flex-col px-4 pt-14 sm:px-6 lg:px-8 lg:ml-72 xl:ml-80">
-                    <ActivityProcess slug={slug} data={ActivityList} />
-                    <footer class="mx-auto w-full mt-5 bg">
-                        <div class="flex justify-between">
-                            <button className='bg-slate-300 flex py-2 px-5 rounded-full flex-row-reverse'>
-                                Prev
-                                <span className='rotate-180 mt-[2px]'>
-                                    <svg  viewBox="0 0 20 20" fill="none" aria-hidden="true" class="mt-0.5 h-5 w-5 -mr-1"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m11.5 6.5 3 3.5m0 0-3 3.5m3-3.5h-9"></path></svg>
-                                </span>
-                            </button>
-                            <button className='bg-slate-300 flex py-2 px-5 rounded-full'>
-                                Next<svg  viewBox="0 0 20 20" fill="none" aria-hidden="true" class="mt-0.5 h-5 w-5 -mr-1"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m11.5 6.5 3 3.5m0 0-3 3.5m3-3.5h-9"></path></svg>
-                            </button>
-                        </div>
-                    </footer>
+                    <ActivityProcess data={ActivityDetails} />
                 </div>
             </div>
     </div>

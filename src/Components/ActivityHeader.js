@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -10,38 +10,37 @@ import { useRouter } from 'next/router';
 
 const CommentsSlider = ({ data }) => {
     const router = useRouter();
-console.log(data)
-const menuItems = [
-    { label: 'API', href: '/' },
-    { label: 'Documentation', href: '/documentation' },
-    { label: 'Support', href: '/support' },
-    {
-      label: 'Guides',
-      href: '',
-      subItems: [
-        { label: 'Introduction', href: '/' },
-        { label: 'Guides', href: '/activity/guides' },
-        { label: 'Resources', href: '/activity/resources' },
-        { label: 'Quickstart', href: '/activity/quickstart' },
-        { label: 'SDKs', href: '/activity/sdks' },
-        { label: 'Authentication', href: '/activity/authentication' },
-        { label: 'Pagination', href: '/activity/pagination' },
-        { label: 'Errors', href: '/activity/errors' },
-        { label: 'Webhooks', href: '/activity/webhooks' },
-      ],
-    },
-    {
-      label: 'Resources',
-      href: '',
-      subItems: [
-        { label: 'Contacts', href: 'contacts' },
-        { label: 'Conversations', href: 'conversations' },
-        { label: 'Messages', href: 'messages' },
-        { label: 'Groups', href: 'groups' },
-        { label: 'Attachments', href: 'attachments' },
-      ],
-    },
-  ];
+    const [activeIndex, setActiveIndex] = useState(0); 
+
+    const handleNext = () => {
+        let nextIndex = activeIndex + 1;
+        while (nextIndex < data.length && !data[nextIndex].data) {
+          nextIndex++; // Skip over items with data: false
+        }
+        if (nextIndex < data.length) {
+          setActiveIndex(nextIndex);
+          router.push(`/activity/${data[nextIndex].name}`);
+        }
+      };
+    
+      // Find the previous item where data is true
+      const handlePrev = () => {
+        let prevIndex = activeIndex - 1;
+        while (prevIndex >= 0 && !data[prevIndex].data) {
+          prevIndex--; // Skip over items with data: false
+        }
+        if (prevIndex >= 0) {
+          setActiveIndex(prevIndex);
+          router.push(`/activity/${data[prevIndex].name}`);
+        }
+      };
+    
+      const handleButtonClick = (index) => {
+        if (data[index].data) {
+          setActiveIndex(index);
+          router.push(`/activity/${data[index].name}`);
+        }
+      };
 
     return (
         <>
@@ -93,13 +92,13 @@ const menuItems = [
                         <div class="flex items-center gap-5">
                             <nav class="hidden md:block">
                                 <ul role="list" class="flex items-center gap-8">
-                                    <li><a class="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white" href="/">API</a></li>
-                                    <li><a class="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white" href="#">Documentation</a></li>
-                                    <li><a class="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white" href="#">Support</a></li>
+                                    {/* <li><a class="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white" href="/">Dashboard</a></li> */}
+                                    <li><a class="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white" >Apply activity</a></li>
+                                    <li><a class="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white" >Topic studying</a></li>
                                 </ul>
                             </nav>
-                            <div class="hidden md:block md:h-5 md:w-px md:bg-zinc-900/10 md:dark:bg-white/15"></div>
-                            <div class="flex gap-4">
+                            {/* <div class="hidden md:block md:h-5 md:w-px md:bg-zinc-900/10 md:dark:bg-white/15"></div> */}
+                            {/* <div class="flex gap-4">
                                 <div class="contents lg:hidden">
                                     <button type="button" class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5 ui-not-focus-visible:outline-none lg:hidden dark:hover:bg-white/5" aria-label="Find something...">
                                         <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" class="h-5 w-5 stroke-zinc-900 dark:stroke-white">
@@ -115,20 +114,20 @@ const menuItems = [
                                     </svg>
                                     <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" class="hidden h-5 w-5 stroke-white dark:block"><path d="M15.224 11.724a5.5 5.5 0 0 1-6.949-6.949 5.5 5.5 0 1 0 6.949 6.949Z"></path></svg>
                                 </button>
-                            </div>
+                            </div> */}
                             <div class="hidden min-[416px]:contents">
                                 <a
                                     class="inline-flex gap-0.5 justify-center overflow-hidden text-sm font-medium transition rounded-full bg-zinc-900 py-1 px-3 text-white hover:bg-zinc-700 dark:bg-emerald-400/10 dark:text-emerald-400 dark:ring-1 dark:ring-inset dark:ring-emerald-400/20 dark:hover:bg-emerald-400/10 dark:hover:text-emerald-300 dark:hover:ring-emerald-300"
-                                    href="#"
+                                    
                                 >
-                                    Sign in
+                                    Back to Dashboard
                                 </a>
                             </div>
                         </div>
                     </div>
                     <nav class="hidden lg:mt-10 lg:block">
                         <ul role="list">
-                            {data === "inProcess" ? 
+                            {data === 'inProcess' ? (
                             <div className='flex flex-col gap-5'>
                                 <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
                                 <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
@@ -137,33 +136,52 @@ const menuItems = [
                                 <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
                                 <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
                             </div>
-                            : data ?
-                                Object.keys(data).map((key) => {
-                                    const formattedKey = key.replace(/[_-]/g, ' ');
-                                    return (
-                                    <li key={key} >
-                                        <button
-                                            onClick={() => router.push(`/activity/${key}`)}
-                                            className="block capitalize py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
-                                            >
-                                        {formattedKey}
-                                        </button>
-                                    </li>
-        
-                                    );
-                                })
-                            : null}
-                            
-                            <li className="sticky bottom-0 z-10 mt-6 min-[416px]:hidden">
-                                <button
-                                className="inline-flex gap-0.5 justify-center overflow-hidden text-sm font-medium transition rounded-full bg-zinc-900 py-1 px-3 text-white hover:bg-zinc-700 dark:bg-emerald-500 dark:text-white dark:hover:bg-emerald-400 w-full"
-                                onClick={() => router.push('/signin')}
-                                >
-                                Sign in
-                                </button>
-                            </li>
+                            ) : data && data !== 'inProcess' ? (
+                            data.map((key, index) => {
+                                const formattedKey = key.name.replace(/[_-]/g, ' ');
+                                return (
+                                <li key={key.name}>
+                                    <button
+                                    disabled={!key.data}
+                                    onClick={() => handleButtonClick(index)}
+                                    className={`${
+                                        !key.data ? 'opacity-50' : ''
+                                    } block capitalize py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white ${
+                                        index === activeIndex ? 'font-bold' : ''
+                                    }`}
+                                    >
+                                    {formattedKey}
+                                    </button>
+                                </li>
+                                );
+                            })
+                            ) : null}
+
                         </ul>
+
+                       
                     </nav>
+                    <div
+                        class="fixed inset-x-0 bottom-0 z-50 flex h-24 items-center justify-between gap-12 transition lg:left-72 lg:z-30  xl:left-80 backdrop-blur-sm dark:backdrop-blur bg-white/[var(--bg-opacity-light)] dark:bg-zinc-900/[var(--bg-opacity-dark)]"   
+                    >
+                         <div className='flex justify-between items-center mt-4 w-full bg-gray-100 h-full px-8'>
+                         <button className='bg-slate-300 flex py-2 px-5 rounded-full flex-row-reverse'
+                         onClick={handlePrev}
+                         disabled={activeIndex === 0}
+                         >
+                                Prev
+                                <span className='rotate-180 mt-[2px]'>
+                                    <svg  viewBox="0 0 20 20" fill="none" aria-hidden="true" class="mt-0.5 h-5 w-5 -mr-1"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m11.5 6.5 3 3.5m0 0-3 3.5m3-3.5h-9"></path></svg>
+                                </span>
+                            </button>
+                            <button className='bg-slate-300 flex py-2 px-5 rounded-full'
+                            onClick={handleNext}
+                            disabled={activeIndex === data.length - 1}
+                            >
+                                Next<svg  viewBox="0 0 20 20" fill="none" aria-hidden="true" class="mt-0.5 h-5 w-5 -mr-1"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m11.5 6.5 3 3.5m0 0-3 3.5m3-3.5h-9"></path></svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </header>
         </>

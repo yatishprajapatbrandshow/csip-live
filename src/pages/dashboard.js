@@ -96,9 +96,9 @@ export default function DashboardCombind() {
         }
     }
 
-    const fetchNewActivities = async () => {
-
-        const APIURL = `${API_URL}activity/get?participantId=${userData?.sid}`
+    const fetchNewActivities = async (sid) => {
+        const APIURL = `${API_URL}activity/get?participantId=${sid}`
+        console.log("responsexvcfvbData", APIURL)
         try {
             const response = await fetch(APIURL, {
                 headers: {
@@ -112,7 +112,7 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
-
+            console.log("responsexvcfvbData", responseData)
             if (responseData.status === true) {
                 setNewActivities(responseData.data);
             }
@@ -256,7 +256,7 @@ export default function DashboardCombind() {
     useEffect(() => {
         if (userData?.sid) {
             fetchDashboardData();
-            fetchNewActivities();
+            fetchNewActivities(userData?.sid);
             fetchRecommenedActivities();
             fetchFavoriteActivity();
             fetchTopicData();
@@ -268,7 +268,7 @@ export default function DashboardCombind() {
 
     useEffect(() => {
         fetchDashboardData();
-        fetchNewActivities();
+        fetchNewActivities(userData?.sid);
         fetchRecommenedActivities();
         fetchFavoriteActivity();
     }, [isTriggeredApply])
