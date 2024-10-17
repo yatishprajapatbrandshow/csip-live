@@ -61,7 +61,7 @@ function Curriculum() {
   const chooseCurriculum = async (sid) => {
 
     try {
-      const response = await fetch(`${API_URL_LOCAL}curriculum/choose`, {
+      const response = await fetch(`${API_URL}curriculum/choose`, {
         headers: {
           'Content-Type': 'application/json',
         },

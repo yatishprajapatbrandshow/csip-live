@@ -158,7 +158,7 @@ export default function EditProfile() {
     console.log(payload);
     
     try {
-      const response = await fetch(`${API_URL_LOCAL}register/update`, {
+      const response = await fetch(`${API_URL}register/update`, {
         headers: {
           'Content-Type': 'application/json',
         },
