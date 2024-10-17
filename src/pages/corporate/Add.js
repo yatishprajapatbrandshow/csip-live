@@ -20,7 +20,7 @@ const Add = () => {
   const userData = useSelector((state) => state.session.userData);
   const [formData, setFormData] = useState({});
   const [topics, setTopics] = useState([]);
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(6);
   const [name, setName] = useState('');
   const [shortName, setShortName] = useState('');
   const [objective, setObjective] = useState('');
@@ -51,7 +51,8 @@ const Add = () => {
   const [sid, setSid] = useState('');
   const [id, setId] = useState('');
 
-  const dataFormStepData = ['Basic Information', 'Scenario and Description', 'Corporate Information', 'Media and Resources', 'Activity Details', 'Participant and Approval', 'Activity and Submission Dates'];
+  const dataFormStepData = ['Basic Information', 'Scenario and Description', 'Corporate Information', 'Media and Resources', 'Activity Details', 'Participant and Approval', "Related Topic News", 'Activity and Submission Dates'];
+  // Job Roles And Description Functionality
   const [jobRolesAndDescription, setJobRolesAndDescription] = useState([
     {
       jobTitle: '',
@@ -111,7 +112,7 @@ const Add = () => {
     return jobRolesAndDescription.every(jobRole => jobRole.jobTitle && jobRole.jobRole);
   };
 
-
+  // Tools Used Functionality
   const [toolsUsed, setToolsUsed] = useState([
     {
       name: '',
@@ -150,10 +151,46 @@ const Add = () => {
     const lastTool = toolsUsed[toolsUsed.length - 1];
     return lastTool.name.trim() !== '' && lastTool.category.trim() !== ''; // Only check required fields
   };
-  useEffect(() => {
-    console.log(jobRolesAndDescription);
 
-  }, [toolsUsed, jobRolesAndDescription])
+
+  // Related Topic And News
+  const [relatedTopicNews, setRelatedTopicNews] = useState([
+    {
+      title: '',
+      description: '',
+      link: '',
+      image: ''
+    }
+  ]);
+
+  // Handle change for input fields
+  const handleNewsChange = (index, field, value) => {
+    const newrelatedTopicNews = [...relatedTopicNews];
+    newrelatedTopicNews[index][field] = value; // Update the specific field
+    setRelatedTopicNews(newrelatedTopicNews);
+  };
+
+  // Add a new news item
+  const addNewsItem = () => {
+    setRelatedTopicNews([
+      ...relatedTopicNews,
+      {
+        title: '',
+        description: '',
+        link: '',
+        image: ''
+      }
+    ]);
+  };
+
+  // Remove a news item
+  const removeNewsItem = (index) => {
+    const newrelatedTopicNews = [...relatedTopicNews];
+    newrelatedTopicNews.splice(index, 1); // Remove the news item
+    setRelatedTopicNews(newrelatedTopicNews);
+  };
+
+
   //   try {
   //     const response = await fetch(`${API_URL}activity/step`, {
   //       method: "POST",
@@ -620,6 +657,80 @@ const Add = () => {
                 </form>
               )}
               {step === 6 && (
+                <form>
+                  {relatedTopicNews.map((newsItem, index) => (
+                    <div key={index} className="mb-6 p-4 border rounded-md shadow-sm">
+                      <h4 className="font-medium text-lg mb-2">News Item {index + 1}</h4>
+
+                      <label className="block text-sm font-medium text-gray-700">
+                        Title <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={newsItem.title}
+                        onChange={(e) => handleNewsChange(index, 'title', e.target.value)}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        required
+                      />
+
+                      <label className="block text-sm font-medium text-gray-700 mt-2">Description</label>
+                      <textarea
+                        value={newsItem.description}
+                        onChange={(e) => handleNewsChange(index, 'description', e.target.value)}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        rows="3"
+                      />
+
+                      <label className="block text-sm font-medium text-gray-700 mt-2">
+                        Link <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="url"
+                        value={newsItem.link}
+                        onChange={(e) => handleNewsChange(index, 'link', e.target.value)}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        required
+                      />
+
+                      <label className="block text-sm font-medium text-gray-700 mt-2">Image</label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          // Convert the file to a base64 string or handle it as needed
+                          const file = e.target.files[0];
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                              handleNewsChange(index, 'image', reader.result); // Store the base64 image data
+                            };
+                            reader.readAsDataURL(file);
+                          } else {
+                            handleNewsChange(index, 'image', ''); // Clear the image if no file is selected
+                          }
+                        }}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() => removeNewsItem(index)}
+                        className="mt-2 p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                      >
+                        Remove News Item
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={addNewsItem}
+                    className="mt-4 p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  >
+                    Add Another News Item
+                  </button>
+                </form>
+              )}
+              {step === 7 && (
                 <form>
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Activity Start Date</label>
