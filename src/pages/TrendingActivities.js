@@ -12,9 +12,11 @@ const OngoingActivity = () => {
     const userData = useSelector((state) => state.session.userData);
     const [trendingActivity, setTrendingActivity] = useState([]);
     const fetchOngoingActivities = async () => {
+        console.log(userData?.sid);
+        
         if (!userData?.sid) return;
         try {
-            const response = await fetch(`${API_URL}activity/get-trending`, {
+            const response = await fetch(`${API_URL}activity/get-trending?participant_id=${userData?.sid}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -32,7 +34,7 @@ const OngoingActivity = () => {
         if (userData?.sid) {
             fetchOngoingActivities();
         }
-    },)
+    }, [userData])
     return (
         <>
             <Header />

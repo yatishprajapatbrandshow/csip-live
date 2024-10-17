@@ -6,17 +6,17 @@ import { API_URL, API_URL_LOCAL } from '@/Config/Config';
 import { useRouter } from 'next/router';
 import Header from '@/Components/Header';
 import CardStudent from '@/Components/CardStudent';
+import { useSelector } from 'react-redux';
 
 function SearchTopic() {
     const [AllActivities, setAllActivities] = useState([]);
     const router = useRouter();
-
+    const userData = useSelector((state) => state.session.userData);
 
     const fecthTopics = async (value) => {
-        console.log(value);
 
         try {
-            const response = await fetch(`${API_URL}activity/get-by-topic?topicSearch=${value}`, {
+            const response = await fetch(`${API_URL}activity/get-by-topic?topicSearch=${value}&&participant_id=${userData?.sid}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

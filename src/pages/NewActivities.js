@@ -4,13 +4,16 @@ import Header from '@/Components/Header';
 import { useEffect, useState } from "react";
 import { API_URL } from "@/Config/Config";
 import CardStudent from "@/Components/CardStudent";
+import { useSelector } from "react-redux";
 
 
 const NewActivity = () => {
     const [newActivities, setNewActivities] = useState([])
+    const userData = useSelector((state) => state.session.userData);
     const fetchNewActivities = async () => {
+        const APIURL = `${API_URL}activity/get?participantId=${userData?.sid}`
         try {
-            const response = await fetch(`${API_URL}activity/list?limit=15&&date=true`, {
+            const response = await fetch(`${APIURL}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
