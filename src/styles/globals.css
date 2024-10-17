@@ -6,6 +6,7 @@
   font-family: 'My Font';
   src: url('/fonts/Montserrat.woff2') format('woff2');
 }
+
 @font-face {
   font-family: 'My Font2';
   src: url('/fonts/Montserrat2.woff2') format('woff2');
@@ -36,7 +37,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
   /* Width of the scrollbar */
 }
 
@@ -62,14 +63,16 @@ body {
   0% {
     transform: scale(0.8);
   }
+
   50% {
     transform: scale(1.2);
   }
+
   100% {
     transform: scale(1);
   }
 }
- 
+
 .animate-scaleIn {
   animation: scaleIn 0.3s ease forwards;
 }
