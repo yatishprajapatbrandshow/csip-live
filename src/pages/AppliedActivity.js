@@ -18,8 +18,8 @@ const AppliedActivity = () => {
                     Go Back
                 </Link>
 
-                {loading && <p>Loading activities...</p>}
-                {error && <p>Error: {error}</p>}
+                {Actloading && <p>Loading activities...</p>}
+                {ActError && <p>Error: {error}</p>}
 
                 <div className="flex flex-wrap justify-start gap-6">
                     {activities?.map((activity) => (

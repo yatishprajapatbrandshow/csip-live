@@ -16,6 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import CommentsSlider from '@/Components/CommentsSlider';
 import { useFetchActivities } from '@/hooks/useFetchActivities';
 import { storeFavouriteActivity } from '../../redux/actions/favouriteActivitySlice';
+import DragAndDropTopic from '../Components/DragAndDrop';
 
 
 const reviews = [
@@ -48,7 +49,7 @@ export default function DashboardCombind() {
     const [newActivities, setNewActivities] = useState([])
     const [recommendedActivities, setRecommendedActivities] = useState([])
     const [favActivities, setfavActivities] = useState([])
-    const [topicData, setTopicData] = useState([]);
+    // const [topicData, setTopicData] = useState([]);
     const [dashboardData, setDashboardData] = useState([]);
     const [commentsData, setCommentsData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -58,8 +59,8 @@ export default function DashboardCombind() {
     const dispatch = useDispatch();
     const isTriggeredApply = useSelector((state) => state.trigger.applyTrigger);
     const userData = useSelector((state) => state.session.userData);
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+    // const openModal = () => setIsModalOpen(true);
+    // const closeModal = () => setIsModalOpen(false);
     const { activities, Actloading, ActError } = useFetchActivities();
 
     const topicStudyingCount = useCountUp(dashboardData?.topicStudying?.length || 0);
@@ -198,36 +199,36 @@ export default function DashboardCombind() {
         }
     };
 
-    const handleRemoveTopic = async (topicId) => {
+    // const handleRemoveTopic = async (topicId) => {
 
-        const datatSend = {
-            participant_id: userData?.sid,
-            TopicsList: [`${topicId}`],
-        }
-        const APIURL = `${API_URL}topic/remove`
+    //     const datatSend = {
+    //         participant_id: userData?.sid,
+    //         TopicsList: [`${topicId}`],
+    //     }
+    //     const APIURL = `${API_URL}topic/remove`
 
-        try {
-            const response = await fetch(APIURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(datatSend),
-            });
+    //     try {
+    //         const response = await fetch(APIURL, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify(datatSend),
+    //         });
 
-            const responseData = await response.json()
+    //         const responseData = await response.json()
 
-            if (responseData.status === true) {
-                alert("topics removed successfully")
-                fetchTopicData();
-            } else {
-                alert("Something went wrong, please try again")
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            toast.error('An error occurred while removing the topic.');
-        }
-    };
+    //         if (responseData.status === true) {
+    //             alert("topics removed successfully")
+    //             fetchTopicData();
+    //         } else {
+    //             alert("Something went wrong, please try again")
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         toast.error('An error occurred while removing the topic.');
+    //     }
+    // };
 
     const fetchCommentsData = async () => {
         const participantId = userData?.sid;
@@ -458,7 +459,8 @@ export default function DashboardCombind() {
                                 <p className="text-center text-sm text-purple-600 mt-2">Points Earned</p>
                             </div>
                         </div>
-                        <div className="bg-pink-100 p-4 rounded-lg col-span-3 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+
+                        {/* <div className="bg-pink-100 p-4 rounded-lg col-span-3 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <h3 className="text-lg  text-purple-800 mb-2">📚 Topics:</h3>
                             <div className="flex flex-wrap gap-2">
                                 <ul className="flex flex-wrap gap-2">
@@ -479,9 +481,10 @@ export default function DashboardCombind() {
                                 </ul>
                                 <button onClick={openModal} className="bg-green-400 text-white px-2 py-1 rounded">Add New Topic</button>
                             </div>
-                        </div>
-                        <TopicModal isOpen={isModalOpen} onClose={closeModal} fetchTopicData={fetchTopicData} fetchDashboardData={fetchDashboardData} showToast={showToast} />
+                        </div> */}
+                        {/* <TopicModal isOpen={isModalOpen} onClose={closeModal} fetchTopicData={fetchTopicData} fetchDashboardData={fetchDashboardData} showToast={showToast} /> */}
                     </div>
+                    <DragAndDropTopic />
                     <ToastContainer position="top-right" autoClose={1000} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
                 </div>
                 <CommentsSlider commentsData={commentsData} />
