@@ -13,14 +13,10 @@ const Add = () => {
 
   const editor = useRef(null);
   const [content, setContent] = useState("");
-
-
-
-
   const userData = useSelector((state) => state.session.userData);
   const [formData, setFormData] = useState({});
   const [topics, setTopics] = useState([]);
-  const [step, setStep] = useState(6);
+  const [step, setStep] = useState(8);
   const [name, setName] = useState('');
   const [shortName, setShortName] = useState('');
   const [objective, setObjective] = useState('');
@@ -51,7 +47,7 @@ const Add = () => {
   const [sid, setSid] = useState('');
   const [id, setId] = useState('');
 
-  const dataFormStepData = ['Basic Information', 'Scenario and Description', 'Corporate Information', 'Media and Resources', 'Activity Details', 'Participant and Approval', "Related Topic News", 'Activity and Submission Dates'];
+  const dataFormStepData = ['Basic Information', 'Scenario and Description', 'Corporate Information', 'Media and Resources', 'Activity Details', 'Participant and Approval', "Related Topic News", 'Activity and Submission Dates', 'Top Employees'];
   // Job Roles And Description Functionality
   const [jobRolesAndDescription, setJobRolesAndDescription] = useState([
     {
@@ -153,7 +149,7 @@ const Add = () => {
   };
 
 
-  // Related Topic And News
+  // Related Topic And News Functionality
   const [relatedTopicNews, setRelatedTopicNews] = useState([
     {
       title: '',
@@ -190,6 +186,25 @@ const Add = () => {
     setRelatedTopicNews(newrelatedTopicNews);
   };
 
+  // TopEmployees 
+  const [topEmployees, setTopEmployees] = useState([
+    { name: '', companyName: '', linkedInProfile: '' }
+  ]);
+
+  const handleEmployeeChange = (index, field, value) => {
+    const newEmployees = [...topEmployees];
+    newEmployees[index][field] = value;
+    setTopEmployees(newEmployees);
+  };
+
+  const addEmployee = () => {
+    setTopEmployees([...topEmployees, { name: '', companyName: '', linkedInProfile: '' }]);
+  };
+
+  const removeEmployee = (index) => {
+    const newEmployees = topEmployees.filter((_, i) => i !== index);
+    setTopEmployees(newEmployees);
+  };
 
   //   try {
   //     const response = await fetch(`${API_URL}activity/step`, {
@@ -730,6 +745,7 @@ const Add = () => {
                   </button>
                 </form>
               )}
+
               {step === 7 && (
                 <form>
                   <div className="mb-4">
@@ -751,7 +767,64 @@ const Add = () => {
                   <button type="button" className="mt-4 p-2 bg-blue-600 text-white rounded">Next</button>
                 </form>
               )}
+              {step === 8 && (
+                <form>
+                  {topEmployees.map((employee, index) => (
+                    <div key={index} className="mb-6 p-4 border rounded-md shadow-sm">
+                      <h4 className="font-medium text-lg mb-2">Employee {index + 1}</h4>
 
+                      <label className="block text-sm font-medium text-gray-700">
+                        Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={employee.name}
+                        onChange={(e) => handleEmployeeChange(index, 'name', e.target.value)}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        required
+                      />
+
+                      <label className="block text-sm font-medium text-gray-700 mt-2">
+                        Company Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={employee.companyName}
+                        onChange={(e) => handleEmployeeChange(index, 'companyName', e.target.value)}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        required
+                      />
+
+                      <label className="block text-sm font-medium text-gray-700 mt-2">
+                        LinkedIn Profile
+                      </label>
+                      <input
+                        type="url"
+                        value={employee.linkedInProfile}
+                        onChange={(e) => handleEmployeeChange(index, 'linkedInProfile', e.target.value)}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() => removeEmployee(index)}
+                        className="mt-2 p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                      >
+                        Remove Employee
+                      </button>
+                    </div>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={addEmployee}
+                    className="mt-4 p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    disabled={topEmployees.some(emp => !emp.name || !emp.companyName)}
+                  >
+                    Add Another Employee
+                  </button>
+                </form>
+              )}
               {errorMessage && <div className="text-red-600 text-sm mb-4">{errorMessage}</div>}
               {/* <div className="flex justify-between">
               {step > 0 && (
