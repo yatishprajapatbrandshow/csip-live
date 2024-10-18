@@ -398,7 +398,7 @@ const Add = () => {
   const fetchStepApi = async (payload) => {
 
     try {
-      const response = await fetch(`${API_URL_LOCAL}activity/step`, {
+      const response = await fetch(`${API_URL}activity/step`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
