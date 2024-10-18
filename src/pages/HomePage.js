@@ -1,5 +1,5 @@
-"use client";
-import React from "react";
+'use client'
+import React from 'react'
 import Header from "../Components/Header";
 import SignUp from "../Components/SignUp";
 import { CircleCheck } from "lucide-react";
@@ -79,10 +79,10 @@ function HomePage() {
         {/* <section className='h-[80vh] flex justify-center items-center max-sm:w-full' id='signupForm'>
                     <SignUp />
                 </section> */}
-      </main>
-      <Footer />
-    </div>
-  );
+            </main>
+            <Footer />
+        </div>
+    )
 }
 
-export default HomePage;
+export default HomePage

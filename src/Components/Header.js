@@ -29,7 +29,7 @@ function classNames(...classes) {
 }
 
 
-const Header = ({ place }) => {
+const Header = ({ session = false }) => {
     const router = useRouter();
     const dispatch = useDispatch();
     const [isSession, setIsSession] = useState(false);
@@ -99,7 +99,7 @@ console.log(userData);
         <>
 
             <Disclosure as="nav" className="">
-                <div className={`mx-auto ${place === "home" ? "max-w-7xl" : "max-w-[1500px]"} px-4 sm:px-6 lg:px-8`}>
+                <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
                             {isSession ?
