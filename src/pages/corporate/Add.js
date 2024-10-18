@@ -303,6 +303,7 @@ const Add = () => {
     const payload = {}
     if (step === 0) {
       payload.name = name,
+        payload.corporate_id = userData?.sid,
         payload.short_name = shortName,
         payload.objective = objective,
         payload.short_desc = shortDesc
@@ -315,7 +316,6 @@ const Add = () => {
     }
     if (step === 2) {
       payload.corporate_hierarchy_overview = corporateHierarchyOverview,
-        payload.corporate_id = userData?.sid,
         payload.tag = tag,
         payload.topic_id = selectedTopic?.sid || ""
     }
@@ -370,8 +370,9 @@ const Add = () => {
     }
   }
   const fetchAddApi = async (payload) => {
+
     try {
-      const response = await fetch(`${API_URL}activity/add`, {
+      const response = await fetch(`${API_URL_LOCAL}activity/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -422,6 +423,32 @@ const Add = () => {
       setErrorMessage(error.message);
     }
   }
+  const fetchUpdateStatus = async (status) => {
+    const payload = {
+      _id: id,
+      status
+    }
+    try {
+      const response = await fetch(`${API_URL_LOCAL}activity/status`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const responseData = await response.json();
+      console.log(responseData);
+
+      if (responseData.status === true) {
+        alert(responseData.message);
+      } else {
+        alert(responseData.message)
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  }
   // Handle topic click
   const handleTopicClick = (topic) => {
     setSelectedTopic(topic);
@@ -465,6 +492,7 @@ const Add = () => {
   return (
     <>
       <Header />
+
       <section className="bg-bgForm bg-cover bg-center min-h-screen relative overflow-hidden mb-20">
         <div className="absolute bg-white/50 backdrop-blur-sm w-full h-full left-0 top-0" style={{
           clipPath: 'polygon(100% 35%, 0% 100%, 100% 100%)'
@@ -472,6 +500,19 @@ const Add = () => {
 
         <div className="mx-auto pt-24 relative z-10 px-10 bg-white">
           <div className='grid grid-cols-4'>
+            <div className='col-span-4 flex gap-5 mb-5 justify-end'>
+              <button onClick={(e) => {
+                e.preventDefault()
+                router.push('ActivityList')
+              }} type="button" className="mb-2 p-2 bg-blue-600 text-white rounded" >Go To List</button>
+              <button onClick={(e) => {
+                e.preventDefault()
+              }} type="button" className="mb-2 p-2 bg-blue-600 text-white rounded cursor-not-allowed" disabled>Preview</button>
+              <button onClick={(e) => {
+                e.preventDefault()
+                fetchUpdateStatus('Draft')
+              }} type="button" className="mb-2 p-2 bg-blue-600 text-white rounded">Draft</button>
+            </div>
             <div className='col-span-1 sticky top-0'>
               <ol className="h-fit overflow-hidden space-y-8">
                 {dataFormStepData?.map((label, index) => (
@@ -517,6 +558,7 @@ const Add = () => {
 
             </div>
             <div className="col-span-3 w-full mx-auto p-6 h-fit bg-white shadow-inner rounded-md">
+
               <h2 className="text-3xl font-medium text-gray-800 mb-4">{dataFormStepData[step]}</h2>
               {step === 0 && (
                 <form>
@@ -527,6 +569,10 @@ const Add = () => {
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Activity Short Name</label>
                     <input type="text" name="short_name" value={shortName || ''} onChange={(e) => setShortName(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Corporate ID</label>
+                    <input type="text" name="corporate_id" value={userData?.sid || ''} disabled className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
                   </div>
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Objective</label>
@@ -600,10 +646,7 @@ const Add = () => {
                     <label className="block text-sm font-medium text-gray-700">Corporate Hierarchy Overview</label>
                     <input type="text" name="corporate_hierarchy_overview" value={corporateHierarchyOverview || ''} onChange={(e) => setCorporateHierarchyOverview(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
                   </div>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Corporate ID</label>
-                    <input type="text" name="corporate_id" value={userData?.sid || ''} disabled className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
-                  </div>
+
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Tag</label>
                     <input type="text" name="tag" value={tag || ''} onChange={(e) => setTag(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />

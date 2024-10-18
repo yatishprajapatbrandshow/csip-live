@@ -5,6 +5,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { API_URL, API_URL_LOCAL } from '@/Config/Config';
 import { useSelector } from 'react-redux';
+import Header from '@/Components/Header';
 
 function ActivityList() {
   const [items, setItems] = useState([]);
@@ -15,8 +16,8 @@ function ActivityList() {
   const fetchActivities = async () => {
     // Only append corporate_id if it's defined
     const APIURL = userData?.sid
-      ? `${API_URL}activity/list?corporate_id=${userData?.sid}`
-      : `${API_URL}activity/list`;
+      ? `${API_URL_LOCAL}activity/list?corporate_id=${userData?.sid}`
+      : `${API_URL_LOCAL}activity/list`;
 
     try {
       const response = await fetch(APIURL, {
@@ -50,10 +51,10 @@ function ActivityList() {
     }
   }, [userData]);
 
-  if (loading) return <div className="text-center w-full ">Loading...</div>; // Loading state
-
   return (
-    <div className="pl-20 p-6 bg-white">
+    <>
+      <Header />
+      <div className="pl-20 p-6 bg-white">
       <h1 className="text-3xl  mb-6">Added Activity List</h1>
       <div className="flex flex-wrap justify-start gap-6">
         {items?.map((activity) => (
@@ -61,6 +62,7 @@ function ActivityList() {
         ))}
       </div>
     </div>
+    </>
   );
 }
 

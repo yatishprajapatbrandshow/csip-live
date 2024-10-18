@@ -7,7 +7,9 @@ import { useRouter } from 'next/router';
 import useFormattedDate from '@/hooks/useDateFormate';
 import DefaultIMG from '/public/images/image-banner.jpg';
 import DefaultLogo from '/public/images/images.png';
+import { encrypt } from '@/utils/cryptoUtils';
 const CardCorporate = ({ activity }) => {
+
     const router = useRouter();
     const [isToggled, setIsToggled] = useState(false);
 
@@ -15,6 +17,13 @@ const CardCorporate = ({ activity }) => {
         setIsToggled(!isToggled);
     };
 
+    const handleClick = () => {
+        const encryptedId = encrypt(activity._id);
+        router.push({
+            pathname: 'Edit',
+            query: { item: encryptedId }
+        });
+    };
     return (
         <div className="bg-white rounded-2xl overflow-hidden w-[300px] shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 hover:scale-105">
             <div className="relative h-40">
@@ -67,6 +76,7 @@ const CardCorporate = ({ activity }) => {
                 <div>
                     <p className='text-sm font-light '><span className='font-medium mr-2'>Start date:</span> {useFormattedDate(activity.activity_start_date, 1)}</p>
                     <p className='text-sm font-light '><span className='font-medium mr-2'>Fee:</span> {activity.amount}</p>
+                    <p className='text-sm font-light '><span className='font-medium mr-2'>Activity Staus :</span> {activity.activityStatus}</p>
                     <div className="flex items-center text-sm text-gray-600 mb-2 mt-2">
                         <CalendarDays className="w-4 h-4 mr-1" />
                         <span className="font-normal text-xs">Apply Before: {useFormattedDate(activity.activity_end_date, 1)}</span>
@@ -81,8 +91,8 @@ const CardCorporate = ({ activity }) => {
                 <button className="bg-purple-500 w-full text-white hover:bg-purple-600 transition-colors flex justify-center items-center">
                     View
                 </button>
-                <button className="bg-gray-200 w-full text-gray-800 hover:bg-gray-300 transition-colors">
-                    Edit
+                <button onClick={handleClick} className="bg-gray-200 w-full text-gray-800 hover:bg-gray-300 transition-colors">
+                   Edit
                 </button>
             </div>
         </div>
