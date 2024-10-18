@@ -317,7 +317,7 @@ const Add = () => {
       payload.corporate_hierarchy_overview = corporateHierarchyOverview,
         payload.corporate_id = userData?.sid,
         payload.tag = tag,
-        payload.topic_id = selectedTopic?.sid
+        payload.topic_id = selectedTopic?.sid || ""
     }
     if (step === 3) {
       payload.tools_used = toolsUsed,
@@ -396,8 +396,9 @@ const Add = () => {
   }
 
   const fetchStepApi = async (payload) => {
+
     try {
-      const response = await fetch(`${API_URL}activity/step`, {
+      const response = await fetch(`${API_URL_LOCAL}activity/step`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -405,17 +406,13 @@ const Add = () => {
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
       const responseData = await response.json();
       console.log(responseData);
 
       if (responseData.status === true) {
         alert(responseData.message);
         if (step === 11) {
-          router.push('/')
+          router.push('ActivityList')
         }
         setStep((prevStep) => prevStep + 1);
       } else {
