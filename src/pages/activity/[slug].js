@@ -14,7 +14,7 @@ const AboutSlug = () => {
   const FetchActivityMenu = async () =>{
         
     const datatoSend = {
-        activityid: 431950,
+        activityid: 76604,
         type :"menu"
     }
     const APIURL =`${API_URL}activity-progress`
@@ -41,7 +41,7 @@ const AboutSlug = () => {
   const FetchActivityDetails = async (slug) =>{
         if(slug){
             const datatoSend = {
-                activityid: 431950,
+                activityid: 76604,
                 step : slug,
                 type :"data"
             }

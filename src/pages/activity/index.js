@@ -28,7 +28,7 @@ export default function DashboardCombind() {
     const FetchActivityDetails = async () =>{
         
         const datatoSend = {
-            activityid: 431950,
+            activityid: 76604,
             requestedSteps : [],
         	type :"menu"
         }

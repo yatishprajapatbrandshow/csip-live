@@ -342,7 +342,6 @@ const TopEmp = [
 
 
 
-
     return (
         <section className='mt-5 pb-32'>
             {data === "inProcess" ? <>
@@ -353,8 +352,10 @@ const TopEmp = [
                   <div>
                     <p className='px-3 text-sm py-1 rounded-full border border-green-400/50 w-max bg-green-50'>{data.objective.short_name}</p>
                      <p className='text-lg mt-5 text-gray-800 font-bold'>{data.objective.name}</p>
-                     {/* <p>{data.objective.short_desc}</p> */}
-                     <p className='text-base text-justify font-light mt-5 text-gray-700'>{data.objective.objective}</p>
+                     {/* <p className="text-base text-justify font-light mt-5 text-gray-700"
+                        dangerouslySetInnerHTML={{ __html: data.objective.short_desc }} /> */}
+                     <p className="text-base text-justify font-light mt-5 text-gray-700"
+                        dangerouslySetInnerHTML={{ __html: data.objective.objective }} />
                   </div>
                )}
 
@@ -424,6 +425,7 @@ const TopEmp = [
                      </ul> */}
                   </div>
                )}
+
                {data.tools && (
                   <div className='shadow-sm'>
                      <h2 className='text-lg mt-5 text-gray-800 font-bold'>Tools used</h2>
@@ -440,11 +442,11 @@ const TopEmp = [
                         </tr>
                       </thead>
                       <tbody>
-                        {toolsData.map((tool) => (
+                        {data.tools.tools_used.map((tool) => (
                           <tr key={tool.id} className='border-b border-b-gray-100'>
                             <td className="py-2 px-4">{tool.id}</td>
                             <td className="py-2 px-4">
-                              <img src={tool.img} alt={tool.name} className="h-8 w-8 object-contain" />
+                              <img src={`https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/1024px-Visual_Studio_Code_1.35_icon.svg.png`} alt={tool.name} className="h-8 w-8 object-contain" />
                             </td>
                             <td className="py-2 text-sm px-4">{tool.name}</td>
                             <td className="py-2 text-sm px-4">{tool.description.slice(0,50)}...</td>

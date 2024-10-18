@@ -20,7 +20,7 @@ import { setOrderID, getOrderID, removeOrderID } from '../../redux/actions/order
 import { addFavouriteActivity, removeFavouriteActivity } from '../../redux/actions/favouriteActivitySlice';
 
 
-const CardStudent = ({ activity }) => {
+const CardStudent = ({ activity, theme }) => {
     const router = useRouter();
     const dispatch = useDispatch();
     const userData = useSelector((state) => state.session.userData);
@@ -196,6 +196,7 @@ const CardStudent = ({ activity }) => {
     return (
         <>
             {/* <button onClick={()=>handleCreatePayment()}>GetRedux</button> */}
+            
             <div className="bg-white rounded-2xl overflow-hidden w-[300px] shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 hover:scale-105">
                 <div className="relative h-40 ">
                     {activity.image_assc ?

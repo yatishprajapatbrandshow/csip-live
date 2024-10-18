@@ -9,7 +9,7 @@ const fetchAllTopics = async (participantId) => {
     if (!participantId) return [];
 
     try {
-        const response = await fetch(`${API_URL_LOCAL}topic/get`, {
+        const response = await fetch(`${API_URL}topic/get`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -40,7 +40,7 @@ const removeTopicFromYourTopics = async (participantId, topicId) => {
         participant_id: participantId,
         TopicsList: [`${topicId}`],
     };
-    const API_URL_REMOVE = `${API_URL_LOCAL}topic/remove`;
+    const API_URL_REMOVE = `${API_URL}topic/remove`;
 
     try {
         const response = await fetch(API_URL_REMOVE, {
@@ -121,7 +121,7 @@ const DragAndDropTopic = () => {
         if (term.length < 1) {
             // Fetch default topics when there is no search term
             try {
-                const response = await fetch(`${API_URL_LOCAL}topic`, {
+                const response = await fetch(`${API_URL}topic`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ const DragAndDropTopic = () => {
 
         // Fetch topics based on the search term
         try {
-            const response = await fetch(`${API_URL_LOCAL}topic`, {
+            const response = await fetch(`${API_URL}topic`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -254,68 +254,91 @@ const DragAndDropTopic = () => {
     }
 
     return (
-        <div className="bg-gray-50 w-full">
+        <div className="bg-gray-100 border border-gray-200 rounded-lg p-2 w-full">
             {loading ? (
-                <div className="text-lg font-semibold">Loading...</div>
+                <div className='min-h-72 grid grid-cols-2 gap-5 mb-2'>
+                    <div className='col-span-2 h-20 bg-white rounded-lg' />
+                    <div className='col-span-1 h-72 bg-white rounded-lg' />
+                    <div className='col-span-1 h-72 bg-white rounded-lg' />
+                </div>
             ) : (
-                <div className="grid grid-cols-2 gap-10  w-full">
-                    {/* All Topics Column */}
-                    <div className='col-span-1'>
-                        <div className="flex mb-4 ">
-                            <input
-                                type="text"
-                                placeholder="Search for topics..."
-                                onChange={(e) => onSearch(e.target.value)}
-                                className="border border-gray-300 p-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 shadow-md"
-                            />
+                <div className="grid grid-cols-2 bg-white w-full rounded-lg border border-gray-200">
+                    <div className='col-span-2 p-4'>
+                        <div className='min-h-10 border-b border-b-gray-200'>
+                            <p className='text-gray-800 font-medium'>Managing Topics You Are Studying: Select or Remove by Dragging or Clicking</p>
                         </div>
+                        <div className='flex gap-2 justify-start items-start pt-4'>
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                            </span>
+                            <p className='text-sm text-gray-700'>Drag a topic from the left box to the right box to select it, or click on a topic to select. To remove a topic, drag it from the right box back to the left box.</p>
+                        </div>
+                    </div>
+                    <div className='col-span-2 bg-gray-50 p-4 grid grid-cols-2 gap-4'>
+                        
+                        <div className='col-span-2'>
+                            <div className="flex justify-start items-center px-2 bg-white border border-gray-300 text-xs rounded-lg w-max">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                <input
+                                    type="text"
+                                    placeholder="Search for topics..."
+                                    onChange={(e) => onSearch(e.target.value)}
+                                    className="p-4 py-2"
+                                />
+                            </div>
+                        </div>
+                        <div className='col-span-1'>
 
+                            <div
+                                className="w-full h-96 p-4 bg-white shadow-sm rounded-xl overflow-y-auto select-none"
+                                onDrop={(event) => handleDrop(event, yourTopics, setYourTopics, allTopics, setAllTopics, "All Topics")}
+                                onDragOver={handleDragOver}
+                            >
+                                <h3 className="text-xl font-bold mb-4 text-gray-800">All Topics</h3>
+                                <div className='flex flex-wrap gap-2'>
+
+                                {allTopics.map((item) => (
+                                    yourTopics.some((ele) => item?.sid === ele.sid) ? (<div
+                                        key={item.id}
+                                        className="draggable-item hidden text-sm border mb-1 border-pink-400 rounded-lg text-pink-500 p-2"
+                                    >
+                                        {item.topic}
+                                    </div>) :
+                                        <div
+                                            onClick={() => { handleAdd(item) }}
+                                            key={item.id}
+                                            className="draggable-item text-sm mb-1 rounded-lg text-pink-700 bg-pink-50 flex px-4 py-4"
+                                            draggable
+                                            onDragStart={(event) => handleDragStart(event, item, 'All Topics')}
+                                        >
+                                            {item.topic}
+                                        </div>
+                                ))}
+                                </div>
+                            </div>
+                        </div>
                         <div
-                            className="w-full h-96 p-4 bg-white rounded-xl shadow-lg overflow-y-auto select-none"
-                            onDrop={(event) => handleDrop(event, yourTopics, setYourTopics, allTopics, setAllTopics, "All Topics")}
+                            className="col-span-1 h-96 p-4 bg-white rounded-xl overflow-y-auto"
+                            onDrop={(event) => handleDrop(event, allTopics, setAllTopics, yourTopics, setYourTopics, "Your Topics")}
                             onDragOver={handleDragOver}
                         >
-                            <h3 className="text-xl font-bold mb-4 text-gray-800">All Topics</h3>
-                            {allTopics.map((item) => (
-                                yourTopics.some((ele) => item?.sid === ele.sid) ? (<div
-                                    key={item.id}
-                                    className="draggable-item p-2 mb-2 bg-green-200 rounded-lg hover:bg-green-300 transition duration-200 cursor-pointer flex justify-between "
-                                >
-                                    {item.topic}
-                                    <Check className='text-gray-600' />
-                                </div>) :
+                            <h3 className="text-xl font-bold mb-4 text-gray-800">Your Topics</h3>
+                            <div className='flex flex-wrap gap-2'>
+                                {yourTopics.map((item) => (
                                     <div
-                                        onClick={() => { handleAdd(item) }}
+                                        onClick={() => { handleRemove(item) }}
                                         key={item.id}
-                                        className="draggable-item p-2 mb-2 bg-blue-100 rounded-lg hover:bg-blue-200 transition duration-200 cursor-pointer"
+                                        className="draggable-item text-sm mb-1 rounded-lg text-green-700 bg-green-50 border border-green-200/70 flex px-4 py-4"
                                         draggable
-                                        onDragStart={(event) => handleDragStart(event, item, 'All Topics')}
+                                        onDragStart={(event) => handleDragStart(event, item, 'Your Topics')}
                                     >
                                         {item.topic}
                                     </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     </div>
-                    {/* Your Topics Column */}
-                    <div
-                        className="col-span-1 mt-16 h-96 p-4 bg-white rounded-xl shadow-lg overflow-y-auto"
-                        onDrop={(event) => handleDrop(event, allTopics, setAllTopics, yourTopics, setYourTopics, "Your Topics")}
-                        onDragOver={handleDragOver}
-                    >
-                        <h3 className="text-xl font-bold mb-4 text-gray-800">Your Topics</h3>
-                        {yourTopics.map((item) => (
-                            <div
-                                onClick={() => { handleRemove(item) }}
-                                key={item.id}
-                                className="draggable-item p-2 mb-2 bg-green-100 rounded-lg hover:bg-green-200 transition duration-200 cursor-pointer flex justify-between"
-                                draggable
-                                onDragStart={(event) => handleDragStart(event, item, 'Your Topics')}
-                            >
-                                {item.topic}
-                                <Check className='text-gray-600' />
-                            </div>
-                        ))}
-                    </div>
+
                 </div>
             )
             }

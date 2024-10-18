@@ -126,7 +126,7 @@ function Login() {
 
     return (
         <div className='min-w-fit bg-gray-200 h-max rounded-xl p-1'>
-            <div className="bg-white py-10 px-10 max-sm:px-5 shadow-2xl shadow-gray-400 rounded-xl">
+            <div className="bg-white py-10 px-10 max-sm:px-5 rounded-xl">
                 <h3 className='text-xl font-bold text-gray-700 leading-5 mb-6'>Login to Federation of Industrial Education's Portal</h3>
 
                 {!isEmailLogin && (

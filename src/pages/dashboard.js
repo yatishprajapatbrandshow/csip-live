@@ -42,6 +42,34 @@ const reviews = [
     },
 ];
 
+const featureData = [
+    {
+      title: "First feature",
+      description: "Neque Dolor, fugiat non cum doloribus aperiam voluptates nostrum.",
+      image: "https://cdn-icons-png.flaticon.com/512/4341/4341139.png",
+      link: "#"
+    },
+    {
+      title: "Second feature",
+      description: "Neque Dolor, fugiat non cum doloribus aperiam voluptates nostrum.",
+      image: "https://cdn-icons-png.flaticon.com/512/4341/4341134.png",
+      link: "#"
+    },
+    {
+      title: "Third feature",
+      description: "Neque Dolor, fugiat non cum doloribus aperiam voluptates nostrum.",
+      image: "https://cdn-icons-png.flaticon.com/512/4341/4341160.png",
+      link: "#"
+    },
+    {
+      title: "More features",
+      description: "Neque Dolor, fugiat non cum doloribus aperiam voluptates nostrum.",
+      image: "https://cdn-icons-png.flaticon.com/512/4341/4341025.png",
+      link: "#"
+    }
+  ];
+  
+
 
 export default function DashboardCombind() {
     const router = useRouter();
@@ -364,12 +392,21 @@ export default function DashboardCombind() {
                                 />
                             </div>
                         </div>
-                        <div className="bg-purple-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                        {/* <div className="bg-purple-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <h3 className="text-lg  text-purple-800 mb-2">Activity Progress Chart</h3>
                             <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <CircularProgressBar value={90} text="90%" color="text-pink-500" />
                             </div>
-                        </div>
+                        </div> */}
+                         <div className="bg-purple-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                                <h3 className="text-lg  text-purple-800 mb-2">Profile Status</h3>
+                                <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                                    {ProfileStatus ?
+                                        <CircularProgressBar value={ProfileStatusCount} text={`${ProfileStatusCount}%`} color="text-pink-500" />
+                                        : null}
+                                </div>
+                                <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
+                            </div>
                         <div className="bg-blue-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <h3 className="text-lg  text-purple-800 mb-2">Corporate Reviews</h3>
                             <ReviewSlider reviews={reviews} />
@@ -381,9 +418,16 @@ export default function DashboardCombind() {
                             </div>
                         </div>
                         <div className="bg-pink-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                            <h3 className="text-lg  text-purple-800 mb-2">Activity/Curriculum</h3>
+                            <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                                <CircularProgressBar value={ActivityCurriculumStatusCount} text={`${ActivityCurriculumStatusCount}%`} color="text-pink-500" />
+                            </div>
+                            <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
+                        </div>
+                        {/* <div className="bg-pink-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <h3 className="text-lg  text-purple-800 mb-2">Corporate Skill Endorsement</h3>
                             <p className="text-sm text-purple-600 font-gilMedium">No Data to Generate Report</p>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -435,7 +479,7 @@ export default function DashboardCombind() {
 
                     <div className="grid grid-cols-5 gap-4">
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 col-span-2 h-max">
-                            <div className="bg-purple-100 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                            {/* <div className="bg-purple-100 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <h3 className="text-lg  text-purple-800 mb-2">Profile Status</h3>
                                 <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                     {ProfileStatus ?
@@ -443,21 +487,21 @@ export default function DashboardCombind() {
                                         : null}
                                 </div>
                                 <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
-                            </div>
-                            <div className="bg-purple-100 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                            </div> */}
+                            {/* <div className="bg-purple-100 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <h3 className="text-lg  text-purple-800 mb-2">Activity/Curriculum</h3>
                                 <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                     <CircularProgressBar value={ActivityCurriculumStatusCount} text={`${ActivityCurriculumStatusCount}%`} color="text-pink-500" />
                                 </div>
                                 <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
-                            </div>
-                            <div className="bg-purple-100 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                            </div> */}
+                            {/* <div className="bg-purple-100 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <h3 className="text-lg  text-purple-800 mb-2">Score</h3>
                                 <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                     <CircularProgressBar value={85} text="85%" color="text-pink-500" />
                                 </div>
                                 <p className="text-center text-sm text-purple-600 mt-2">Points Earned</p>
-                            </div>
+                            </div> */}
                         </div>
 
                         {/* <div className="bg-pink-100 p-4 rounded-lg col-span-3 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
@@ -484,23 +528,88 @@ export default function DashboardCombind() {
                         </div> */}
                         {/* <TopicModal isOpen={isModalOpen} onClose={closeModal} fetchTopicData={fetchTopicData} fetchDashboardData={fetchDashboardData} showToast={showToast} /> */}
                     </div>
-                    <DragAndDropTopic />
+                    <div className=''>
+                        <DragAndDropTopic />
+                    </div>
                     <ToastContainer position="top-right" autoClose={1000} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
                 </div>
-                <CommentsSlider commentsData={commentsData} />
-                {activities ?
+                {/* <CommentsSlider commentsData={commentsData} /> */}
+                {/* {activities ?
                     <Activities title="Applied Activity" cardData={activities} />
+                    : null} */}
+                    
+
+                
+            </div>
+            <div className=" bg-gray-100 p-10">
+                <div className="relative max-w-[1500px] bg-gray-100 mx-auto w-full">
+                    <div className="grid divide-x divide-y divide-gray-100 dark:divide-gray-700 overflow-hidden rounded-3xl border border-gray-100 text-gray-600 dark:border-gray-700 sm:grid-cols-2 lg:grid-cols-4 lg:divide-y-0 xl:grid-cols-4">
+                        {featureData.map((feature, index) => (
+                            <div
+                            key={index}
+                            className="group relative bg-white dark:bg-gray-800 transition hover:z-[1] hover:shadow-2xl hover:shadow-gray-600/10"
+                            >
+                                <div className="relative space-y-8 py-12 p-8">
+                                    <img
+                                    src={feature.image}
+                                    alt={feature.title}
+                                    className="w-12"
+                                    width="512"
+                                    height="512"
+                                    />
+                                    <div className="space-y-2">
+                                    <h5 className="text-xl font-semibold text-gray-700 dark:text-white transition group-hover:text-secondary">
+                                        {feature.title}
+                                    </h5>
+                                    <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
+                                    </div>
+                                    <a href={feature.link} className="flex items-center justify-between group-hover:text-secondary">
+                                    <span className="text-sm">Read more</span>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        className="w-5 h-5 -translate-x-4 text-2xl opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+                                    >
+                                        <path
+                                        fillRule="evenodd"
+                                        d="M12.97 3.97a.75.75 0 011.06 0l7.5 7.5a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 11-1.06-1.06l6.22-6.22H3a.75.75 0 010-1.5h16.19l-6.22-6.22a.75.75 0 010-1.06z"
+                                        clipRule="evenodd"
+                                        ></path>
+                                    </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+            <div className="bg-gray-100">
+                <div className="relative max-w-[1500px] mx-auto w-full pt-10">
+                    {favActivities && Array.isArray(favActivities) && favActivities.length > 0 ?
+                        <Activities title="Favourite Activity" cardData={favActivities} />
                     : null}
 
-                {favActivities && Array.isArray(favActivities) && favActivities.length > 0 ?
-                    <Activities title="Favourite Activity" cardData={favActivities} />
+                    {recommendedActivities && Array.isArray(recommendedActivities) && recommendedActivities.length > 0 ?
+                        <div className='p-10 bg-white rounded-xl'>
+                            <Activities title="Recommended Activity" cardData={recommendedActivities} />
+                        </div>
                     : null}
-                {recommendedActivities && Array.isArray(recommendedActivities) && recommendedActivities.length > 0 ?
-                    <Activities title="Recommended Activity" cardData={recommendedActivities} />
-                    : null}
-                {newActivities && Array.isArray(newActivities) && newActivities.length > 0 ?
-                    <Activities title="New Activity" bgDesign={"Full"} cardData={newActivities} />
-                    : null}
+                 
+                </div>
+                <div className="relative max-w-[1500px] mx-auto w-full pt-10 mb-10">
+                    <div className="bg-purple-800 bg-BGRec bg-[length:40px_40px] rounded-lg overflow-hidden">
+                        <div className="bg-gray-900/70">
+                            {newActivities && Array.isArray(newActivities) && newActivities.length > 0 ?
+                                <div className=''>
+                                    <div className='p-10 '>
+                                    <Activities theme={"black"} title="New Activity" cardData={newActivities.slice(0, 4)}  />
+                                    </div>
+                                </div>
+                            : null}
+                        </div>
+                    </div>
+                </div>
             </div>
         </>
     );

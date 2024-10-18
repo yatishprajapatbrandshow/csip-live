@@ -14,7 +14,7 @@ const roboto = Roboto({
 function MyApp({ Component, pageProps }) {
   return (
     <Provider store={store}>
-      <div className={`${roboto.className} bg-white px-10 max-sm:px-0`}>
+      <div className={`${roboto.className} bg-white`}>
         <Component {...pageProps} />
       </div>
     </Provider>
