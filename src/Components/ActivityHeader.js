@@ -7,40 +7,58 @@ import "swiper/css/pagination";
 import { Navigation, Autoplay } from "swiper/modules";
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { encrypt } from '@/utils/cryptoUtils';
 
 const CommentsSlider = ({ data }) => {
+    console.log("Data In Comments Slider", data);
+
     const router = useRouter();
-    const [activeIndex, setActiveIndex] = useState(0); 
+    const [activeIndex, setActiveIndex] = useState(0);
 
     const handleNext = () => {
         let nextIndex = activeIndex + 1;
         while (nextIndex < data.length && !data[nextIndex].data) {
-          nextIndex++; // Skip over items with data: false
+            nextIndex++; // Skip over items with data: false
         }
         if (nextIndex < data.length) {
-          setActiveIndex(nextIndex);
-          router.push(`/activity/${data[nextIndex].name}`);
+            const encryptedId = encrypt(activity._id);
+            setActiveIndex(nextIndex);
+            router.push({
+                pathname: `/activity/${data[nextIndex].name}`,
+                query: { item: encryptedId }
+            }
+            );
         }
-      };
-    
-      // Find the previous item where data is true
-      const handlePrev = () => {
+    };
+
+    // Find the previous item where data is true
+    const handlePrev = () => {
         let prevIndex = activeIndex - 1;
         while (prevIndex >= 0 && !data[prevIndex].data) {
-          prevIndex--; // Skip over items with data: false
+            prevIndex--; // Skip over items with data: false
         }
         if (prevIndex >= 0) {
-          setActiveIndex(prevIndex);
-          router.push(`/activity/${data[prevIndex].name}`);
+            const encryptedId = encrypt(activity._id);
+            setActiveIndex(prevIndex);
+            router.push({
+                pathname: `/activity/${data[prevIndex].name}`,
+                query: { item: encryptedId }
+            });
         }
-      };
-    
-      const handleButtonClick = (index) => {
+    };
+
+    const handleButtonClick = (index) => {
+        const encryptedId = encrypt(activity._id);
+        console.log("Handle Next :", encryptedId);
+
         if (data[index].data) {
-          setActiveIndex(index);
-          router.push(`/activity/${data[index].name}`);
+            setActiveIndex(index);
+            router.push({
+                pathname: `/activity/${data[index].name}`,
+                query: { item: encryptedId }
+            });
         }
-      };
+    };
 
     return (
         <>
@@ -59,7 +77,7 @@ const CommentsSlider = ({ data }) => {
                     </div>
                     <div
                         class="fixed inset-x-0 top-0 z-50 flex h-14 items-center justify-between gap-12 px-4 transition sm:px-6 lg:left-72 lg:z-30 lg:px-8 xl:left-80 backdrop-blur-sm lg:left-72 xl:left-80 dark:backdrop-blur bg-white/[var(--bg-opacity-light)] dark:bg-zinc-900/[var(--bg-opacity-dark)]"
-                        
+
                     >
                         <div class="absolute inset-x-0 top-full h-px transition bg-zinc-900/7.5 dark:bg-white/7.5"></div>
                         <div class="hidden lg:block lg:max-w-md lg:flex-auto">
@@ -72,13 +90,13 @@ const CommentsSlider = ({ data }) => {
                                 </svg>
                                 Find something...<kbd class="ml-auto text-2xs text-zinc-400 dark:text-zinc-500"><kbd class="font-sans">⌘</kbd><kbd class="font-sans">K</kbd></kbd>
                             </button>
-                            
+
                         </div>
                         <div class="flex items-center gap-5 lg:hidden">
                             <button type="button" class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5 dark:hover:bg-white/5" aria-label="Toggle navigation">
                                 <svg viewBox="0 0 10 9" fill="none" stroke-linecap="round" aria-hidden="true" class="w-2.5 stroke-zinc-900 dark:stroke-white"><path d="M.5 1h9M.5 8h9M.5 4.5h9"></path></svg>
                             </button>
-                            
+
                             <a aria-label="Home" href="/">
                                 <svg viewBox="0 0 99 24" aria-hidden="true" class="h-6">
                                     <path class="fill-emerald-400" d="M16 8a5 5 0 0 0-5-5H5a5 5 0 0 0-5 5v13.927a1 1 0 0 0 1.623.782l3.684-2.93a4 4 0 0 1 2.49-.87H11a5 5 0 0 0 5-5V8Z"></path>
@@ -118,7 +136,7 @@ const CommentsSlider = ({ data }) => {
                             <div class="hidden min-[416px]:contents">
                                 <a
                                     class="inline-flex gap-0.5 justify-center overflow-hidden text-sm font-medium transition rounded-full bg-zinc-900 py-1 px-3 text-white hover:bg-zinc-700 dark:bg-emerald-400/10 dark:text-emerald-400 dark:ring-1 dark:ring-inset dark:ring-emerald-400/20 dark:hover:bg-emerald-400/10 dark:hover:text-emerald-300 dark:hover:ring-emerald-300"
-                                    
+
                                 >
                                     Back to Dashboard
                                 </a>
@@ -128,57 +146,55 @@ const CommentsSlider = ({ data }) => {
                     <nav class="hidden lg:mt-10 lg:block">
                         <ul role="list">
                             {data === 'inProcess' ? (
-                            <div className='flex flex-col gap-5'>
-                                <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
-                                <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
-                                <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
-                                <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
-                                <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
-                                <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
-                            </div>
+                                <div className='flex flex-col gap-5'>
+                                    <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
+                                    <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
+                                    <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
+                                    <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
+                                    <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
+                                    <span className='w-52 h-7 rounded-lg bg-gray-200'></span>
+                                </div>
                             ) : data && data !== 'inProcess' ? (
-                            data.map((key, index) => {
-                                const formattedKey = key.name.replace(/[_-]/g, ' ');
-                                return (
-                                <li key={key.name}>
-                                    <button
-                                    disabled={!key.data}
-                                    onClick={() => handleButtonClick(index)}
-                                    className={`${
-                                        !key.data ? 'opacity-50' : ''
-                                    } block capitalize py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white ${
-                                        index === activeIndex ? 'font-bold' : ''
-                                    }`}
-                                    >
-                                    {formattedKey}
-                                    </button>
-                                </li>
-                                );
-                            })
+                                data.map((key, index) => {
+                                    const formattedKey = key.name.replace(/[_-]/g, ' ');
+                                    return (
+                                        <li key={key.name}>
+                                            <button
+                                                disabled={!key.data}
+                                                onClick={() => handleButtonClick(index)}
+                                                className={`${!key.data ? 'opacity-50' : ''
+                                                    } block capitalize py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white ${index === activeIndex ? 'font-bold' : ''
+                                                    }`}
+                                            >
+                                                {formattedKey}
+                                            </button>
+                                        </li>
+                                    );
+                                })
                             ) : null}
 
                         </ul>
 
-                       
+
                     </nav>
                     <div
-                        class="fixed inset-x-0 bottom-0 z-50 flex h-24 items-center justify-between gap-12 transition lg:left-72 lg:z-30  xl:left-80 backdrop-blur-sm dark:backdrop-blur bg-white/[var(--bg-opacity-light)] dark:bg-zinc-900/[var(--bg-opacity-dark)]"   
+                        class="fixed inset-x-0 bottom-0 z-50 flex h-24 items-center justify-between gap-12 transition lg:left-72 lg:z-30  xl:left-80 backdrop-blur-sm dark:backdrop-blur bg-white/[var(--bg-opacity-light)] dark:bg-zinc-900/[var(--bg-opacity-dark)]"
                     >
-                         <div className='flex justify-between items-center mt-4 w-full bg-gray-100 h-full px-8'>
-                         <button className='bg-slate-300 flex py-2 px-5 rounded-full flex-row-reverse'
-                         onClick={handlePrev}
-                         disabled={activeIndex === 0}
-                         >
+                        <div className='flex justify-between items-center mt-4 w-full bg-gray-100 h-full px-8'>
+                            <button className='bg-slate-300 flex py-2 px-5 rounded-full flex-row-reverse'
+                                onClick={handlePrev}
+                                disabled={activeIndex === 0}
+                            >
                                 Prev
                                 <span className='rotate-180 mt-[2px]'>
-                                    <svg  viewBox="0 0 20 20" fill="none" aria-hidden="true" class="mt-0.5 h-5 w-5 -mr-1"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m11.5 6.5 3 3.5m0 0-3 3.5m3-3.5h-9"></path></svg>
+                                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" class="mt-0.5 h-5 w-5 -mr-1"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m11.5 6.5 3 3.5m0 0-3 3.5m3-3.5h-9"></path></svg>
                                 </span>
                             </button>
                             <button className='bg-slate-300 flex py-2 px-5 rounded-full'
-                            onClick={handleNext}
-                            disabled={activeIndex === data.length - 1}
+                                onClick={handleNext}
+                                disabled={activeIndex === data.length - 1}
                             >
-                                Next<svg  viewBox="0 0 20 20" fill="none" aria-hidden="true" class="mt-0.5 h-5 w-5 -mr-1"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m11.5 6.5 3 3.5m0 0-3 3.5m3-3.5h-9"></path></svg>
+                                Next<svg viewBox="0 0 20 20" fill="none" aria-hidden="true" class="mt-0.5 h-5 w-5 -mr-1"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m11.5 6.5 3 3.5m0 0-3 3.5m3-3.5h-9"></path></svg>
                             </button>
                         </div>
                     </div>

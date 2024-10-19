@@ -35,16 +35,16 @@ export default function DashboardCombind() {
     }, [router.query]);
 
 
-    const FetchActivityDetails = async (decryptedItem) =>{
+    const FetchActivityDetails = async (decryptedItem) => {
         const datatoSend = {
-            activityid: 8574508,
-            requestedSteps : [],
-        	type :"menu"
+            activityid: Number(decryptedItem),
+            requestedSteps: [],
+            type: "menu"
         }
         console.log(datatoSend)
-        const APIURL =`${API_URL}activity-progress`
+        const APIURL = `${API_URL}activity-progress`
 
-        try{
+        try {
             const response = await fetch(APIURL, {
                 method: 'POST',
                 headers: {
@@ -53,26 +53,23 @@ export default function DashboardCombind() {
                 body: JSON.stringify(datatoSend)
             })
             const data = await response.json();
-            console(data);
-            if(data.status === true){
+            console.log(data);
+            if (data.status === true) {
                 setActivityList(data.data)
                 setLocalStorageItem('AttemptActivity', data.data);
-            }else{
+            } else {
                 setActivityList(false)
             }
-        }catch (error) {
+        } catch (error) {
             console.log("Error fetching activity details:", error);
         }
     }
-
-  
-
     return (
         <>
             <div className="relative max-w-[1500px] mx-auto w-full">
-                
+
                 <ActivityHeader data={ActivityList} />
-                
+
                 <div class="relative flex h-full flex-col px-4 pt-14 sm:px-6 lg:px-8 lg:ml-72 xl:ml-80">
                     <main class="flex-auto mb-10">
                         <div className="container mx-auto px-4 py-8">
@@ -95,7 +92,7 @@ export default function DashboardCombind() {
 
                         </div>
                     </main>
-                    
+
                 </div>
 
             </div>
