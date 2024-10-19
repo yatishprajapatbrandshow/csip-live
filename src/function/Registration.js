@@ -1,8 +1,9 @@
 import { API_URL } from "@/Config/Config";
 
 const handleApply = async (activity, userData) => {
-    if (activity?.activity_category === "DIRECT") {
-        console.log(activity?.sid)
+    console.log(activity)
+    if (activity?.activity_category === "DIRECT" || activity?.activity_category === "General") {
+        
         if (!userData?.sid) return false;
 
         const payload = {

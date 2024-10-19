@@ -35,7 +35,9 @@ const CardStudent = ({ activity, theme }) => {
         (state) => state.favouriteActivity.favouriteActivities // Accessing the state correctly
     );
     let OrderDetNew;
+    
 
+    console.log(activity);
 
     const toggleHeart = async (activity) => {
         if (!activity) {
@@ -91,6 +93,8 @@ const CardStudent = ({ activity, theme }) => {
     const handleApply = async () => {
         try {
             const register = await Registration(activity, userData)
+            console.log(register)
+            
             if (register && register.status) {
                 console.log("step 1")
                 OrderCreate()
@@ -101,7 +105,7 @@ const CardStudent = ({ activity, theme }) => {
     }
 
     const OrderCreate = async () => {
-
+        
         try {
             const order = await CreateOrder(activity, userData)
             if (order && order.status) {
@@ -116,6 +120,7 @@ const CardStudent = ({ activity, theme }) => {
     }
 
     const initiatePayment = async () => {
+        console.log(OrderDetNew);
         try {
             const Payment = await Razorpay(activity, userData)
             if (Payment) {
@@ -205,30 +210,16 @@ const CardStudent = ({ activity, theme }) => {
             const response = await AttemptActivity(activity, userData);
             
             console.log(activity.sid)
-            if (response.message === "Study created successfully.") {
+            if (response.message === "Study created successfully." || response.message === "Already Studying this Activity") {
                 toast.update(loadingToastId, {
                     render: "Proceeding to next steps!",
                     type: "success",
                     isLoading: false,
                     autoClose: 3000,
                 });
-                const encryptedId = encrypt(JSON.stringify(activity.sid));
                 router.push({
                     pathname: '/activity',
-                    query: { item: encryptedId }
-                });
-            }else if(response.message === "Already Studying this Activity"){
-                toast.update(loadingToastId, {
-                    render: "Proceed to next steps!",
-                    type: "success",
-                    isLoading: false,
-                    autoClose: 3000,
-                });
-                const encryptedId = encrypt(JSON.stringify(activity?.sid));
-                console.log(encryptedId);
-                router.push({
-                    pathname: '/activity',
-                    query: { item: encryptedId }
+                    query: { item: activity.sid }
                 });
             }else{
                 throw new Error("else hit")

@@ -14,23 +14,19 @@ const AboutSlug = () => {
 
     useEffect(() => {
         if (router.query.item) {
-          const decryptedItem = decrypt(router.query.item);
-          
-            if (decryptedItem) {
-                FetchActivityDetails(slug, decryptedItem);
-                FetchActivityMenu(decryptedItem);
-            }
+            FetchActivityDetails(slug, router.query.item);
+            FetchActivityMenu(router.query.item);
         }
     }, [router.query]);
 
 
 
-  const FetchActivityMenu = async (decryptedItem) =>{
-        
+  const FetchActivityMenu = async (ActId) =>{
     const datatoSend = {
-        activityid: decryptedItem,
+        activityid: ActId,
         type :"menu"
     }
+    console.log(datatoSend);
     const APIURL =`${API_URL}activity-progress`
 
     try{
@@ -42,6 +38,7 @@ const AboutSlug = () => {
             body: JSON.stringify(datatoSend)
         })
         const data = await response.json();
+        
         if(data.status === true){
             setActivityList(data.data)
         }else{
@@ -52,10 +49,10 @@ const AboutSlug = () => {
     }
 }
 
-  const FetchActivityDetails = async (slug, decryptedItem) =>{
+  const FetchActivityDetails = async (slug, ActId) =>{
         if(slug){
             const datatoSend = {
-                activityid: decryptedItem,
+                activityid: ActId,
                 step : slug,
                 type :"data"
             }

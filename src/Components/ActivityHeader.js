@@ -7,7 +7,7 @@ import "swiper/css/pagination";
 import { Navigation, Autoplay } from "swiper/modules";
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { decrypt } from '@/utils/cryptoUtils';
+import { decrypt, encrypt } from '@/utils/cryptoUtils';
  
 const CommentsSlider = ({ data }) => {
     console.log("Data In Comments Slider", data);
@@ -18,7 +18,7 @@ const CommentsSlider = ({ data }) => {
 
     useEffect(() => {
         if (router.query.item) {
-            setParamId(router.query.item)  
+            setParamId(router.query.item)
         }
     }, [router.query]);
  
@@ -48,6 +48,7 @@ const CommentsSlider = ({ data }) => {
       const handleButtonClick = (index) => {
         if (data[index].data) {
           setActiveIndex(index);
+        //   console.log(encrypt(JSON.stringify(ParamId)))
           router.push(`/activity/${data[index].name}?item=${ParamId}`);
         }
       };

@@ -27,17 +27,14 @@ export default function DashboardCombind() {
  
     useEffect(() => {
         if (router.query.item) {
-            const decryptedItem = decrypt(router.query.item);
-            if (decryptedItem) {
-                FetchActivityDetails(decryptedItem);
-            }
+            FetchActivityDetails(router.query.item);
         }
     }, [router.query]);
  
  
-    const FetchActivityDetails = async (decryptedItem) =>{
+    const FetchActivityDetails = async (ActId) =>{
         const datatoSend = {
-            activityid: decryptedItem,
+            activityid: ActId,
             requestedSteps : [],
             type :"menu"
         }

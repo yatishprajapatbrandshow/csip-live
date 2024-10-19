@@ -366,7 +366,8 @@ const TopEmp = [
                     <p className='text-base text-justify font-light mt-5 text-gray-700'>{data['virtual-scenario'].case_scenario}</p>
                     {/* You can also render description or note if needed */}
                     {data['virtual-scenario'].description && (
-                        <p className='text-base text-justify font-light mt-5 text-gray-700'>{data['virtual-scenario'].description}</p>
+                      <p className="text-base text-justify font-light mt-5 text-gray-700"
+                      dangerouslySetInnerHTML={{ __html: data['virtual-scenario'].description }} />
                     )}
                     {data['virtual-scenario'].note && (
                         <p className='text-base text-justify font-light mt-5 text-gray-700'>{data['virtual-scenario'].note}</p>
