@@ -68,7 +68,7 @@ function SearchTopic() {
                 </div>
                 <div className='mt-10'>
                     {AllActivities.length > 0 && <h2 className='font-gilBold text-2xl mb-4'>Activity Based Result</h2>}
-                    <div className='w-full h-max mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+                    <div className='w-full h-max mt-5 flex flex-wrap justify-start gap-6'>
                         {
                             AllActivities.map((activity, index) => {
                                 return (

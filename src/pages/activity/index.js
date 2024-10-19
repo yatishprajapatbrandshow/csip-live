@@ -10,7 +10,7 @@ import { API_URL, API_URL_LOCAL } from "@/Config/Config";
 import { useSelector } from "react-redux";
 import Header from '@/Components/Header';
 import ActivityHeader from '@/Components/ActivityHeader';
-
+import { decrypt } from '@/utils/cryptoUtils';
 import { useRouter } from 'next/router';
 import { setLocalStorageItem } from '@/Config/localstorage';
 
@@ -25,13 +25,23 @@ export default function DashboardCombind() {
     const userData = useSelector((state) => state.session.userData);
     const [ActivityList, setActivityList] = useState("inProcess");
 
-    const FetchActivityDetails = async () =>{
-        
+    useEffect(() => {
+        if (router.query.item) {
+            const decryptedItem = decrypt(router.query.item);
+            if (decryptedItem) {
+                FetchActivityDetails(decryptedItem);
+            }
+        }
+    }, [router.query]);
+
+
+    const FetchActivityDetails = async (decryptedItem) =>{
         const datatoSend = {
-            activityid: 76604,
+            activityid: 8574508,
             requestedSteps : [],
         	type :"menu"
         }
+        console.log(datatoSend)
         const APIURL =`${API_URL}activity-progress`
 
         try{
@@ -43,6 +53,7 @@ export default function DashboardCombind() {
                 body: JSON.stringify(datatoSend)
             })
             const data = await response.json();
+            console(data);
             if(data.status === true){
                 setActivityList(data.data)
                 setLocalStorageItem('AttemptActivity', data.data);
@@ -54,9 +65,7 @@ export default function DashboardCombind() {
         }
     }
 
-    useEffect(() => {
-        FetchActivityDetails();
-    }, []);
+  
 
     return (
         <>

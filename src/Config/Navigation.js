@@ -36,21 +36,25 @@ export const MenuItemLinks = [
         name: 'View',
         description: 'Gain insights into your academic traffic and performance metrics.',
         href: '/curriculum',
-        icon: ViewfinderCircleIcon
+        icon: ViewfinderCircleIcon,
+        color: 'blue-500'  // Assign color for this icon
       },
       {
         name: 'Choose / Change',
         description: 'Connect with third-party tools to customize your curriculum based on your needs.',
         href: 'AllCurriculum',
-        icon: SquaresPlusIcon
+        icon: SquaresPlusIcon,
+        color: 'green-500'  // Assign color for this icon
       },
       {
         name: 'College Wise',
         description: 'Engage with specific colleges to understand their offerings and expectations.',
         href: 'ChooseCollege',
-        icon: AcademicCapIcon
-      },
+        icon: AcademicCapIcon,
+        color: 'purple-500'  // Assign color for this icon
+      }
     ],
+    
     subMenuType: "multiple"
   },
   // {
@@ -82,56 +86,65 @@ export const MenuItemLinks = [
         name: 'Applied',
         description: 'View all topics you have applied your knowledge to in real scenarios.',
         href: 'AppliedActivity',
-        icon: CursorArrowRippleIcon
+        icon: CursorArrowRippleIcon,
+        color: 'blue-500'  // Assign color for this icon
       },
       {
         name: 'Search by Topic',
         description: 'Find activities related to specific topics for better focus.',
         href: 'SearchByTopic',
-        icon: DocumentMagnifyingGlassIcon
+        icon: DocumentMagnifyingGlassIcon,
+        color: 'green-500'  // Assign color for this icon
       },
       {
         name: 'Recommended',
         description: 'Discover activities suggested based on your preferences and performance.',
         href: 'RecomendedActivity',
-        icon: FolderOpenIcon
+        icon: FolderOpenIcon,
+        color: 'yellow-500'  // Assign color for this icon
       },
       {
         name: 'New',
         description: 'Explore the latest activities available to enhance your learning.',
         href: 'NewActivities',
-        icon: PlusIcon
+        icon: PlusIcon,
+        color: 'purple-500'  // Assign color for this icon
       },
       {
         name: 'Trending',
         description: 'Stay updated with activities that are currently popular among users.',
         href: 'TrendingActivities',
-        icon: ArrowTrendingUpIcon
+        icon: ArrowTrendingUpIcon,
+        color: 'red-500'  // Assign color for this icon
       },
       {
         name: 'Ongoing',
         description: 'Track your ongoing activities to stay on top of your learning progress.',
         href: 'OngoingActivities',
-        icon: ArrowRightEndOnRectangleIcon
+        icon: ArrowRightEndOnRectangleIcon,
+        color: 'indigo-500'  // Assign color for this icon
       },
       {
         name: 'Submission Pending',
         description: 'Manage your activities that are pending submission for evaluation.',
         href: '#',
-        icon: IdentificationIcon
+        icon: IdentificationIcon,
+        color: 'pink-500'  // Assign color for this icon
       },
       {
         name: 'Pending Approval',
         description: 'Check the status of your activities waiting for approval from the authority.',
         href: '#',
-        icon: ReceiptRefundIcon
+        icon: ReceiptRefundIcon,
+        color: 'orange-500'  // Assign color for this icon
       },
       {
         name: 'Payment Pending',
         description: 'Review activities that have payments pending for successful enrollment.',
         href: 'PaymentPending',
-        icon: CurrencyRupeeIcon
-      },
+        icon: CurrencyRupeeIcon,
+        color: 'teal-500'  // Assign color for this icon
+      }
     ],
     subMenuType: "single"
   },

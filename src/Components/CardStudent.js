@@ -16,6 +16,9 @@ import PopUp from './PopUp';
 import Registration from '../function/Registration';
 import CreateOrder from '../function/CreateOrder';
 import Razorpay from '../function/initiatePayment';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import AttemptActivity from '../function/AttemptActivity';
 import { setOrderID, getOrderID, removeOrderID } from '../../redux/actions/orderIdSlice';
 import { addFavouriteActivity, removeFavouriteActivity } from '../../redux/actions/favouriteActivitySlice';
 
@@ -130,6 +133,7 @@ const CardStudent = ({ activity, theme }) => {
     // await handleCreatePayment(responseData?.data, paydata);
     // dispatch(applyTrigger());
 
+   
     const GetDetails = async (Payment) => {
 
         try {
@@ -169,7 +173,6 @@ const CardStudent = ({ activity, theme }) => {
             razorpayId: PayData.id || "",
             currency: PayData.currency || ""
         }
-        console.log(payload)
         try {
             const response = await fetch(`${API_URL}payment/create`, {
                 headers: {
@@ -193,9 +196,61 @@ const CardStudent = ({ activity, theme }) => {
         }
     }
 
+
+
+    const Ataimpt = async () => {
+        const loadingToastId = toast.loading("Loading...");
+        try {
+            
+            const response = await AttemptActivity(activity, userData);
+            
+            console.log(activity.sid)
+            if (response.message === "Study created successfully.") {
+                toast.update(loadingToastId, {
+                    render: "Proceeding to next steps!",
+                    type: "success",
+                    isLoading: false,
+                    autoClose: 3000,
+                });
+                const encryptedId = encrypt(activity.sid);
+                router.push({
+                    pathname: '/activity',
+                    query: { item: encryptedId }
+                });
+            }else if(response.message === "Already Studying this Activity"){
+                toast.update(loadingToastId, {
+                    render: "Proceed to next steps!",
+                    type: "success",
+                    isLoading: false,
+                    autoClose: 3000,
+                });
+                const encryptedId = encrypt(JSON.stringify(activity?.sid));
+                console.log(encryptedId);
+                router.push({
+                    pathname: '/activity',
+                    query: { item: encryptedId }
+                });
+            }else{
+                throw new Error("else hit")
+            }
+        } catch (error) {
+            console.log("Error fetching data from API:", error);
+            toast.update(loadingToastId, {
+                render: "Something went wrong, please try again",
+                type: "error",
+                isLoading: false,
+                autoClose: 3000,
+            });
+        }
+    };
+
+
+
+
+
     return (
         <>
-            {/* <button onClick={()=>handleCreatePayment()}>GetRedux</button> */}
+            
             
             <div className="bg-white rounded-2xl overflow-hidden w-[300px] shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 hover:scale-105">
                 <div className="relative h-40 ">
@@ -271,7 +326,9 @@ const CardStudent = ({ activity, theme }) => {
                                 Pay Now
                             </button>
                         ) : activity?.paymentStatus === "success" && activity?.activityProgress === 'Paid' ? (
-                            <button className="bg-gray-200 w-full text-gray-800 text-sm hover:bg-gray-300 transition-colors">
+                            <button 
+                                onClick={()=> Ataimpt()}
+                                className="bg-gray-200 w-full text-gray-800 text-sm hover:bg-gray-300 transition-colors">
                                 Attempt
                             </button>
                         ) : (
@@ -283,6 +340,7 @@ const CardStudent = ({ activity, theme }) => {
                 </div>
             </div>
             {showPopup && <PopUp onClose={() => { setShowPopup(false) }} activity={activity} onSuccess={handleApply} />}
+            <ToastContainer position="top-right" autoClose={1000} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
         </>
     );
 };

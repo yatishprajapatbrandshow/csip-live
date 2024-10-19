@@ -23,8 +23,6 @@ const favouriteActivitySlice = createSlice({
       );
     },
     storeFavouriteActivity: (state, action) => {
-      console.log(action.payload);
-      
       state.favouriteActivities = action.payload
     },
     // Clear all favorite activity `sid`s

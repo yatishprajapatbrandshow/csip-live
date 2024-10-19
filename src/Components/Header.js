@@ -43,7 +43,6 @@ const Header = ({ session = false }) => {
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
-console.log(userData);
     const LogOut = () => {
         localStorage.removeItem("userData");
         router.replace('/login')
@@ -64,6 +63,7 @@ console.log(userData);
             setIsSession(false);
         }
     }, []);
+
 
     // useEffect(() => {
     //     const timer = setInterval(() => {
@@ -98,7 +98,7 @@ console.log(userData);
     return (
         <>
 
-            <Disclosure as="nav" className="">
+            <Disclosure as="nav" className=" sticky top-0 z-10 bg-white/10 backdrop-blur-lg border-b border-b-white">
                 <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
@@ -138,26 +138,26 @@ console.log(userData);
                                                             <div className="grid grid-cols-1 gap-x-6 gap-y-1 p-4 lg:grid-cols-2">
                                                                 {item.subMenu.map((item) => (
                                                                     <div key={item.name} className="group relative flex gap-x-6 rounded-lg p-2 hover:bg-gray-50" onClick={() => { item.name === 'Add' && openModal() }}>
-                                                                        <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                                                                            <item.icon aria-hidden="true" className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" />
+                                                                        <div className={`mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white`}>
+                                                                            <item.icon aria-hidden="true" className={`h-6 w-6 ${item.color ? `text-${item.color}` : "text-gray-600"}  group-hover:text-indigo-600`} />
                                                                         </div>
                                                                         <div>
-                                                                            <button onClick={() => router.push(item.href)} className="font-semibold text-gray-900">
+                                                                            <button onClick={() => router.push(item.href)} className="font-medium text-[13px] text-gray-900">
                                                                                 {item.name}
                                                                                 <span className="absolute inset-0" />
                                                                             </button>
-                                                                            <p className="mt-1 text-gray-600 line-clamp-2">{item.description}</p>
+                                                                            <p className="mt-1 text-gray-600 line-clamp-2 text-xs">{item.description}</p>
                                                                         </div>
                                                                     </div>
                                                                 ))}
                                                             </div>
                                                             <div className="bg-gray-50 px-8 py-6">
                                                                 <div className="flex items-center gap-x-3">
-                                                                    <h3 className="text-sm font-semibold leading-6 text-gray-900">Enterprise</h3>
-                                                                    <p className="rounded-full bg-indigo-600/10 px-2.5 py-1.5 text-xs font-semibold text-indigo-600">New</p>
+                                                                    <h3 className="text-sm font-semibold leading-6 text-gray-900">Curriculum Management</h3>
+                                                                    {/* <p className="rounded-full bg-indigo-600/10 px-2.5 py-1.5 text-xs font-semibold text-indigo-600">New</p> */}
                                                                 </div>
                                                                 <p className="mt-2 text-sm leading-6 text-gray-600">
-                                                                    Empower your entire team with even more advanced tools.
+                                                                Efficiently customize and manage your courses with real-time insights and third-party integrations to streamline curriculum development.
                                                                 </p>
                                                             </div>
                                                         </div>

@@ -11,10 +11,23 @@ const AboutSlug = () => {
   const [ActivityList, setActivityList] = useState("inProcess");
   const [ActivityDetails, setActivityDetails] = useState("inProcess");
 
-  const FetchActivityMenu = async () =>{
+
+    useEffect(() => {
+        if (router.query.item) {
+            const decryptedItem = decrypt(router.query.item);
+            if (decryptedItem) {
+                FetchActivityDetails(slug, decryptedItem);
+                FetchActivityMenu(decryptedItem);
+            }
+        }
+    }, [router.query]);
+
+
+
+  const FetchActivityMenu = async (decryptedItem) =>{
         
     const datatoSend = {
-        activityid: 76604,
+        activityid: decryptedItem,
         type :"menu"
     }
     const APIURL =`${API_URL}activity-progress`
@@ -38,10 +51,10 @@ const AboutSlug = () => {
     }
 }
 
-  const FetchActivityDetails = async (slug) =>{
+  const FetchActivityDetails = async (slug, decryptedItem) =>{
         if(slug){
             const datatoSend = {
-                activityid: 76604,
+                activityid: decryptedItem,
                 step : slug,
                 type :"data"
             }

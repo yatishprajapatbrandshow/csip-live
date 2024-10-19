@@ -141,7 +141,7 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
-            console.log("responsexvcfvbData", responseData)
+            
             if (responseData.status === true) {
                 setNewActivities(responseData.data);
             }
@@ -333,7 +333,6 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
-            console.log(responseData);
             if (responseData.status === true) {
                 setProfileStatus(responseData.data);
             }
@@ -358,7 +357,7 @@ export default function DashboardCombind() {
             }
 
             const responseData = await response.json();
-            console.log(responseData);
+            
             if (responseData.status === true) {
                 setActivityCurriculumStatus(responseData?.data?.percentage);
             }
@@ -432,7 +431,7 @@ export default function DashboardCombind() {
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div className="bg-yellow-100 p-4 rounded-lg space-y-2 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                            <button className="w-full text-left text-purple-800 border-b pb-3 border-gray-400 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5 ">👀 View Curriculum</button>
+                            <button onClick={() => router.push('/curriculum')} className="w-full text-left text-purple-800 border-b pb-3 border-gray-400 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5 ">👀 View Curriculum</button>
                             <button className="w-full text-left text-purple-800 border-b pb-3 border-gray-400 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">📊 View Report</button>
                             <button className="w-full text-left text-purple-800 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">🔄 Change Form</button>
                         </div>
