@@ -55,7 +55,6 @@ const Header = ({ session = false }) => {
         if (userData) {
             setUserDataShow(userData)
             dispatch(setUserData(userData));
-            console.log(userData);
             dispatch(setUserType(userData?.type));
             setIsSession(true);
         } else {
