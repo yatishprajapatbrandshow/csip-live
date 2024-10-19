@@ -7,11 +7,27 @@ import { useRouter } from 'next/router';
 import Header from '@/Components/Header';
 import CardStudent from '@/Components/CardStudent';
 import { useSelector } from 'react-redux';
+import { getLocalStorageItem } from '@/Config/localstorage';
 
 function SearchTopic() {
     const [AllActivities, setAllActivities] = useState([]);
     const router = useRouter();
     const userData = useSelector((state) => state.session.userData);
+
+    const [isSession, setIsSession] = useState(false);
+
+    useEffect(() => {
+        const userData = getLocalStorageItem("userData");
+        if (userData) {
+            setIsSession(true);
+            if (userData.type !== "Participant") {
+                router.push('/')
+            }
+        } else {
+            router.push('/')
+            setIsSession(false);
+        }
+    }, []);
 
     const fecthTopics = async (value) => {
 

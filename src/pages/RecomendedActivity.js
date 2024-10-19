@@ -6,12 +6,28 @@ import Link from 'next/link'
 import { useSelector } from 'react-redux';
 import { API_URL, API_URL_LOCAL } from '@/Config/Config';
 import Header from '@/Components/Header';
+import { useRouter } from 'next/router';
+import { getLocalStorageItem } from '@/Config/localstorage';
 
 const RecommendedActivity = () => {
     const userData = useSelector((state) => state.session.userData);
     const [cardData, setCardData] = useState([])
     // Fetch favourite activity
+    const [isSession, setIsSession] = useState(false);
+    const router = useRouter();
 
+    useEffect(() => {
+        const userData = getLocalStorageItem("userData");
+        if (userData) {
+            setIsSession(true);
+            if(userData.type !== "Participant"){
+                router.push('/')    
+            }
+        } else {
+            router.push('/')
+            setIsSession(false);
+        }
+    }, []);
     const fetchRecomentedActivities = async () => {
         try {
             const APIURL = userData?.sid

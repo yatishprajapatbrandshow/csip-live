@@ -7,8 +7,25 @@ import { API_URL, API_URL_LOCAL } from '@/Config/Config';
 import { useSelector } from 'react-redux';
 import Header from '@/Components/Header';
 import { useRouter } from 'next/router';
+import { getLocalStorageItem } from '@/Config/localstorage';
 function AllCurriculum() {
+
+  const [isSession, setIsSession] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const userData = getLocalStorageItem("userData");
+    if (userData) {
+      setIsSession(true);
+      if (userData.type !== "Participant") {
+        router.push('/')
+      }
+    } else {
+      router.push('/')
+      setIsSession(false);
+    }
+  }, []);
+
   const [allCurriculum, setAllCurriculum] = useState("inProcess");
   const fetchCurriculum = async () => {
     // Only append corporate_id if it's defined

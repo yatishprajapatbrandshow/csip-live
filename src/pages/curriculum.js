@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { applyTrigger } from '../../redux/actions/triggerSlice';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getLocalStorageItem } from '@/Config/localstorage';
 const removeTopicFromYourTopics = async (participantId, topicId) => {
   console.log(participantId, topicId);
 
@@ -80,6 +81,22 @@ function Curriculum() {
   const [userTopics, setUserTopics] = useState([]);
   const isTriggeredApply = useSelector((state) => state.trigger.applyTrigger);
   const dispatch = useDispatch();
+
+  const [isSession, setIsSession] = useState(false);
+    useEffect(() => {
+        const userData = getLocalStorageItem("userData");
+        if (userData) {
+            setIsSession(true);
+            if(userData.type !== "Participant"){
+                router.push('/')    
+            }
+        } else {
+            router.push('/')
+            setIsSession(false);
+        }
+    }, []);
+
+
   const fetchAllTopics = async (participantId) => {
     if (!participantId) return;
 
@@ -107,8 +124,8 @@ function Curriculum() {
       setUserTopics([]);
     }
   };
-  const fetchCurriculumID = async () => {
 
+  const fetchCurriculumID = async () => {
     // Only append corporate_id if it's defined
     const APIURL = userData?.sid
       ? `${API_URL}curriculum/maped-curriculum?participant_id=${userData?.sid}`
@@ -232,7 +249,7 @@ function Curriculum() {
                           userTopics.some((ele1) => ele1.sid === ele.sid) ? (
                             <button
                               onClick={() => handleRemoveClick(ele)}
-                              className="flex items-center justify-center bg-green-600 text-white py-2 px-4 text-sm hover:bg-green-700 transition-colors duration-200 w-1/2"
+                              className="flex items-center justify-center bg-green-600 text-white py-2 px-4 text-sm hover:bg-green-700 transition-colors duration-200 "
                             >
                               <span>Studying</span>
                               <X className="w-4 h-4 ml-2" />

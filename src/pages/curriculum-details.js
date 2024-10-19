@@ -7,6 +7,7 @@ import { API_URL, API_URL_LOCAL } from '@/Config/Config';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import Header from '@/Components/Header';
+import { getLocalStorageItem } from '@/Config/localstorage';
 
 function Curriculum() {
   const router = useRouter();
@@ -17,6 +18,22 @@ function Curriculum() {
   const [loading, setLoading] = useState(false);
   const userData = useSelector((state) => state.session.userData);
   const [clickedCurriculum, setClickedCurriculum] = useState({});
+
+  const [isSession, setIsSession] = useState(false);
+
+  useEffect(() => {
+    const userData = getLocalStorageItem("userData");
+    if (userData) {
+      setIsSession(true);
+      if (userData.type !== "Participant") {
+        router.push('/')
+      }
+    } else {
+      router.push('/')
+      setIsSession(false);
+    }
+  }, []);
+
 
   useEffect(() => {
     if (router.query.item) {
@@ -136,7 +153,7 @@ function Curriculum() {
     <>
       <Header />
       <div className="bg-white w-full max-w-6xl mx-auto shadow-xl mt-10">
-      <div className='flex items-center gap-2 mb-4 cursor-pointer ' onClick={() => router.back()}><Undo2 className='w-5 h-5' />Go Back</div>
+        <div className='flex items-center gap-2 mb-4 cursor-pointer ' onClick={() => router.back()}><Undo2 className='w-5 h-5' />Go Back</div>
         {
           loading ? <div className='text-center'>Loading ....</div> :
             <div className='bg-white w-full '>

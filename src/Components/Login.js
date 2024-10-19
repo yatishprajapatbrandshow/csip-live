@@ -34,7 +34,7 @@ function Login() {
         const userData = getLocalStorageItem("userData")
         if (userData) {
             if (userData?.type === "Corporate") {
-                router.replace('/corporate/activity-list')
+                router.replace('/corporate/ActivityList')
             } else {
                 router.replace('/dashboard')
             }
@@ -97,7 +97,7 @@ function Login() {
                 setLocalStorageItem('userData', result?.data);
                 setLoginProcess(false)
                 if (result?.data?.type === "Corporate") {
-                    router.push('/corporate/activity-list')
+                    router.push('/corporate/ActivityList')
                 } else {
                     router.push('/dashboard')
                 }

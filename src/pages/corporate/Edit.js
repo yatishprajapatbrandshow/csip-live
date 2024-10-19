@@ -10,6 +10,7 @@ import { X } from 'lucide-react';
 const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
 import { useRouter } from 'next/router';
 import { decrypt } from '@/utils/cryptoUtils';
+import { getLocalStorageItem } from '@/Config/localstorage';
 
 const Edit = () => {
     const editor = useRef(null);
@@ -43,6 +44,22 @@ const Edit = () => {
     const [id, setId] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTopic, setSelectedTopic] = useState('');
+
+    const [isSession, setIsSession] = useState(false);
+
+    useEffect(() => {
+        const userData = getLocalStorageItem("userData");
+        if (userData) {
+            setIsSession(true);
+            if (userData.type !== "Corporate") {
+                router.push('/dashboard')
+            }
+        } else {
+            router.push('/')
+            setIsSession(false);
+        }
+    }, []);
+
     const dataFormStepData = ['Basic Information', 'Scenario and Description', 'Corporate Information', 'Tools Used', 'Video Podcast Link', 'Job Roles And Description', "Related Topic News", 'Activity Details', 'Participant and Approval', 'Activity and Submission Dates', "Empty", 'Top Employees'];
 
     const router = useRouter();

@@ -1,10 +1,29 @@
 "use client"
-;import Link from 'next/link'
-import React from 'react'
+    ; import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
 import { Calendar, Clock, MousePointer, ArrowLeft } from "lucide-react"
+import { getLocalStorageItem } from '@/Config/localstorage';
+import { useRouter } from 'next/router';
 
 
 const ActivityDetail = () => {
+    const [isSession, setIsSession] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        const userData = getLocalStorageItem("userData");
+        if (userData) {
+            setIsSession(true);
+            if (userData.type !== "Participant") {
+                router.push('/')
+            }
+        } else {
+            router.push('/')
+            setIsSession(false);
+        }
+    }, []);
+
+
     return (
         <section className='bg-[#f0f0f0] w-full h-screen'>
             <div className="p-6">

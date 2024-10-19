@@ -6,11 +6,30 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { API_URL, API_URL_LOCAL } from "@/Config/Config";
 import CardStudent from "@/Components/CardStudent";
+import { useRouter } from "next/router";
+import { getLocalStorageItem } from "@/Config/localstorage";
 
 
 const OngoingActivity = () => {
     const userData = useSelector((state) => state.session.userData);
     const [ongoingActivity, setOngoingActivity] = useState([]);
+
+    const [isSession, setIsSession] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        const userData = getLocalStorageItem("userData");
+        if (userData) {
+            setIsSession(true);
+            if (userData.type !== "Participant") {
+                router.push('/')
+            }
+        } else {
+            router.push('/')
+            setIsSession(false);
+        }
+    }, []);
+
     const fetchOngoingActivities = async () => {
         if (!userData?.sid) return;
         try {
