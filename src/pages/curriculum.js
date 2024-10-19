@@ -1,10 +1,74 @@
 "use client";
-import { ArrowLeft, Check, MousePointerClick, Search, Undo2 } from 'lucide-react';
+import { ArrowLeft, Check, MousePointerClick, Search, Undo2, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { API_URL, API_URL_LOCAL } from '@/Config/Config';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '@/Components/Header';
 import { useRouter } from 'next/router';
+import { applyTrigger } from '../../redux/actions/triggerSlice';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+const removeTopicFromYourTopics = async (participantId, topicId) => {
+  console.log(participantId, topicId);
+
+  const dataToSend = {
+    participant_id: participantId,
+    TopicsList: [`${topicId}`],
+  };
+  const API_URL_REMOVE = `${API_URL}topic/remove`;
+
+  try {
+    const response = await fetch(API_URL_REMOVE, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToSend),
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.status === true) {
+      toast.success(`Removed Topic Successfully.`)
+      return true; // Indicates success
+    } else {
+      toast.error(`Failed to remove topic: ${responseData.message} `)
+      return false; // Indicates failure
+    }
+  } catch (error) {
+    console.error('Error removing topic:', error);
+    return false; // Indicates failure
+  }
+};
+// Function to add a topic to Your Topics
+const addTopicToYourTopics = async (participantId, topicId) => {
+  const API_URL_ADD = `${API_URL}topic/add`;
+  const dataToSend = {
+    participant_id: participantId,
+    TopicsList: [topicId],
+  };
+
+  try {
+    const response = await fetch(API_URL_ADD, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToSend),
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.status === true) {
+      toast.success(`Topic Added Successfully`)
+      // console.log(`Added ${topic.text} to Your Topics successfully.`);
+    } else {
+      toast.error(`Failed to add topic:${responseData.message}`)
+    }
+  } catch (error) {
+    console.error('Error adding topic:', error);
+  }
+};
 function Curriculum() {
   const [CurriculumData, setCurriculumData] = useState();
   const [groupsData, setGroupData] = useState([]);
@@ -13,7 +77,36 @@ function Curriculum() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const userData = useSelector((state) => state.session.userData);
+  const [userTopics, setUserTopics] = useState([]);
+  const isTriggeredApply = useSelector((state) => state.trigger.applyTrigger);
+  const dispatch = useDispatch();
+  const fetchAllTopics = async (participantId) => {
+    if (!participantId) return;
 
+    try {
+      const response = await fetch(`${API_URL}topic/get`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          participant_id: participantId,
+        }),
+      });
+      const responseData = await response.json();
+      if (responseData.status === true) {
+        console.log(responseData.data);
+
+        setUserTopics(responseData.data)
+      } else {
+        console.error('Failed to fetch topics:', responseData.message);
+        setUserTopics([]);
+      }
+    } catch (error) {
+      console.error('Error fetching topics:', error);
+      setUserTopics([]);
+    }
+  };
   const fetchCurriculumID = async () => {
 
     // Only append corporate_id if it's defined
@@ -85,10 +178,22 @@ function Curriculum() {
   useEffect(() => {
     if (userData) {
       fetchCurriculumID();
+      fetchAllTopics(userData?.sid)
     }
-  }, [userData]);
+  }, [userData, isTriggeredApply]);
 
   if (loading) return <div className="text-center w-full ">Loading...</div>; // Loading state
+
+  const handleAddClick = async (item) => {
+    console.log(item);
+    await addTopicToYourTopics(userData?.sid, item?.sid);
+    dispatch(applyTrigger())
+  }
+  const handleRemoveClick = async (item) => {
+    console.log(item);
+    await removeTopicFromYourTopics(userData?.sid, item?.sid);
+    dispatch(applyTrigger())
+  }
 
   return (
     <>
@@ -114,17 +219,34 @@ function Curriculum() {
                       </div>
 
                       {/* Column for Search Activity */}
-                      <div className="flex items-center col-span-1 text-gray-600  font-medium text-sm cursor-pointer">
-                        <Search className="text-[#9779FF] w-4 h-4 mr-2" />
-                        <span >Search Activity</span>
+                      <div className="flex items-center col-span-1 text-gray-600  font-medium text-sm  ">
+                        <div className='cursor-pointer flex' onClick={() => { }}>
+                          <Search className="text-[#9779FF] w-4 h-4 mr-2" />
+                          <span >Search Activity</span>
+                        </div>
                       </div>
 
                       {/* Column for Click to Select */}
                       <div className="flex items-center justify-center col-span-1">
-                        <button onClick={() => { handleClick(item, ele) }} className="flex items-center bg-[#9779FF] text-white py-1 px-4  text-sm hover:bg-[#8A6CE0] transition-colors duration-200">
-                          <MousePointerClick className="w-4 h-4 mr-2" />
-                          <span>Click to Select</span>
-                        </button>
+                        {
+                          userTopics.some((ele1) => ele1.sid === ele.sid) ? (
+                            <button
+                              onClick={() => handleRemoveClick(ele)}
+                              className="flex items-center justify-center bg-green-600 text-white py-2 px-4 text-sm hover:bg-green-700 transition-colors duration-200 w-1/2"
+                            >
+                              <span>Studying</span>
+                              <X className="w-4 h-4 ml-2" />
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleAddClick(ele)}
+                              className="flex items-center bg-[#9779FF] text-white py-2 px-4 text-sm hover:bg-[#8A6CE0] transition-colors duration-200 "
+                            >
+                              <MousePointerClick className="w-4 h-4 mr-2" />
+                              <span>Click to Select</span>
+                            </button>
+                          )
+                        }
                       </div>
                     </li>
                   )
@@ -133,6 +255,7 @@ function Curriculum() {
             )
           }
         </div>
+        <ToastContainer position="top-right" autoClose={1000} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       </div>
     </>
   );

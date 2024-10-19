@@ -118,19 +118,22 @@ const DragAndDropTopic = () => {
 
     // Search for topics based on the input term
     const onSearch = async (term) => {
+
         if (term.length < 1) {
             // Fetch default topics when there is no search term
             try {
-                const response = await fetch(`${API_URL}topic`, {
+                const response = await fetch(`${API_URL_LOCAL}topic`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ TopicSearch: '' }), // Empty search term for defaults
+                    body: JSON.stringify({ TopicSearch: '', participant_id: userData?.sid }), // Empty search term for defaults
                 });
 
                 if (response.ok) {
                     const data = await response.json();
+                    console.log("On Search ;-", data.data);
+
                     if (data.data.length > 0) {
                         setAllTopics(data.data);
                     } else {
@@ -146,7 +149,6 @@ const DragAndDropTopic = () => {
             }
             return;
         }
-
         // Fetch topics based on the search term
         try {
             const response = await fetch(`${API_URL}topic`, {
@@ -269,16 +271,16 @@ const DragAndDropTopic = () => {
                         </div>
                         <div className='flex gap-2 justify-start items-start pt-4'>
                             <span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg>
                             </span>
                             <p className='text-sm text-gray-700'>Drag a topic from the left box to the right box to select it, or click on a topic to select. To remove a topic, drag it from the right box back to the left box.</p>
                         </div>
                     </div>
                     <div className='col-span-2 bg-gray-50 p-4 grid grid-cols-2 gap-4'>
-                        
+
                         <div className='col-span-2'>
                             <div className="flex justify-start items-center px-2 bg-white border border-gray-300 text-xs rounded-lg w-max">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
                                 <input
                                     type="text"
                                     placeholder="Search for topics..."
@@ -297,23 +299,23 @@ const DragAndDropTopic = () => {
                                 <h3 className="text-xl font-bold mb-4 text-gray-800">All Topics</h3>
                                 <div className='flex flex-wrap gap-2'>
 
-                                {allTopics.map((item) => (
-                                    yourTopics.some((ele) => item?.sid === ele.sid) ? (<div
-                                        key={item.id}
-                                        className="draggable-item hidden text-sm border mb-1 border-pink-400 rounded-lg text-pink-500 p-2"
-                                    >
-                                        {item.topic}
-                                    </div>) :
-                                        <div
-                                            onClick={() => { handleAdd(item) }}
+                                    {allTopics.map((item) => (
+                                        yourTopics.some((ele) => item?.sid === ele.sid) ? (<div
                                             key={item.id}
-                                            className="draggable-item text-sm mb-1 rounded-lg text-pink-700 bg-pink-50 flex px-4 py-4"
-                                            draggable
-                                            onDragStart={(event) => handleDragStart(event, item, 'All Topics')}
+                                            className="draggable-item hidden text-sm border mb-1 border-pink-400 rounded-lg text-pink-500 p-2"
                                         >
                                             {item.topic}
-                                        </div>
-                                ))}
+                                        </div>) :
+                                            <div
+                                                onClick={() => { handleAdd(item) }}
+                                                key={item.id}
+                                                className="draggable-item text-sm mb-1 rounded-lg text-pink-700 bg-pink-50 flex px-4 py-4"
+                                                draggable
+                                                onDragStart={(event) => handleDragStart(event, item, 'All Topics')}
+                                            >
+                                                {item.topic}
+                                            </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
