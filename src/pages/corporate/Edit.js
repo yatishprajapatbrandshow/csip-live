@@ -347,7 +347,7 @@ const Edit = () => {
     }
     const fetchEditApi = async (payload) => {
         try {
-            const response = await fetch(`${API_URL_LOCAL}activity/edit`, {
+            const response = await fetch(`${API_URL}activity/edit`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

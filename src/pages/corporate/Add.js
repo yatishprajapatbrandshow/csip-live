@@ -372,7 +372,7 @@ const Add = () => {
   const fetchAddApi = async (payload) => {
 
     try {
-      const response = await fetch(`${API_URL_LOCAL}activity/add`, {
+      const response = await fetch(`${API_URL}activity/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -429,7 +429,7 @@ const Add = () => {
       status
     }
     try {
-      const response = await fetch(`${API_URL_LOCAL}activity/status`, {
+      const response = await fetch(`${API_URL}activity/status`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
