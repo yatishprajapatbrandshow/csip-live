@@ -1,16 +1,24 @@
 'use client';
  
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Navigation, Autoplay } from "swiper/modules";
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { decrypt } from '@/utils/cryptoUtils';
  
 const CommentsSlider = ({ data }) => {
     const router = useRouter();
     const [activeIndex, setActiveIndex] = useState(0);
+    const [ParamId, setParamId] = useState("");
+
+    useEffect(() => {
+        if (router.query.item) {
+            setParamId(router.query.item)  
+        }
+    }, [router.query]);
  
     const handleNext = () => {
         let nextIndex = activeIndex + 1;
@@ -19,7 +27,7 @@ const CommentsSlider = ({ data }) => {
         }
         if (nextIndex < data.length) {
           setActiveIndex(nextIndex);
-          router.push(`/activity/${data[nextIndex].name}`);
+          router.push(`/activity/${data[nextIndex].name}?item=${ParamId}`);
         }
       };
    
@@ -31,14 +39,14 @@ const CommentsSlider = ({ data }) => {
         }
         if (prevIndex >= 0) {
           setActiveIndex(prevIndex);
-          router.push(`/activity/${data[prevIndex].name}`);
+          router.push(`/activity/${data[prevIndex].name}?item=${ParamId}`);
         }
       };
    
       const handleButtonClick = (index) => {
         if (data[index].data) {
           setActiveIndex(index);
-          router.push(`/activity/${data[index].name}`);
+          router.push(`/activity/${data[index].name}?item=${ParamId}`);
         }
       };
  
