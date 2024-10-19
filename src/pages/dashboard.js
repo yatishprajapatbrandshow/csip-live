@@ -17,6 +17,7 @@ import CommentsSlider from '@/Components/CommentsSlider';
 import { useFetchActivities } from '@/hooks/useFetchActivities';
 import { storeFavouriteActivity } from '../../redux/actions/favouriteActivitySlice';
 import DragAndDropTopic from '../Components/DragAndDrop';
+import { getLocalStorageItem } from '@/Config/localstorage';
 
 
 const reviews = [
@@ -100,6 +101,23 @@ export default function DashboardCombind() {
     const totalScoreCount = useCountUp(dashboardData?.totalScore || 0); // Assuming totalScore is a number
     const ProfileStatusCount = useCountUp(ProfileStatus?.profilePercentage || 0); // Assuming totalScore is a number
     const ActivityCurriculumStatusCount = useCountUp(ActivityCurriculumStatus?.percentage || 0); // Assuming totalScore is a number
+    const [isSession, setIsSession] = useState(false);
+
+
+    useEffect(() => {
+        const userData = getLocalStorageItem("userData");
+        if (userData) {
+            setIsSession(true);
+            if(userData.type !== "Participant"){
+                router.push('/')    
+            }
+        } else {
+            router.push('/')
+            setIsSession(false);
+        }
+    }, []);
+
+    
 
 
     const fetchDashboardData = async () => {

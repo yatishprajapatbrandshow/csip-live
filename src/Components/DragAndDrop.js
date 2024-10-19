@@ -34,7 +34,6 @@ const fetchAllTopics = async (participantId) => {
 };
 // Function to remove a topic from Your Topics
 const removeTopicFromYourTopics = async (participantId, topicId) => {
-    console.log(participantId, topicId);
 
     const dataToSend = {
         participant_id: participantId,
@@ -54,14 +53,13 @@ const removeTopicFromYourTopics = async (participantId, topicId) => {
         const responseData = await response.json();
 
         if (responseData.status === true) {
-            console.log(`Removed topic with ID ${topicId} successfully.`);
+            
             return true; // Indicates success
         } else {
-            console.error('Failed to remove topic:', responseData.message);
+            
             return false; // Indicates failure
         }
     } catch (error) {
-        console.error('Error removing topic:', error);
         return false; // Indicates failure
     }
 };
@@ -85,7 +83,6 @@ const addTopicToYourTopics = async (participantId, topicId) => {
         const responseData = await response.json();
 
         if (responseData.status === true) {
-            console.log(responseData);
 
             // console.log(`Added ${topic.text} to Your Topics successfully.`);
         } else {
@@ -132,7 +129,6 @@ const DragAndDropTopic = () => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log("On Search ;-", data.data);
 
                     if (data.data.length > 0) {
                         setAllTopics(data.data);
@@ -140,11 +136,9 @@ const DragAndDropTopic = () => {
                         setAllTopics([]);
                     }
                 } else {
-                    console.error('Error fetching default topics');
                     setAllTopics([]);
                 }
             } catch (error) {
-                console.error('Error:', error);
                 setAllTopics([]);
             }
             return;
@@ -167,11 +161,9 @@ const DragAndDropTopic = () => {
                     setAllTopics([]);
                 }
             } else {
-                console.error('Error fetching topic');
                 setAllTopics([]);
             }
         } catch (error) {
-            console.error('Error:', error);
             setAllTopics([]);
         }
     };
@@ -197,7 +189,6 @@ const DragAndDropTopic = () => {
             try {
                 const success = await removeTopicFromYourTopics(userData.sid, item.sid);
                 if (!success) {
-                    console.error('Failed to remove from your topics in the backend.');
                 }
                 dispatch(applyTrigger())
             } catch (error) {
