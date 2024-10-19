@@ -16,8 +16,8 @@ function ActivityList() {
   const fetchActivities = async () => {
     // Only append corporate_id if it's defined
     const APIURL = userData?.sid
-      ? `${API_URL_LOCAL}activity/list?corporate_id=${userData?.sid}`
-      : `${API_URL_LOCAL}activity/list`;
+      ? `${API_UR}activity/list?corporate_id=${userData?.sid}`
+      : `${API_URL}activity/list`;
 
     try {
       const response = await fetch(APIURL, {

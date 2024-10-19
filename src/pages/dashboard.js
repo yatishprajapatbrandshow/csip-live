@@ -196,36 +196,6 @@ export default function DashboardCombind() {
         }
     }
 
-    const fetchTopicData = async () => {
-        if (!userData?.sid) return;
-
-        setLoading(true);
-        try {
-            const response = await fetch(`${API_URL}topic/get`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                method: "POST",
-                body: JSON.stringify({
-                    participant_id: userData?.sid
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-
-            const responseData = await response.json();
-
-            if (responseData.status === true) {
-                setTopicData(responseData.data);
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     // const handleRemoveTopic = async (topicId) => {
 
@@ -288,7 +258,6 @@ export default function DashboardCombind() {
             fetchNewActivities(userData?.sid);
             fetchRecommenedActivities();
             fetchFavoriteActivity();
-            fetchTopicData();
             fetchCommentsData();
             fetchProfileStatus();
             fetchActivityCurriculumStatus();

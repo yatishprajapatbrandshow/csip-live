@@ -18,6 +18,8 @@ function Report() {
       });
 
       const responseData = await response.json();
+      console.log(responseData);
+      
       if (responseData.status === true) {
         setReportData(responseData.data);
       }
@@ -50,7 +52,11 @@ function Report() {
     if (userData?.sid) {
       fetchReportData();
     }
-  }, [])
+  }, [userData])
+  const handleClick=(item)=>{
+    console.log(item);
+    
+  }
   return (
     <>
       <Header />
@@ -108,7 +114,7 @@ function Report() {
                   <td className="p-3">{item.stage}</td>
                   <td className="p-3">{item.score}</td>
                   <td className="p-3">
-                    <button className="text-blue-600 hover:text-blue-800">View Certificate</button>
+                    <button onClick={()=>handleClick(item)} className="text-blue-600 hover:text-blue-800">View Certificate</button>
                   </td>
                 </tr>
               ))}
