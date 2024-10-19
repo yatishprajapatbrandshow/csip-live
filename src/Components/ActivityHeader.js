@@ -1,18 +1,26 @@
 'use client';
  
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Navigation, Autoplay } from "swiper/modules";
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { decrypt } from '@/utils/cryptoUtils';
  
 const CommentsSlider = ({ data }) => {
     console.log("Data In Comments Slider", data);
 
     const router = useRouter();
     const [activeIndex, setActiveIndex] = useState(0);
+    const [ParamId, setParamId] = useState("");
+
+    useEffect(() => {
+        if (router.query.item) {
+            setParamId(router.query.item)  
+        }
+    }, [router.query]);
  
     const handleNext = () => {
         let nextIndex = activeIndex + 1;
@@ -20,13 +28,8 @@ const CommentsSlider = ({ data }) => {
             nextIndex++; // Skip over items with data: false
         }
         if (nextIndex < data.length) {
-            const encryptedId = encrypt(activity._id);
-            setActiveIndex(nextIndex);
-            router.push({
-                pathname: `/activity/${data[nextIndex].name}`,
-                query: { item: encryptedId }
-            }
-            );
+          setActiveIndex(nextIndex);
+          router.push(`/activity/${data[nextIndex].name}?item=${ParamId}`);
         }
       };
    
@@ -37,22 +40,15 @@ const CommentsSlider = ({ data }) => {
             prevIndex--; // Skip over items with data: false
         }
         if (prevIndex >= 0) {
-            const encryptedId = encrypt(activity._id);
-            setActiveIndex(prevIndex);
-            router.push({
-                pathname: `/activity/${data[prevIndex].name}`,
-                query: { item: encryptedId }
-            });
+          setActiveIndex(prevIndex);
+          router.push(`/activity/${data[prevIndex].name}?item=${ParamId}`);
         }
       };
    
       const handleButtonClick = (index) => {
         if (data[index].data) {
-            setActiveIndex(index);
-            router.push({
-                pathname: `/activity/${data[index].name}`,
-                query: { item: encryptedId }
-            });
+          setActiveIndex(index);
+          router.push(`/activity/${data[index].name}?item=${ParamId}`);
         }
       };
  

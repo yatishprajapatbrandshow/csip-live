@@ -37,7 +37,7 @@ export default function DashboardCombind() {
  
     const FetchActivityDetails = async (decryptedItem) =>{
         const datatoSend = {
-            activityid: 8574508,
+            activityid: decryptedItem,
             requestedSteps : [],
             type :"menu"
         }
@@ -53,8 +53,7 @@ export default function DashboardCombind() {
                 body: JSON.stringify(datatoSend)
             })
             const data = await response.json();
-            console.log(data);
-            if (data.status === true) {
+            if(data.status === true){
                 setActivityList(data.data)
                 setLocalStorageItem('AttemptActivity', data.data);
             } else {

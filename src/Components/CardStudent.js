@@ -212,7 +212,7 @@ const CardStudent = ({ activity, theme }) => {
                     isLoading: false,
                     autoClose: 3000,
                 });
-                const encryptedId = encrypt(activity.sid);
+                const encryptedId = encrypt(JSON.stringify(activity.sid));
                 router.push({
                     pathname: '/activity',
                     query: { item: encryptedId }
