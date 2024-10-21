@@ -8,7 +8,7 @@ import { setUserData, setUserType } from '../../redux/actions/sessionSlice';
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, Popover, PopoverButton, PopoverPanel, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { PlusIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
-import { MenuItemLinks } from '@/Config/Navigation'
+import { MenuItemLinks, MenuItemLinksForCorporate } from '@/Config/Navigation'
 import TopicModal from "./TopicModal";
 
 const user = {
@@ -37,10 +37,12 @@ const Header = ({ session = false }) => {
     const [time, setTime] = useState("");
     const [date, setDate] = useState("");
     const [UserDataShow, setUserDataShow] = useState("");
+    
     const userData = useSelector((state) => state.session.userData);
+    const userType = useSelector((state) => state.session.userType);
     const startSessionTrigger = useSelector((state) => state.session.startSessionTrigger);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    console.log(userType)
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
     const LogOut = () => {
@@ -51,8 +53,8 @@ const Header = ({ session = false }) => {
     useEffect(() => {
 
         const userData = getLocalStorageItem("userData")
-
         if (userData) {
+            console.log(userData)
             setUserDataShow(userData)
             dispatch(setUserData(userData));
             dispatch(setUserType(userData?.type));
@@ -120,60 +122,117 @@ const Header = ({ session = false }) => {
                             </div>
                             {isSession ?
                                 <div className="hidden md:ml-6 md:flex md:items-center md:space-x-6 relative">
-                                    {MenuItemLinks.map((item) => (
-                                        <div>
-                                            {item.subMenu ?
-                                                <Popover className="relative">
-                                                    <PopoverButton className="inline-flex items-center gap-x-1 text-sm font-medium leading-6 text-gray-700 outline-none">
-                                                        <span>{item.name}</span>
-                                                        <ChevronDownIcon aria-hidden="true" className="h-4 w-4" />
-                                                    </PopoverButton>
+                                    {userType === "Participant" ? <>
+                                        {MenuItemLinks.map((item) => (
+                                            <div>
+                                                {item.subMenu ?
+                                                    <Popover className="relative">
+                                                        <PopoverButton className="inline-flex items-center gap-x-1 text-sm font-medium leading-6 text-gray-700 outline-none">
+                                                            <span>{item.name}</span>
+                                                            <ChevronDownIcon aria-hidden="true" className="h-4 w-4" />
+                                                        </PopoverButton>
 
-                                                    <PopoverPanel
-                                                        transition
-                                                        className="absolute left-1/2  z-10 mt-5 flex w-screen max-w-max -translate-x-1/4 px-4 transition-transform transform data-[closed]:scale-95 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in data-[leave]:skew-x-6 data-[enter]:skew-x-0"
-                                                    >
-                                                        <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5 lg:max-w-3xl">
-                                                            <div className="grid grid-cols-1 gap-x-6 gap-y-1 p-4 lg:grid-cols-2">
-                                                                {item.subMenu.map((item) => (
-                                                                    <div key={item.name} className="group relative flex gap-x-6 rounded-lg p-2 hover:bg-gray-50" onClick={() => { item.name === 'Add' && openModal() }}>
-                                                                        <div className={`mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white`}>
-                                                                            <item.icon aria-hidden="true" className={`h-6 w-6 ${item.color ? `text-${item.color}` : "text-gray-600"}  group-hover:text-indigo-600`} />
+                                                        <PopoverPanel
+                                                            transition
+                                                            className="absolute left-1/2  z-10 mt-5 flex w-screen max-w-max -translate-x-1/4 px-4 transition-transform transform data-[closed]:scale-95 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in data-[leave]:skew-x-6 data-[enter]:skew-x-0"
+                                                        >
+                                                            <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5 lg:max-w-3xl">
+                                                                <div className="grid grid-cols-1 gap-x-6 gap-y-1 p-4 lg:grid-cols-2">
+                                                                    {item.subMenu.map((item) => (
+                                                                        <div key={item.name} className="group relative flex gap-x-6 rounded-lg p-2 hover:bg-gray-50" onClick={() => { item.name === 'Add' && openModal() }}>
+                                                                            <div className={`mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white`}>
+                                                                                <item.icon aria-hidden="true" className={`h-6 w-6 ${item.color ? `text-${item.color}` : "text-gray-600"}  group-hover:text-indigo-600`} />
+                                                                            </div>
+                                                                            <div>
+                                                                                <button onClick={() => router.push(item.href)} className="font-medium text-[13px] text-gray-900">
+                                                                                    {item.name}
+                                                                                    <span className="absolute inset-0" />
+                                                                                </button>
+                                                                                <p className="mt-1 text-gray-600 line-clamp-2 text-xs">{item.description}</p>
+                                                                            </div>
                                                                         </div>
-                                                                        <div>
-                                                                            <button onClick={() => router.push(item.href)} className="font-medium text-[13px] text-gray-900">
-                                                                                {item.name}
-                                                                                <span className="absolute inset-0" />
-                                                                            </button>
-                                                                            <p className="mt-1 text-gray-600 line-clamp-2 text-xs">{item.description}</p>
-                                                                        </div>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                            <div className="bg-gray-50 px-8 py-6">
-                                                                <div className="flex items-center gap-x-3">
-                                                                    <h3 className="text-sm font-semibold leading-6 text-gray-900">Curriculum Management</h3>
-                                                                    {/* <p className="rounded-full bg-indigo-600/10 px-2.5 py-1.5 text-xs font-semibold text-indigo-600">New</p> */}
+                                                                    ))}
                                                                 </div>
-                                                                <p className="mt-2 text-sm leading-6 text-gray-600">
-                                                                Efficiently customize and manage your courses with real-time insights and third-party integrations to streamline curriculum development.
-                                                                </p>
+                                                                <div className="bg-gray-50 px-8 py-6">
+                                                                    <div className="flex items-center gap-x-3">
+                                                                        <h3 className="text-sm font-semibold leading-6 text-gray-900">Curriculum Management</h3>
+                                                                        {/* <p className="rounded-full bg-indigo-600/10 px-2.5 py-1.5 text-xs font-semibold text-indigo-600">New</p> */}
+                                                                    </div>
+                                                                    <p className="mt-2 text-sm leading-6 text-gray-600">
+                                                                    Efficiently customize and manage your courses with real-time insights and third-party integrations to streamline curriculum development.
+                                                                    </p>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </PopoverPanel>
-                                                </Popover>
-                                                :
-                                                <button
-                                                    key={item.name}
-                                                    onClick={() => router.push(item.href)}
-                                                    aria-current={item.current ? 'page' : undefined}
-                                                    className={`inline-flex items-center gap-x-1 text-sm font-medium leading-6 text-gray-700`}
-                                                >
-                                                    {item.name}
-                                                </button>
-                                            }
-                                        </div>
-                                    ))}
+                                                        </PopoverPanel>
+                                                    </Popover>
+                                                    :
+                                                    <button
+                                                        key={item.name}
+                                                        onClick={() => router.push(item.href)}
+                                                        aria-current={item.current ? 'page' : undefined}
+                                                        className={`inline-flex items-center gap-x-1 text-sm font-medium leading-6 text-gray-700`}
+                                                    >
+                                                        {item.name}
+                                                    </button>
+                                                }
+                                            </div>
+                                        ))}
+                                    </>: <>
+                                        {MenuItemLinksForCorporate.map((item) => (
+                                            <div>
+                                                {item.subMenu ?
+                                                    <Popover className="relative">
+                                                        <PopoverButton className="inline-flex items-center gap-x-1 text-sm font-medium leading-6 text-gray-700 outline-none">
+                                                            <span>{item.name}</span>
+                                                            <ChevronDownIcon aria-hidden="true" className="h-4 w-4" />
+                                                        </PopoverButton>
+
+                                                        <PopoverPanel
+                                                            transition
+                                                            className="absolute left-1/2  z-10 mt-5 flex w-screen max-w-max -translate-x-1/4 px-4 transition-transform transform data-[closed]:scale-95 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in data-[leave]:skew-x-6 data-[enter]:skew-x-0"
+                                                        >
+                                                            <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5 lg:max-w-3xl">
+                                                                <div className="grid grid-cols-1 gap-x-6 gap-y-1 p-4 lg:grid-cols-2">
+                                                                    {item.subMenu.map((item) => (
+                                                                        <div key={item.name} className="group relative flex gap-x-6 rounded-lg p-2 hover:bg-gray-50" onClick={() => { item.name === 'Add' && openModal() }}>
+                                                                            <div className={`mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white`}>
+                                                                                <item.icon aria-hidden="true" className={`h-6 w-6 ${item.color ? `text-${item.color}` : "text-gray-600"}  group-hover:text-indigo-600`} />
+                                                                            </div>
+                                                                            <div>
+                                                                                <button onClick={() => router.push(item.href)} className="font-medium text-[13px] text-gray-900">
+                                                                                    {item.name}
+                                                                                    <span className="absolute inset-0" />
+                                                                                </button>
+                                                                                <p className="mt-1 text-gray-600 line-clamp-2 text-xs">{item.description}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                                <div className="bg-gray-50 px-8 py-6">
+                                                                    <div className="flex items-center gap-x-3">
+                                                                        <h3 className="text-sm font-semibold leading-6 text-gray-900">Curriculum Management</h3>
+                                                                        {/* <p className="rounded-full bg-indigo-600/10 px-2.5 py-1.5 text-xs font-semibold text-indigo-600">New</p> */}
+                                                                    </div>
+                                                                    <p className="mt-2 text-sm leading-6 text-gray-600">
+                                                                    Efficiently customize and manage your courses with real-time insights and third-party integrations to streamline curriculum development.
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </PopoverPanel>
+                                                    </Popover>
+                                                    :
+                                                    <button
+                                                        key={item.name}
+                                                        onClick={() => router.push(item.href)}
+                                                        aria-current={item.current ? 'page' : undefined}
+                                                        className={`inline-flex items-center gap-x-1 text-sm font-medium leading-6 text-gray-700`}
+                                                    >
+                                                        {item.name}
+                                                    </button>
+                                                }
+                                            </div>
+                                        ))}
+                                    </>}
                                 </div>
                                 : null}
                         </div>

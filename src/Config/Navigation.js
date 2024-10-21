@@ -21,6 +21,18 @@ import {
 } from '@heroicons/react/24/outline'
 
 
+export const MenuItemLinksForCorporate = [
+  {
+    name: 'Add Activity',
+    href: '/corporate/add',
+    current: true
+  },
+  {
+    name: 'Activity List',
+    href: '/corporate/activitylist',
+    current: true
+  },
+];
 export const MenuItemLinks = [
   {
     name: 'Dashboard',

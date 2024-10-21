@@ -97,7 +97,7 @@ function Login() {
                 setLocalStorageItem('userData', result?.data);
                 setLoginProcess(false)
                 if (result?.data?.type === "Corporate") {
-                    router.push('/corporate/ActivityList')
+                    router.push('/corporate/activitylist')
                 } else {
                     router.push('/dashboard')
                 }
