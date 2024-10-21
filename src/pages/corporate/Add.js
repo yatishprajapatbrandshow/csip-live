@@ -26,8 +26,7 @@ const Add = () => {
   const [caseScenarioTitle, setCaseScenarioTitle] = useState("");
   const [description, setDescription] = useState("");
   const [note, setNote] = useState("");
-  const [corporateHierarchyOverview, setCorporateHierarchyOverview] =
-    useState("");
+  const [corporateHierarchyOverview, setCorporateHierarchyOverview] = useState("");
   const [tag, setTag] = useState("");
   const [snapShot, setSnapShot] = useState("");
   const [youtubeVideoLink, setYoutubeVideoLink] = useState("");
@@ -389,6 +388,7 @@ const Add = () => {
       payload._id = id;
       payload.step = step + 1; // Add the step field for steps greater than 0
     }
+
     if (step == 0 && id === null) {
       fetchAddApi(payload);
     } else if (step != 0) {
@@ -397,6 +397,7 @@ const Add = () => {
       setStep((pre) => (pre += 1));
     }
   };
+
   const fetchAddApi = async (payload) => {
     try {
       const response = await fetch(`${API_URL}activity/add`, {
@@ -464,7 +465,7 @@ const Add = () => {
       });
 
       const responseData = await response.json();
-      console.log(responseData);
+      
 
       if (responseData.status === true) {
         alert(responseData.message);
@@ -513,6 +514,42 @@ const Add = () => {
       fetchTopic();
     }
   }, [searchTerm]);
+
+
+
+
+
+  const handleFileChange = (e) => {
+      setFile(e.target.files[0]);
+  };
+  
+  const handleUpload = async () => {
+      if (!file) {
+          setUploadStatus('Please select a file first.');
+          return;
+      }
+      
+      const formData = new FormData();
+      formData.append('fileUp', file); // Append the file to the form data
+  
+      for (const [key, value] of formData.entries()) {
+          console.log(key, value); // This will log the key-value pairs in the FormData
+      }
+  
+      try {
+          const response = await fetch('/api/upload', {
+              method: 'POST',
+              body: formData, // Send the FormData object
+          });
+  
+          const result = await response.json();
+          console.log(result);
+      } catch (error) {
+          console.log("error here", error);
+      }
+  };
+
+
 
   return (
     <>

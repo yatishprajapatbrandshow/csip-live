@@ -388,7 +388,17 @@ const Edit = () => {
     }
 
     const fetchStepApi = async (payload) => {
-
+        console.log(payload.tools_used)
+        if (payload.tools_used) {
+            payload.tools_used.forEach(tool => {
+                console.log(tool)
+                if (tool.image) {
+                    console.log("hit 3")
+                    handleUpload(tool.image); 
+                }
+            });
+        }
+        return
         try {
             const response = await fetch(`${API_URL}activity/step`, {
                 method: "POST",
@@ -419,6 +429,31 @@ const Edit = () => {
         setSelectedTopic(topic);
         setSearchTerm('');
     };
+
+
+    
+    const handleUpload = async (file) => {
+        
+        const formData = new FormData();
+        formData.append('fileUp', file); // Append the file to the form data
+    
+        for (const [key, value] of formData.entries()) {
+            console.log(key, value); // This will log the key-value pairs in the FormData
+        }
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData, // Send the FormData object
+            });
+    
+            const result = await response.json();
+            console.log(result);
+        } catch (error) {
+            console.log("error here", error);
+        }
+    };
+
+    
 
     const fetchTopic = async () => {
         setTopics([])
