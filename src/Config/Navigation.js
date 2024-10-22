@@ -23,6 +23,11 @@ import {
 
 export const MenuItemLinksForCorporate = [
   {
+    name: 'Dashboard',
+    href: '/corporate/',
+    current: true
+  },
+  {
     name: 'Add Activity',
     href: '/corporate/add',
     current: true
