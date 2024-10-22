@@ -10,6 +10,7 @@ import { X } from "lucide-react";
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 import { useRouter } from "next/router";
 import { getLocalStorageItem } from "@/Config/localstorage";
+import ImageUploader from "@/Components/ImageUploader";
 
 const Add = () => {
   const editor = useRef(null);
@@ -559,6 +560,7 @@ const Add = () => {
               >
                 Draft
               </button>
+            <ImageUploader />
             </div>
             <div className="col-span-1 sticky top-0">
               <ol className="h-fit overflow-hidden space-y-8">
