@@ -623,7 +623,7 @@ const Edit = () => {
                                             readonly: false,
                                             height: 400,
                                         }}
-                                        onBlur={(newContent) => setCaseScenario(newContent)}
+                                        onBlur={(newContent) => setDescription(newContent)}
                                         />
                                     </div>
                                     <div className="mb-4">
