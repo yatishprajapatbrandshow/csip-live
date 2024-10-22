@@ -860,11 +860,14 @@ const Edit = () => {
                                                 />
 
                                                 <label className="block text-sm font-medium text-gray-700 mt-2">Description</label>
-                                                <textarea
-                                                    value={jobRole.description}
-                                                    onChange={(e) => handleJobRoleChange(index, 'description', e.target.value)}
-                                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                                                    rows="3"
+                                           
+                                                  <JoditEditor
+                                                value={jobRole.description}
+                                                config={{
+                                                    readonly: false,
+                                                    height: 400,
+                                                }}
+                                                onBlur={(newContent) => handleJobRoleChange(index, 'description', newContent)}
                                                 />
 
                                                 <label className="block text-sm font-medium text-gray-700 mt-2">Average Salary</label>
@@ -955,12 +958,14 @@ const Edit = () => {
                                             />
 
                                             <label className="block text-sm font-medium text-gray-700 mt-2">Description</label>
-                                            <textarea
+                                             <JoditEditor
                                                 value={newsItem.description}
-                                                onChange={(e) => handleNewsChange(index, 'description', e.target.value)}
-                                                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                                                rows="3"
-                                            />
+                                                config={{
+                                                    readonly: false,
+                                                    height: 400,
+                                                }}
+                                                onBlur={(newContent) => handleNewsChange(index, 'description', newContent)}
+                                                />
 
                                             <label className="block text-sm font-medium text-gray-700 mt-2">
                                                 Link <span className="text-red-500">*</span>
