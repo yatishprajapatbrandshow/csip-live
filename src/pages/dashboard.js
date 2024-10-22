@@ -589,7 +589,7 @@ export default function DashboardCombind() {
                             {newActivities && Array.isArray(newActivities) && newActivities.length > 0 ?
                                 <div className=''>
                                     <div className='p-10 '>
-                                    <Activities theme={"black"} title="New Activity" cardData={newActivities.slice(0, 4)}  />
+                                    <Activities theme={"black"} title="New Activity" cardData={newActivities}  />
                                     </div>
                                 </div>
                             : null}

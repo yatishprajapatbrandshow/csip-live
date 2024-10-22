@@ -794,12 +794,12 @@ const Add = () => {
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                     />*/}
                     <JoditEditor
-                      value={description}
+                      value={note || ""}
                       config={{
                         readonly: false,
                         height: 400,
                       }}
-                      onBlur={(newContent) => setCaseScenario(newContent)}
+                      onBlur={(newContent) => setNote(newContent)}
                     />
                   </div>
                   <div className="flex gap-4">

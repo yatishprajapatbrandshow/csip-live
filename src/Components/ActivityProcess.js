@@ -340,6 +340,7 @@ const TopEmp = [
 ]
 
 
+console.log(data);
 
 
     return (

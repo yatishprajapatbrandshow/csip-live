@@ -602,7 +602,14 @@ const Edit = () => {
                                 <form>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Case Scenario</label>
-                                        <input type="text" name="case_scenario" value={caseScenario || ''} onChange={(e) => setCaseScenario(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+                                        <JoditEditor
+                                        value={caseScenario || ""}
+                                        config={{
+                                            readonly: false,
+                                            height: 400,
+                                        }}
+                                        onBlur={(newContent) => setCaseScenario(newContent)}
+                                        />
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Case Scenario Title</label>
@@ -610,11 +617,25 @@ const Edit = () => {
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Description</label>
-                                        <input type="text" name="description" value={description || ''} onChange={(e) => setDescription(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+                                        <JoditEditor
+                                        value={description || ""}
+                                        config={{
+                                            readonly: false,
+                                            height: 400,
+                                        }}
+                                        onBlur={(newContent) => setCaseScenario(newContent)}
+                                        />
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Note</label>
-                                        <input type="text" name="note" value={note || ''} onChange={(e) => setNote(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+                                        <JoditEditor
+                                        value={note || ""}
+                                        config={{
+                                            readonly: false,
+                                            height: 400,
+                                        }}
+                                        onBlur={(newContent) => setNote(newContent)}
+                                        />
                                     </div>
                                     <div className='flex gap-4'>
                                         <button onClick={(e) => {
@@ -637,7 +658,14 @@ const Edit = () => {
 
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Tag</label>
-                                        <input type="text" name="tag" value={tag || ''} onChange={(e) => setTag(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+                                        <JoditEditor
+                                            value={tag || ""}
+                                            config={{
+                                                readonly: false,
+                                                height: 400,
+                                            }}
+                                            onBlur={(newContent) => setTag(newContent)}
+                                            />
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Search Topic</label>
@@ -701,11 +729,17 @@ const Edit = () => {
                                                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                                                 />
                                                 <label className="block text-sm font-medium text-gray-700 mt-2">Description</label>
-                                                <input
-                                                    type="text"
+                                                 <JoditEditor
                                                     value={tool.description}
-                                                    onChange={(e) => handleToolChange(index, 'description', e.target.value)}
-                                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                                    config={{
+                                                    readonly: false,
+                                                    height: 400,
+                                                    }}
+                                                    onBlur={(newContent) => handleToolChange(
+                                                    index,
+                                                    "description",
+                                                    newContent
+                                                    )}
                                                 />
                                                 <label className="block text-sm font-medium text-gray-700 mt-2">Category</label>
                                                 <input
@@ -748,7 +782,14 @@ const Edit = () => {
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Snap Shot</label>
-                                        <input type="text" name="snap_shot" value={snapShot || ''} onChange={(e) => setSnapShot(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+                                        <JoditEditor
+                                            value={snapShot || ""}
+                                            config={{
+                                                readonly: false,
+                                                height: 400,
+                                            }}
+                                            onBlur={(newContent) => setSnapShot(newContent)}
+                                            />
                                     </div>
                                     <div className='flex gap-4'>
                                         <button onClick={(e) => {
@@ -770,7 +811,14 @@ const Edit = () => {
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Image Associated</label>
-                                        <input type="text" name="image_assc" value={imageAssc || ''} onChange={(e) => setImageAssc(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+                                        <JoditEditor
+                                        value={imageAssc || ""}
+                                        config={{
+                                            readonly: false,
+                                            height: 400,
+                                        }}
+                                        onBlur={(newContent) => setImageAssc(newContent)}
+                                        />
                                     </div>
 
                                     <div className='flex gap-4'>

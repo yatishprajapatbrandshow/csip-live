@@ -36,7 +36,7 @@ function ActivityList() {
     const APIURL = userData?.sid
       ? `${API_URL}activity/list?corporate_id=${userData?.sid}`
       : `${API_URL}activity/list`;
-
+console.log(userData?.sid);
     try {
       const response = await fetch(APIURL, {
         headers: {
