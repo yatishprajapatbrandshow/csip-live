@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import { API_URL, API_URL_LOCAL } from "@/Config/Config";
 import { useSelector } from 'react-redux';
 import Header from '@/Components/Header';
-import { X } from 'lucide-react';
+import { Trash, X } from 'lucide-react';
 const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
 import { useRouter } from 'next/router';
 import { decrypt } from '@/utils/cryptoUtils';
@@ -26,7 +26,6 @@ const Edit = () => {
     const [description, setDescription] = useState('');
     const [note, setNote] = useState('');
     const [corporateHierarchyOverview, setCorporateHierarchyOverview] = useState('');
-    const [tag, setTag] = useState('');
     const [snapShot, setSnapShot] = useState('');
     const [youtubeVideoLink, setYoutubeVideoLink] = useState('');
     const [imageAssc, setImageAssc] = useState('');
@@ -44,7 +43,6 @@ const Edit = () => {
     const [id, setId] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTopic, setSelectedTopic] = useState('');
-
     const [isSession, setIsSession] = useState(false);
 
     useEffect(() => {
@@ -64,6 +62,31 @@ const Edit = () => {
 
     const router = useRouter();
 
+    const [tag, setTag] = useState('');
+    const [tags, setTags] = useState([]);
+
+    // Function to handle adding the tag to the array
+    const handleAddTag = () => {
+        if (tag && !tags.includes(tag)) {
+            setTags([...tags, tag]);  // Add tag to the tags array
+            setTag('');  // Reset input field
+        }
+    };
+
+    // Function to handle removing a tag
+    const handleRemoveTag = (tagToRemove) => {
+        setTags(tags.filter((t) => t !== tagToRemove));  // Remove the selected tag
+    };
+
+    // Handle "Enter" key press to add tag
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleAddTag();
+        }
+    };
+
+
     useEffect(() => {
         if (router.query.item) {
             const decryptedItem = decrypt(router.query.item);
@@ -77,7 +100,6 @@ const Edit = () => {
 
     const fetchAllCurriculum = async () => {
         const APIURL = `${API_URL}activity/get-by-id?_id=${id}`;
-        console.log(APIURL);
         try {
             const response = await fetch(APIURL, {
                 headers: {
@@ -94,6 +116,8 @@ const Edit = () => {
 
             if (responseData.status === true) {
                 const data = responseData.data;
+                console.log(data);
+
                 setName(data?.name);
                 setShortName(data?.short_name);
                 setObjective(data?.objective);
@@ -103,8 +127,11 @@ const Edit = () => {
                 setDescription(data?.description);
                 setNote(data?.note);
                 setCorporateHierarchyOverview(data?.corporate_hierarchy_overview);
-                setTag(data?.tag);
-                setSelectedTopic(data?.topic_id);
+                if (Array.isArray(data?.tag)) {
+                    setTags(data?.tag);
+                } else {
+                    setTags([])
+                }
                 setToolsUsed(data?.tools_used);
                 setSnapShot(data?.snap_shot);
                 setYoutubeVideoLink(data?.youtube_video_link);
@@ -122,6 +149,8 @@ const Edit = () => {
                 setSubmissionStartDate(data?.submission_start_date);
                 setSubmissionEndDate(data?.submission_end_date);
                 setTopEmployees(data?.top_employees);
+
+                fetchTopicById(data?.topic_id);
             }
         } catch (error) {
             console.error("Error:", error);
@@ -129,10 +158,35 @@ const Edit = () => {
     };
     useEffect(() => {
         if (id) {
-            fetchAllCurriculum()
+            fetchAllCurriculum();
         }
     }, [id])
+    const fetchTopicById = async (topic_id) => {
+        setTopics([])
+        const APIURL = `${API_URL}topic/get-by-sid`
+        try {
+            const response = await fetch(APIURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    sid: topic_id
+                }),
+            });
 
+            const responseData = await response.json();
+            console.log(responseData);
+
+            if (responseData.status === true) {
+                setSelectedTopic(responseData.data)
+            } else {
+            }
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
     // Job Roles And Description Functionality
     const [jobRolesAndDescription, setJobRolesAndDescription] = useState([
         {
@@ -269,7 +323,6 @@ const Edit = () => {
         newrelatedTopicNews.splice(index, 1); // Remove the news item
         setRelatedTopicNews(newrelatedTopicNews);
     };
-
     // TopEmployees 
     const [topEmployees, setTopEmployees] = useState([
         { name: '', companyName: '', linkedInProfile: '' }
@@ -308,9 +361,8 @@ const Edit = () => {
         }
         if (step === 2) {
             payload.corporate_hierarchy_overview = corporateHierarchyOverview,
-                payload.corporate_id = userData?.sid,
-                payload.tag = tag,
-                payload.topic_id = selectedTopic?.sid || ""
+                payload.tag = tags || [],
+                payload.topic_id = selectedTopic?.sid || null
         }
         if (step === 3) {
             payload.tools_used = toolsUsed,
@@ -386,21 +438,28 @@ const Edit = () => {
             throw error; // Rethrow the error for the caller to handle
         }
     }
-
     const fetchStepApi = async (payload) => {
-        console.log(payload.tools_used)
         if (payload.tools_used) {
-            payload.tools_used.forEach(tool => {
-                console.log(tool)
-                if (tool.image) {
-                    console.log("hit 3")
-                    handleUpload(tool.image); 
+            for (const tool of payload.tools_used) {
+                if (tool.image && typeof tool.image !== 'string') { // Ensure it's a file and not an already uploaded URL
+                    console.log(`Uploading image for tool: ${tool.name || "Unnamed tool"}`);
+                    try {
+                        // Wait for the image upload to complete
+                        const result = await handleUpload(tool.image);
+                        if (result?.fileUrl) {
+                            tool.image = result?.fileUrl?.split('https://csip-image.blr1.digitaloceanspaces.com/img/content')[1]; // Replace the file with the uploaded URL
+                        }
+                    } catch (error) {
+                        console.error(`Error uploading image for tool: ${tool.name || "Unnamed tool"}`, error);
+                    }
                 }
-            });
+            }
         }
-        return
+
+        console.log(payload);
+
         try {
-            const response = await fetch(`${API_URL}activity/step`, {
+            const response = await fetch(`${API_URL_LOCAL}activity/step`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -429,14 +488,11 @@ const Edit = () => {
         setSelectedTopic(topic);
         setSearchTerm('');
     };
-
-
-    
     const handleUpload = async (file) => {
-        
+
         const formData = new FormData();
         formData.append('fileUp', file); // Append the file to the form data
-    
+
         for (const [key, value] of formData.entries()) {
             console.log(key, value); // This will log the key-value pairs in the FormData
         }
@@ -445,15 +501,14 @@ const Edit = () => {
                 method: 'POST',
                 body: formData, // Send the FormData object
             });
-    
+
             const result = await response.json();
-            console.log(result);
+
+            return result.data;
         } catch (error) {
             console.log("error here", error);
         }
     };
-
-    
 
     const fetchTopic = async () => {
         setTopics([])
@@ -603,12 +658,12 @@ const Edit = () => {
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Case Scenario</label>
                                         <JoditEditor
-                                        value={caseScenario || ""}
-                                        config={{
-                                            readonly: false,
-                                            height: 400,
-                                        }}
-                                        onBlur={(newContent) => setCaseScenario(newContent)}
+                                            value={caseScenario || ""}
+                                            config={{
+                                                readonly: false,
+                                                height: 400,
+                                            }}
+                                            onBlur={(newContent) => setCaseScenario(newContent)}
                                         />
                                     </div>
                                     <div className="mb-4">
@@ -618,23 +673,23 @@ const Edit = () => {
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Description</label>
                                         <JoditEditor
-                                        value={description || ""}
-                                        config={{
-                                            readonly: false,
-                                            height: 400,
-                                        }}
-                                        onBlur={(newContent) => setDescription(newContent)}
+                                            value={description || ""}
+                                            config={{
+                                                readonly: false,
+                                                height: 400,
+                                            }}
+                                            onBlur={(newContent) => setDescription(newContent)}
                                         />
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Note</label>
                                         <JoditEditor
-                                        value={note || ""}
-                                        config={{
-                                            readonly: false,
-                                            height: 400,
-                                        }}
-                                        onBlur={(newContent) => setNote(newContent)}
+                                            value={note || ""}
+                                            config={{
+                                                readonly: false,
+                                                height: 400,
+                                            }}
+                                            onBlur={(newContent) => setNote(newContent)}
                                         />
                                     </div>
                                     <div className='flex gap-4'>
@@ -652,23 +707,82 @@ const Edit = () => {
                             {step === 2 && (
                                 <form>
                                     <div className="mb-4">
-                                        <label className="block text-sm font-medium text-gray-700">Corporate Hierarchy Overview</label>
-                                        <input type="text" name="corporate_hierarchy_overview" value={corporateHierarchyOverview || ''} onChange={(e) => setCorporateHierarchyOverview(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
-                                    </div>
-
-                                    <div className="mb-4">
-                                        <label className="block text-sm font-medium text-gray-700">Tag</label>
+                                        <label className="block text-sm font-medium text-gray-700">
+                                            Corporate Hierarchy Overview
+                                        </label>
+                                        {/* <input
+                                            type="text"
+                                            name="corporate_hierarchy_overview"
+                                            value={corporateHierarchyOverview || ""}
+                                            onChange={(e) =>
+                                                setCorporateHierarchyOverview(e.target.value)
+                                            }
+                                            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                        /> */}
                                         <JoditEditor
-                                            value={tag || ""}
+                                            value={corporateHierarchyOverview || ""}
                                             config={{
                                                 readonly: false,
                                                 height: 400,
                                             }}
+                                            className='mt-2'
                                             onBlur={(newContent) => setTag(newContent)}
-                                            />
+                                        />
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <div className="mb-4">
+                                            <label className="block text-sm font-medium text-gray-700">Tag</label>
+                                            <div className="flex items-center mt-1">
+                                                <input
+                                                    type="text"
+                                                    value={tag}
+                                                    onChange={(e) => setTag(e.target.value)}
+                                                    onKeyDown={handleKeyDown}  // Add tag on "Enter" press
+                                                    className="p-2 border border-gray-300 rounded-md flex-grow"
+                                                    placeholder="Type and press Enter or click Add"
+                                                />
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
+                                                        handleAddTag()
+                                                    }}
+                                                    className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md"
+                                                >
+                                                    Add
+                                                </button>
+                                            </div>
+
+                                            {/* Display the tags */}
+                                            <div className="mt-3 flex flex-wrap">
+                                                {console.log(tags)
+                                                }
+                                                {Array.isArray(tags) && tags.length > 0 ? (
+                                                    tags.map((tag, index) => (
+                                                        <div
+                                                            key={index}
+                                                            className="flex items-center bg-gray-200 text-gray-700 px-3 py-1 rounded-full mr-2 mb-2"
+                                                        >
+                                                            {tag}
+                                                            <button
+                                                                onClick={() => handleRemoveTag(tag)}
+                                                                className="ml-2 text-red-500 hover:text-red-700"
+                                                            >
+                                                                ✕
+                                                            </button>
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <p className="text-gray-500">No tags available</p>
+                                                )}
+                                            </div>
+
+                                        </div>
                                     </div>
                                     <div className="mb-4">
-                                        <label className="block text-sm font-medium text-gray-700">Search Topic</label>
+                                        <label className="block text-sm font-medium text-gray-700">
+                                            Search Topic
+                                        </label>
 
                                         {/* Search Input */}
                                         <input
@@ -681,7 +795,17 @@ const Edit = () => {
 
                                         {/* Show selected topic */}
                                         {selectedTopic && (
-                                            <p className="mt-2 text-gray-600 p-2 bg-green-200 rounded-lg flex items-center justify-between ">{selectedTopic?.topic} <span className='cursor-pointer' onClick={() => { setSelectedTopic('') }}><X /></span></p>
+                                            <p className="mt-2 text-gray-600 p-2 bg-green-200 rounded-lg flex items-center justify-between ">
+                                                {selectedTopic?.topic}{" "}
+                                                <span
+                                                    className="cursor-pointer"
+                                                    onClick={() => {
+                                                        setSelectedTopic("");
+                                                    }}
+                                                >
+                                                    <X />
+                                                </span>
+                                            </p>
                                         )}
 
                                         {/* Div to show filtered topics */}
@@ -698,20 +822,34 @@ const Edit = () => {
                                                         </div>
                                                     ))
                                                 ) : (
-                                                    <div className="p-2 text-gray-500">No topics found</div>
+                                                    <div className="p-2 text-gray-500">
+                                                        No topics found
+                                                    </div>
                                                 )}
                                             </div>
                                         )}
                                     </div>
-                                    <div className='flex gap-4'>
-                                        <button onClick={(e) => {
-                                            e.preventDefault()
-                                            setStep((pre) => pre -= 1)
-                                        }} type="button" className="mt-4 p-2 bg-blue-600 text-white rounded ">Back</button>
-                                        <button onClick={(e) => {
-                                            e.preventDefault()
-                                            addActivityAPI(2)
-                                        }} type="button" className="mt-4 p-2 bg-blue-600 text-white rounded">Next</button>
+                                    <div className="flex gap-4">
+                                        <button
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setStep((pre) => (pre -= 1));
+                                            }}
+                                            type="button"
+                                            className="mt-4 p-2 bg-blue-600 text-white rounded "
+                                        >
+                                            Back
+                                        </button>
+                                        <button
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                addActivityAPI(2);
+                                            }}
+                                            type="button"
+                                            className="mt-4 p-2 bg-blue-600 text-white rounded"
+                                        >
+                                            Next
+                                        </button>
                                     </div>
                                 </form>
                             )}
@@ -729,16 +867,16 @@ const Edit = () => {
                                                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                                                 />
                                                 <label className="block text-sm font-medium text-gray-700 mt-2">Description</label>
-                                                 <JoditEditor
+                                                <JoditEditor
                                                     value={tool.description}
                                                     config={{
-                                                    readonly: false,
-                                                    height: 400,
+                                                        readonly: false,
+                                                        height: 400,
                                                     }}
                                                     onBlur={(newContent) => handleToolChange(
-                                                    index,
-                                                    "description",
-                                                    newContent
+                                                        index,
+                                                        "description",
+                                                        newContent
                                                     )}
                                                 />
                                                 <label className="block text-sm font-medium text-gray-700 mt-2">Category</label>
@@ -768,6 +906,9 @@ const Edit = () => {
                                                     onChange={(e) => handleToolChange(index, 'image', e.target.files[0])}
                                                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                                                 />
+                                                <div className=' w-full h-14 mt-2 rounded-lg overflow-hidden flex justify-between px-5 items-center border-2'>
+                                                    <img src={tool?.image} className='h-full' alt='tool-image' />
+                                                </div>
                                             </div>
                                         ))}
 
@@ -789,7 +930,7 @@ const Edit = () => {
                                                 height: 400,
                                             }}
                                             onBlur={(newContent) => setSnapShot(newContent)}
-                                            />
+                                        />
                                     </div>
                                     <div className='flex gap-4'>
                                         <button onClick={(e) => {
@@ -812,12 +953,12 @@ const Edit = () => {
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Image Associated</label>
                                         <JoditEditor
-                                        value={imageAssc || ""}
-                                        config={{
-                                            readonly: false,
-                                            height: 400,
-                                        }}
-                                        onBlur={(newContent) => setImageAssc(newContent)}
+                                            value={imageAssc || ""}
+                                            config={{
+                                                readonly: false,
+                                                height: 400,
+                                            }}
+                                            onBlur={(newContent) => setImageAssc(newContent)}
                                         />
                                     </div>
 
@@ -860,14 +1001,14 @@ const Edit = () => {
                                                 />
 
                                                 <label className="block text-sm font-medium text-gray-700 mt-2">Description</label>
-                                           
-                                                  <JoditEditor
-                                                value={jobRole.description}
-                                                config={{
-                                                    readonly: false,
-                                                    height: 400,
-                                                }}
-                                                onBlur={(newContent) => handleJobRoleChange(index, 'description', newContent)}
+
+                                                <JoditEditor
+                                                    value={jobRole.description}
+                                                    config={{
+                                                        readonly: false,
+                                                        height: 400,
+                                                    }}
+                                                    onBlur={(newContent) => handleJobRoleChange(index, 'description', newContent)}
                                                 />
 
                                                 <label className="block text-sm font-medium text-gray-700 mt-2">Average Salary</label>
@@ -958,14 +1099,14 @@ const Edit = () => {
                                             />
 
                                             <label className="block text-sm font-medium text-gray-700 mt-2">Description</label>
-                                             <JoditEditor
+                                            <JoditEditor
                                                 value={newsItem.description}
                                                 config={{
                                                     readonly: false,
                                                     height: 400,
                                                 }}
                                                 onBlur={(newContent) => handleNewsChange(index, 'description', newContent)}
-                                                />
+                                            />
 
                                             <label className="block text-sm font-medium text-gray-700 mt-2">
                                                 Link <span className="text-red-500">*</span>

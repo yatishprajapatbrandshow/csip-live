@@ -17,7 +17,7 @@ const Add = () => {
   const userData = useSelector((state) => state.session.userData);
 
   const [topics, setTopics] = useState([]);
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(2);
   const [name, setName] = useState("");
   const [shortName, setShortName] = useState("");
   const [objective, setObjective] = useState("");
@@ -27,7 +27,7 @@ const Add = () => {
   const [description, setDescription] = useState("");
   const [note, setNote] = useState("");
   const [corporateHierarchyOverview, setCorporateHierarchyOverview] = useState("");
-  const [tag, setTag] = useState("");
+  // const [tag, setTag] = useState("");
   const [snapShot, setSnapShot] = useState("");
   const [youtubeVideoLink, setYoutubeVideoLink] = useState("");
   const [imageAssc, setImageAssc] = useState("");
@@ -75,6 +75,32 @@ const Add = () => {
     "Empty",
     "Top Employees",
   ];
+
+  const [tag, setTag] = useState('');
+  const [tags, setTags] = useState([]);
+
+  // Function to handle adding the tag to the array
+  const handleAddTag = () => {
+    if (tag && !tags.includes(tag)) {
+      setTags([...tags, tag]);  // Add tag to the tags array
+      setTag('');  // Reset input field
+    }
+  };
+
+  // Function to handle removing a tag
+  const handleRemoveTag = (tagToRemove) => {
+    setTags(tags.filter((t) => t !== tagToRemove));  // Remove the selected tag
+  };
+
+  // Handle "Enter" key press to add tag
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddTag();
+    }
+  };
+
+
   // Job Roles And Description Functionality
   const [jobRolesAndDescription, setJobRolesAndDescription] = useState([
     {
@@ -345,7 +371,7 @@ const Add = () => {
     }
     if (step === 2) {
       (payload.corporate_hierarchy_overview = corporateHierarchyOverview),
-        (payload.tag = tag),
+        (payload.tag = tags),
         (payload.topic_id = selectedTopic?.sid || "");
     }
     if (step === 3) {
@@ -426,7 +452,7 @@ const Add = () => {
 
   const fetchStepApi = async (payload) => {
     try {
-      const response = await fetch(`${API_URL}activity/step`, {
+      const response = await fetch(`${API_URL_LOCAL}activity/step`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -465,7 +491,7 @@ const Add = () => {
       });
 
       const responseData = await response.json();
-      
+
 
       if (responseData.status === true) {
         alert(responseData.message);
@@ -520,35 +546,34 @@ const Add = () => {
 
 
   const handleFileChange = (e) => {
-      setFile(e.target.files[0]);
-  };
-  
-  const handleUpload = async () => {
-      if (!file) {
-          setUploadStatus('Please select a file first.');
-          return;
-      }
-      
-      const formData = new FormData();
-      formData.append('fileUp', file); // Append the file to the form data
-  
-      for (const [key, value] of formData.entries()) {
-          console.log(key, value); // This will log the key-value pairs in the FormData
-      }
-  
-      try {
-          const response = await fetch('/api/upload', {
-              method: 'POST',
-              body: formData, // Send the FormData object
-          });
-  
-          const result = await response.json();
-          console.log(result);
-      } catch (error) {
-          console.log("error here", error);
-      }
+    setFile(e.target.files[0]);
   };
 
+  const handleUpload = async () => {
+    if (!file) {
+      setUploadStatus('Please select a file first.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('fileUp', file); // Append the file to the form data
+
+    for (const [key, value] of formData.entries()) {
+      console.log(key, value); // This will log the key-value pairs in the FormData
+    }
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData, // Send the FormData object
+      });
+
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.log("error here", error);
+    }
+  };
 
 
   return (
@@ -602,19 +627,16 @@ const Add = () => {
                 {dataFormStepData?.map((label, index) => (
                   <li
                     key={index}
-                    className={`relative flex-1 after:content-[''] after:w-0.5 after:h-full ${
-                      step + 1 > index
-                        ? "after:bg-blue-500"
-                        : "after:bg-gray-300"
-                    } after:inline-block after:absolute after:-bottom-12 after:left-4 lg:after:left-5`}
+                    className={`relative flex-1 after:content-[''] after:w-0.5 after:h-full ${step + 1 > index
+                      ? "after:bg-blue-500"
+                      : "after:bg-gray-300"
+                      } after:inline-block after:absolute after:-bottom-12 after:left-4 lg:after:left-5`}
                   >
                     <a className="flex items-center  w-full">
                       <span
-                        className={`w-8 h-8 ${
-                          step + 1 > index ? "bg-blue-500" : "bg-gray-100"
-                        } border-2 border-gray-300 rounded-full flex justify-center items-center mr-3 text-sm ${
-                          step + 1 > index ? "text-white" : "text-gray-900"
-                        } lg:w-10 lg:h-10`}
+                        className={`w-8 h-8 ${step + 1 > index ? "bg-blue-500" : "bg-gray-100"
+                          } border-2 border-gray-300 rounded-full flex justify-center items-center mr-3 text-sm ${step + 1 > index ? "text-white" : "text-gray-900"
+                          } lg:w-10 lg:h-10`}
                       >
                         {step + 1 > index ? (
                           <svg
@@ -638,9 +660,8 @@ const Add = () => {
                       </span>
                       <div className="block">
                         <h4 className="text-base  text-gray-800"> {label} </h4>
-                        <span className="text-sm text-gray-600">{`Step ${
-                          index + 1
-                        }`}</span>
+                        <span className="text-sm text-gray-600">{`Step ${index + 1
+                          }`}</span>
                       </div>
                     </a>
                   </li>
@@ -832,7 +853,7 @@ const Add = () => {
                     <label className="block text-sm font-medium text-gray-700">
                       Corporate Hierarchy Overview
                     </label>
-                    <input
+                    {/* <input
                       type="text"
                       name="corporate_hierarchy_overview"
                       value={corporateHierarchyOverview || ""}
@@ -840,13 +861,19 @@ const Add = () => {
                         setCorporateHierarchyOverview(e.target.value)
                       }
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                    /> */}
+                    <JoditEditor
+                      value={corporateHierarchyOverview || ""}
+                      config={{
+                        readonly: false,
+                        height: 400,
+                      }}
+                      className="mt-2"
+                      onBlur={(newContent) => setTag(newContent)}
                     />
                   </div>
 
                   <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Tag
-                    </label>
                     {/*<input
                       type="text"
                       name="tag"
@@ -854,14 +881,54 @@ const Add = () => {
                       onChange={(e) => setTag(e.target.value)}
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                     />*/}
-                    <JoditEditor
+                    {/* <JoditEditor
                       value={tag}
                       config={{
                         readonly: false,
                         height: 400,
                       }}
                       onBlur={(newContent) => setTag(newContent)}
-                    />
+                    /> */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">Tag</label>
+                      <div className="flex items-center mt-1">
+                        <input
+                          type="text"
+                          value={tag}
+                          onChange={(e) => setTag(e.target.value)}
+                          onKeyDown={handleKeyDown}  // Add tag on "Enter" press
+                          className="p-2 border border-gray-300 rounded-md flex-grow"
+                          placeholder="Type and press Enter or click Add"
+                        />
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handleAddTag()
+                          }}
+                          className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md"
+                        >
+                          Add
+                        </button>
+                      </div>
+
+                      {/* Display the tags */}
+                      <div className="mt-3 flex flex-wrap">
+                        {tags.map((tag, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center bg-gray-200 text-gray-700 px-3 py-1 rounded-full mr-2 mb-2"
+                          >
+                            {tag}
+                            <button
+                              onClick={() => handleRemoveTag(tag)}
+                              className="ml-2 text-red-500 hover:text-red-700"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">
@@ -962,19 +1029,19 @@ const Add = () => {
                         <label className="block text-sm font-medium text-gray-700 mt-2">
                           Description
                         </label>
-                         <JoditEditor
-                            value={tool.description}
-                            config={{
-                              readonly: false,
-                              height: 400,
-                            }}
-                            onBlur={(newContent) => handleToolChange(
-                              index,
-                              "description",
-                              newContent
-                            )}
-                          />
-                        
+                        <JoditEditor
+                          value={tool.description}
+                          config={{
+                            readonly: false,
+                            height: 400,
+                          }}
+                          onBlur={(newContent) => handleToolChange(
+                            index,
+                            "description",
+                            newContent
+                          )}
+                        />
+
                         <label className="block text-sm font-medium text-gray-700 mt-2">
                           Category
                         </label>
@@ -1025,11 +1092,10 @@ const Add = () => {
                       type="button"
                       onClick={addToolField}
                       disabled={!isLastToolFilled()} // Disable if last tool's fields are not filled
-                      className={`mt-4 p-2 rounded ${
-                        isLastToolFilled()
-                          ? "bg-blue-600 text-white hover:bg-blue-700"
-                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      }`}
+                      className={`mt-4 p-2 rounded ${isLastToolFilled()
+                        ? "bg-blue-600 text-white hover:bg-blue-700"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
                     >
                       Add Another Tool
                     </button>
@@ -1045,7 +1111,7 @@ const Add = () => {
                       onChange={(e) => setSnapShot(e.target.value)}
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                     />*/}
-                     <JoditEditor
+                    <JoditEditor
                       value={snapShot}
                       config={{
                         readonly: false,
@@ -1096,14 +1162,14 @@ const Add = () => {
                     <label className="block text-sm font-medium text-gray-700">
                       Image Associated
                     </label>
-                   { /*<input
+                    { /*<input
                       type="text"
                       name="image_assc"
                       value={imageAssc || ""}
                       onChange={(e) => setImageAssc(e.target.value)}
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                     />*/}
-                     <JoditEditor
+                    <JoditEditor
                       value={description}
                       config={{
                         readonly: false,
@@ -1279,11 +1345,10 @@ const Add = () => {
                     <button
                       type="button"
                       onClick={addJobRoleField}
-                      className={`mt-4 p-2 ${
-                        canAddNewJobRole()
-                          ? "bg-green-600"
-                          : "bg-gray-300 cursor-not-allowed"
-                      } text-white rounded hover:bg-green-700`}
+                      className={`mt-4 p-2 ${canAddNewJobRole()
+                        ? "bg-green-600"
+                        : "bg-gray-300 cursor-not-allowed"
+                        } text-white rounded hover:bg-green-700`}
                       disabled={!canAddNewJobRole()}
                     >
                       Add Another Job Role
