@@ -11,6 +11,7 @@ const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
 import { useRouter } from 'next/router';
 import { decrypt } from '@/utils/cryptoUtils';
 import { getLocalStorageItem } from '@/Config/localstorage';
+import ImageUploader from '@/Components/ImageUploader';
 
 const Edit = () => {
     const editor = useRef(null);
@@ -251,9 +252,9 @@ const Edit = () => {
         {
             name: '',
             description: '',
-            category: '',
-            version: '',
-            download: '',
+            // category: '',
+            // version: '',
+            // download: '',
             image: ''
         }
     ]);
@@ -272,9 +273,9 @@ const Edit = () => {
             {
                 name: '',
                 description: '',
-                category: '',
-                version: '',
-                download: '',
+                // category: '',
+                // version: '',
+                // download: '',
                 image: ''
             }
         ]);
@@ -283,7 +284,8 @@ const Edit = () => {
     // Function to check if the last tool is filled with required fields
     const isLastToolFilled = () => {
         const lastTool = toolsUsed[toolsUsed.length - 1];
-        return lastTool?.name?.trim() !== '' && lastTool?.category?.trim() !== ''; // Only check required fields
+        // return lastTool?.name?.trim() !== '' && lastTool?.category?.trim() !== ''; // Only check required fields
+        return lastTool?.name?.trim() !== ''  // Only check required fields
     };
 
     // Related Topic And News Functionality
@@ -350,7 +352,8 @@ const Edit = () => {
                 payload.short_name = shortName,
                 payload.objective = objective,
                 payload.short_desc = shortDesc,
-                payload.corporate_id = userData?.sid
+                payload.corporate_id = userData?.sid,
+                payload.image_assc = imageAssc
         }
         if (step === 1) {
             payload.case_scenario = caseScenario,
@@ -368,8 +371,8 @@ const Edit = () => {
                 payload.snap_shot = snapShot
         }
         if (step === 4) {
-            payload.youtube_video_link = youtubeVideoLink,
-                payload.image_assc = imageAssc
+            payload.youtube_video_link = youtubeVideoLink
+
         }
 
         if (step === 5) {
@@ -414,6 +417,20 @@ const Edit = () => {
         }
     }
     const fetchEditApi = async (payload) => {
+        if (payload.image_assc) {
+            try {
+                // Wait for the image upload to complete
+                const result = await handleUpload(payload.image_assc);
+                console.log(result);
+
+                if (result?.fileUrl) {
+                    const imageAsscFinal = result?.fileUrl?.split('https://csip-image.blr1.digitaloceanspaces.com/img/content/')[1];
+                    payload.image_assc = imageAsscFinal
+                }
+            } catch (error) {
+                console.error(`Error uploading image`, error);
+            }
+        }
         try {
             const response = await fetch(`${API_URL}activity/edit`, {
                 method: "POST",
@@ -446,7 +463,7 @@ const Edit = () => {
                         // Wait for the image upload to complete
                         const result = await handleUpload(tool.image);
                         if (result?.fileUrl) {
-                            tool.image = result?.fileUrl; // Replace the file with the uploaded URL
+                            tool.image = result?.fileUrl.split('https://csip-image.blr1.digitaloceanspaces.com/img/content/')[1]; // Replace the file with the uploaded URL
                         }
                     } catch (error) {
                         console.error(`Error uploading image for tool: ${tool.name || "Unnamed tool"}`, error);
@@ -464,7 +481,7 @@ const Edit = () => {
                         const result = await handleUpload(news.image);
 
                         if (result?.fileUrl) {
-                            news.image = result?.fileUrl; // Replace the file with the uploaded URL
+                            news.image = result?.fileUrl.split('https://csip-image.blr1.digitaloceanspaces.com/img/content/')[1]; // Replace the file with the uploaded URL
                         }
                     } catch (error) {
                         console.error(`Error uploading image for tool: ${news.name || "Unnamed tool"}`, error);
@@ -566,8 +583,13 @@ const Edit = () => {
                 <div className="absolute bg-white/50 backdrop-blur-sm w-full h-full left-0 top-0" style={{
                     clipPath: 'polygon(100% 35%, 0% 100%, 100% 100%)'
                 }} />
-
                 <div className="mx-auto pt-24 relative z-10 px-10 bg-white">
+
+                    <div className="grid grid-cols-4">
+                        <div className="col-span-4 flex gap-5 mb-5 justify-end">
+                            <ImageUploader />
+                        </div>
+                    </div>
                     <div className='grid grid-cols-4'>
                         <div className='col-span-1 sticky top-0'>
                             <ol className="h-fit overflow-hidden space-y-8">
@@ -631,6 +653,20 @@ const Edit = () => {
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Corporate ID</label>
                                         <input type="text" name="corporate_id" value={userData?.sid || ''} disabled className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700">
+                                            Image Associated
+                                        </label>
+                                        <input
+                                            type="file"
+                                            onChange={(e) => {
+                                                e.preventDefault()
+                                                setImageAssc(e.target.files[0])
+                                            }
+                                            }
+                                            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                        />
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Objective</label>
@@ -776,7 +812,7 @@ const Edit = () => {
                                                     tags.map((tag, index) => (
                                                         <div
                                                             key={index}
-                                                            className="flex items-center bg-gray-200 text-gray-700 px-3 py-1 rounded-full mr-2 mb-2"
+                                                            className="flex items-center bg-green-200 text-gray-700 px-3 py-1 rounded-full mr-2 mb-2"
                                                         >
                                                             {tag}
                                                             <button
@@ -970,17 +1006,6 @@ const Edit = () => {
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Youtube Video Link</label>
                                         <input type="text" name="youtube_video_link" value={youtubeVideoLink || ''} onChange={(e) => setYoutubeVideoLink(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
-                                    </div>
-                                    <div className="mb-4">
-                                        <label className="block text-sm font-medium text-gray-700">Image Associated</label>
-                                        <JoditEditor
-                                            value={imageAssc || ""}
-                                            config={{
-                                                readonly: false,
-                                                height: 400,
-                                            }}
-                                            onBlur={(newContent) => setImageAssc(newContent)}
-                                        />
                                     </div>
 
                                     <div className='flex gap-4'>

@@ -168,9 +168,9 @@ const Add = () => {
     {
       name: "",
       description: "",
-      category: "",
-      version: "",
-      download: "",
+      // category: "",
+      // version: "",
+      // download: "",
       image: "",
     },
   ]);
@@ -189,9 +189,9 @@ const Add = () => {
       {
         name: "",
         description: "",
-        category: "",
-        version: "",
-        download: "",
+        // category: "",
+        // version: "",
+        // download: "",
         image: "",
       },
     ]);
@@ -200,7 +200,8 @@ const Add = () => {
   // Function to check if the last tool is filled with required fields
   const isLastToolFilled = () => {
     const lastTool = toolsUsed[toolsUsed.length - 1];
-    return lastTool.name.trim() !== "" && lastTool.category.trim() !== ""; // Only check required fields
+    return lastTool.name.trim() !== ""; // Only check required fields
+    // return lastTool.name.trim() !== "" && lastTool.category.trim() !== ""; // Only check required fields
   };
 
   // Related Topic And News Functionality
@@ -272,6 +273,7 @@ const Add = () => {
         (payload.short_name = shortName),
         (payload.objective = objective),
         (payload.short_desc = shortDesc);
+      (payload.image_assc = imageAssc);
     }
     if (step === 1) {
       (payload.case_scenario = caseScenario),
@@ -336,6 +338,23 @@ const Add = () => {
 
   const fetchAddApi = async (payload) => {
 
+    if (payload.image_assc) {
+      try {
+        // Wait for the image upload to complete
+        const result = await handleUpload(payload.image_assc);
+        console.log(result);
+
+        if (result?.fileUrl) {
+          const imageAsscFinal = result?.fileUrl?.split('https://csip-image.blr1.digitaloceanspaces.com/img/content/')[1];
+          console.log(imageAsscFinal);
+
+          payload.image_assc = imageAsscFinal
+        }
+      } catch (error) {
+        console.error(`Error uploading image`, error);
+      }
+    }
+
     try {
       const response = await fetch(`${API_URL}activity/add`, {
         method: "POST",
@@ -372,7 +391,7 @@ const Add = () => {
             console.log(result);
 
             if (result?.fileUrl) {
-              tool.image = result?.fileUrl;
+              tool.image = result?.fileUrl?.split('https://csip-image.blr1.digitaloceanspaces.com/img/content/')[1];
             }
           } catch (error) {
             console.error(`Error uploading image for tool: ${tool.name || "Unnamed tool"}`, error);
@@ -392,7 +411,7 @@ const Add = () => {
 
 
             if (result?.fileUrl) {
-              news.image = result?.fileUrl;
+              news.image = result?.fileUrl?.split('https://csip-image.blr1.digitaloceanspaces.com/img/content/')[1];
             }
           } catch (error) {
             console.error(`Error uploading image for tool: ${news.name || "Unnamed tool"}`, error);
@@ -560,7 +579,7 @@ const Add = () => {
               >
                 Draft
               </button>
-            <ImageUploader />
+              <ImageUploader />
             </div>
             <div className="col-span-1 sticky top-0">
               <ol className="h-fit overflow-hidden space-y-8">
@@ -647,6 +666,20 @@ const Add = () => {
                       name="corporate_id"
                       value={userData?.sid || ""}
                       disabled
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Image Associated
+                    </label>
+                    <input
+                      type="file"
+                      onChange={(e) => {
+                        e.preventDefault()
+                        setImageAssc(e.target.files[0])
+                      }
+                      }
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                     />
                   </div>
@@ -809,7 +842,7 @@ const Add = () => {
                         height: 400,
                       }}
                       className="mt-2"
-                      onBlur={(newContent) => setTag(newContent)}
+                      onBlur={(newContent) => setCorporateHierarchyOverview(newContent)}
                     />
                   </div>
 
@@ -856,11 +889,14 @@ const Add = () => {
                         {tags.map((tag, index) => (
                           <div
                             key={index}
-                            className="flex items-center bg-gray-200 text-gray-700 px-3 py-1 rounded-full mr-2 mb-2"
+                            className="flex items-center bg-green-200 text-gray-700 px-3 py-1 rounded-full mr-2 mb-2"
                           >
                             {tag}
                             <button
-                              onClick={() => handleRemoveTag(tag)}
+                              onClick={(e) => {
+                                e.preventDefault()
+                                handleRemoveTag(tag)
+                              }}
                               className="ml-2 text-red-500 hover:text-red-700"
                             >
                               ✕
@@ -1098,26 +1134,7 @@ const Add = () => {
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                     />
                   </div>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Image Associated
-                    </label>
-                    { /*<input
-                      type="text"
-                      name="image_assc"
-                      value={imageAssc || ""}
-                      onChange={(e) => setImageAssc(e.target.value)}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                    />*/}
-                    <JoditEditor
-                      value={description}
-                      config={{
-                        readonly: false,
-                        height: 400,
-                      }}
-                      onBlur={(newContent) => setImageAssc(newContent)}
-                    />
-                  </div>
+
 
                   <div className="flex gap-4">
                     <button

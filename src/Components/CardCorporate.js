@@ -28,15 +28,15 @@ const CardCorporate = ({ activity }) => {
         <div className="bg-white rounded-2xl overflow-hidden w-[300px] shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 hover:scale-105">
             <div className="relative h-40">
                 {activity.image_assc ?
-                    <Image
-                        src={`https://csip.fieindia.org/images/activity/${activity.image_assc}`}
+                    <img
+                        src={activity?.image_assc}
                         alt={activity.title}
                         layout="fill"
                         objectFit="cover"
                         className="w-full h-full object-cover"
                     />
                     :
-                    <Image
+                    <img
                         src={DefaultIMG}
                         alt={activity.title}
                         layout="fill"
@@ -92,7 +92,7 @@ const CardCorporate = ({ activity }) => {
                     View
                 </button>
                 <button onClick={handleClick} className="bg-gray-200 w-full text-gray-800 hover:bg-gray-300 transition-colors">
-                   Edit
+                    Edit
                 </button>
             </div>
         </div>
