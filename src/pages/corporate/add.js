@@ -980,7 +980,7 @@ const Add = () => {
                           )}
                         />
 
-                        <label className="block text-sm font-medium text-gray-700 mt-2">
+                        {/* <label className="block text-sm font-medium text-gray-700 mt-2">
                           Category
                         </label>
                         <input
@@ -1012,7 +1012,7 @@ const Add = () => {
                             handleToolChange(index, "download", e.target.value)
                           }
                           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                        />
+                        /> */}
                         <label className="block text-sm font-medium text-gray-700 mt-2">
                           Image
                         </label>

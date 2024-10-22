@@ -897,7 +897,7 @@ const Edit = () => {
                                                         newContent
                                                     )}
                                                 />
-                                                <label className="block text-sm font-medium text-gray-700 mt-2">Category</label>
+                                                {/* <label className="block text-sm font-medium text-gray-700 mt-2">Category</label>
                                                 <input
                                                     type="text"
                                                     value={tool.category}
@@ -917,17 +917,19 @@ const Edit = () => {
                                                     value={tool.download}
                                                     onChange={(e) => handleToolChange(index, 'download', e.target.value)}
                                                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                                                />
+                                                /> */}
                                                 <label className="block text-sm font-medium text-gray-700 mt-2">Image</label>
                                                 <input
                                                     type="file"
                                                     onChange={(e) => handleToolChange(index, 'image', e.target.files[0])}
                                                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                                                 />
-                                                <div className=' w-full h-14 mt-2 rounded-lg overflow-hidden flex justify-between px-5 items-center border-2'>
-                                                    {console.log(tool?.image)}
-                                                    <img src={tool?.image} className='h-full' alt='tool-image' />
-                                                </div>
+                                                {
+                                                    tool?.image &&
+                                                    <div className=' w-full h-14 mt-2 rounded-lg overflow-hidden flex justify-between px-5 items-center border-2'>
+                                                        <img src={tool?.image} className='h-full' alt='tool-image' />
+                                                    </div>
+                                                }
                                             </div>
                                         ))}
 
