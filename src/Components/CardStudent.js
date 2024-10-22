@@ -32,12 +32,11 @@ const CardStudent = ({ activity, theme }) => {
     const [showPopup, setShowPopup] = useState(false);
     const OrderDet = useSelector((state) => state.orderId.orderId);
     const favouriteActivities = useSelector(
-        (state) => state.favouriteActivity.favouriteActivities // Accessing the state correctly
+        (state) => state.favouriteActivity.favouriteActivities 
     );
     let OrderDetNew;
     
 
-    console.log(activity);
 
     const toggleHeart = async (activity) => {
         if (!activity) {
@@ -79,11 +78,12 @@ const CardStudent = ({ activity, theme }) => {
     };
 
     const handleClick = (activity) => {
-        const encryptedId = encrypt(activity._id);
+        const formattedName = activity.short_name.replace(/\s+/g, '-').toLowerCase();
         router.push({
-            pathname: '/landing',
-            query: { item: encryptedId }
+            pathname: formattedName,
+            query: { item: activity._id }
         });
+
     };
 
     const handlePopUp = () => {
@@ -241,9 +241,7 @@ const CardStudent = ({ activity, theme }) => {
 
     return (
         <>
-            
-            
-            <div className="bg-white rounded-2xl overflow-hidden w-[300px] shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 hover:scale-105">
+            <div className="bg-white rounded-2xl overflow-hidden w-[300px] shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2 hover:scale-105">
                 <div className="relative h-40 ">
                     {activity.image_assc ?
                         <Image

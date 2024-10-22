@@ -1,13 +1,13 @@
 'use client';
 
-import { Boxes, ChartNoAxesCombined, Clapperboard, X } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import { Boxes, ChartNoAxesCombined, Clapperboard } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { API_URL } from '@/Config/Config';
-import { decrypt } from '@/utils/cryptoUtils';
 import Loader from '@/Components/Loader';
 import Header from '@/Components/Header';
 import Footer from '@/Components/Footer';
+
 
 const cardData = [
     {
@@ -55,89 +55,33 @@ const featureData = [
         description: 'Earn an industry-recognized certificate upon completion, boosting your resume and standing out to employers on LinkedIn.',
     },
 ];
-
-const quoteSvg = (
-    <svg aria-hidden="true" width="105" height="78" className="absolute left-6 top-6 fill-slate-100">
-        <path d="M25.086 77.292c-4.821 0-9.115-1.205-12.882-3.616-3.767-2.561-6.78-6.102-9.04-10.622C1.054 58.534 0 53.411 0 47.686c0-5.273.904-10.396 2.712-15.368 1.959-4.972 4.746-9.567 8.362-13.786a59.042 59.042 0 0 1 12.43-11.3C28.325 3.917 33.599 1.507 39.324 0l11.074 13.786c-6.479 2.561-11.677 5.951-15.594 10.17-3.767 4.219-5.65 7.835-5.65 10.848 0 1.356.377 2.863 1.13 4.52.904 1.507 2.637 3.089 5.198 4.746 3.767 2.41 6.328 4.972 7.684 7.684 1.507 2.561 2.26 5.5 2.26 8.814 0 5.123-1.959 9.19-5.876 12.204-3.767 3.013-8.588 4.52-14.464 4.52Zm54.24 0c-4.821 0-9.115-1.205-12.882-3.616-3.767-2.561-6.78-6.102-9.04-10.622-2.11-4.52-3.164-9.643-3.164-15.368 0-5.273.904-10.396 2.712-15.368 1.959-4.972 4.746-9.567 8.362-13.786a59.042 59.042 0 0 1 12.43-11.3C82.565 3.917 87.839 1.507 93.564 0l11.074 13.786c-6.479 2.561-11.677 5.951-15.594 10.17-3.767 4.219-5.65 7.835-5.65 10.848 0 1.356.377 2.863 1.13 4.52.904 1.507 2.637 3.089 5.198 4.746 3.767 2.41 6.328 4.972 7.684 7.684 1.507 2.561 2.26 5.5 2.26 8.814 0 5.123-1.959 9.19-5.876 12.204-3.767 3.013-8.588 4.52-14.464 4.52Z" />
-    </svg>
-)
-
-const landing = () => {
+const landing = ({ initialData, success }) => {
     const router = useRouter();
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [popupContent, setPopupContent] = useState({ title: '', moreData: '', icon: '' });
-    const [allCurriculum, setAllCurriculum] = useState([]);
     const [loader, setLoader] = useState(true);
-    const [id, setId] = useState(null);
+    const [allCurriculum, setAllCurriculum] = useState([]);
 
     useEffect(() => {
-        if (router.query.item) {
-            
-            fetchAllCurriculum(router.query.item)
+        if (initialData && success) {
+            console.log(initialData);
+            setAllCurriculum(initialData.data);
+            setLoader(false); // Hide loader once data is set
+        } else {
+            setLoader(false); // Hide loader if no data
         }
-    }, [router.query]);
+    }, [initialData, success]);
 
-
-
-    const fetchAllCurriculum = async (sid) => {
-        
-        const APIURL = `${API_URL}activity/get-by-id?_id=${sid}`;
-        try {
-            const response = await fetch(APIURL, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                method: "GET",
-            });
-
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-
-            const responseData = await response.json();
-            console.log(responseData);
-
-            if (responseData.status === true) {
-                setAllCurriculum(responseData.data);
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        } finally {
-            setLoader(false);
-        }
-    };
-
-    useEffect(() => {
-        if (id) {
-            fetchAllCurriculum();
-        }
-    }, [id]);
-
-    const openPopup = (card) => {
-        setPopupContent({ title: card.title, moreData: card.moreData, icon: card.icon });
-        setIsPopupOpen(true);
-        document.body.style.overflow = 'hidden';
-    };
-
-    const closePopup = () => {
-        setIsPopupOpen(false);
-        document.body.style.overflow = '';
-    };
-
-    const { name = '', activity_category, activity_type, image_assc, amount, objective, short_name, short_desc, } = allCurriculum;
-
+    const { name = '' } = allCurriculum;
     const words = name.split(' ');
     const half = Math.ceil(words.length / 2);
     const firstHalf = words.slice(0, half).join(' ');
     const secondHalf = words.slice(half).join(' ');
+    const {  activity_category, activity_type, image_assc, amount, objective, short_name, short_desc, } = allCurriculum;
 
-
-
-
-    return (loader ? <Loader /> : 
+    return (
+        loader ? <Loader /> :
         <>
-        <Header/>
-        <section>
+            <Header />
+            <section>
             <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-4 pb-16 pt-20 lg:pt-10 grid grid-cols-12 gap-5">
                 <div className='col-span-8'>
                     <h1 className="max-w-4xl font-montserrat2 max-sm:text-3xl tracking-tight text-slate-900 sm:text-5xl">
@@ -231,39 +175,6 @@ const landing = () => {
                                     </div>
                                 ))}
                             </div>
-
-                            {/* Popup Overlay */}
-                            {isPopupOpen && (
-                                <div
-                                    className="fixed inset-0 z-10 bg-black/30 backdrop-blur-md flex items-center justify-center"
-                                    onClick={closePopup}
-                                >
-                                    {/* Popup Box */}
-                                    <div
-                                        className="relative bg-white p-8 rounded-3xl max-w-lg w-full m-4 shadow-2xl"
-                                        onClick={(e) => e.stopPropagation()} // Prevent close on clicking inside the popup
-                                    >
-                                        {/* Close Button */}
-                                        <button
-                                            onClick={closePopup}
-                                            className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
-                                        >
-                                            <X className="w-6 h-6" />
-                                        </button>
-                                        <div className="p-10">
-                                            {popupContent.icon}
-                                            <div className="mt-3">
-                                                <h2 className="text-2xl font-montserrat2 tracking-tight font-bold text-gray-950">
-                                                    {popupContent.title}
-                                                </h2>
-                                                <p className="mt-3 font-montserrat font-medium text-gray-500 tracking-tight">
-                                                    {popupContent.moreData}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
                         </div>
                         <div className="py-24">
                             <h3 className='font-montserrat2 tracking-tighter text-4xl'>Engage and Network</h3>
@@ -432,10 +343,57 @@ const landing = () => {
                     </div>
                 </section> */}
         </section>
-        <Footer />
+            <Footer />
         </>
-
-    )
+    );
 }
 
-export default landing
+export default landing;
+
+export async function getServerSideProps(context) {
+    const { item } = context.query;
+
+    const fetchAllCurriculum = async (item) => {
+        const APIURL = `${API_URL}activity/get-by-id?_id=${item}`;
+        try {
+            const response = await fetch(APIURL, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: "GET",
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const responseData = await response.json();
+            if (responseData.status === true) {
+                return {
+                    props: {
+                        initialData: responseData,
+                        success: true,
+                    },
+                };
+            }
+        } catch (error) {
+            return {
+                props: {
+                    initialData: null,
+                    success: false,
+                },
+            };
+        }
+    };
+
+    if (item) {
+        return await fetchAllCurriculum(item);
+    }
+
+    return {
+        props: {
+            initialData: null,
+            success: false,
+        },
+    };
+}

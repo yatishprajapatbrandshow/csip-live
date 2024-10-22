@@ -398,7 +398,7 @@ export default function DashboardCombind() {
                             <ReviewSlider reviews={reviews} />
                         </div>
                         <div className="bg-pink-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                            <h3 className="text-lg  text-purple-800 mb-2">Points Earned</h3>
+                            <h3 className="text-lg text-purple-800 mb-2">Points Earned</h3>
                             <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <CircularProgressBar value={62} text="62" color="text-pink-500" />
                             </div>
@@ -419,8 +419,8 @@ export default function DashboardCombind() {
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div className="bg-yellow-100 p-4 rounded-lg space-y-2 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <button onClick={() => router.push('/curriculum')} className="w-full text-left text-purple-800 border-b pb-3 border-gray-400 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5 ">👀 View Curriculum</button>
-                            <button className="w-full text-left text-purple-800 border-b pb-3 border-gray-400 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">📊 View Report</button>
-                            <button className="w-full text-left text-purple-800 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">🔄 Change Form</button>
+                            <button onClick={() => router.push('/Report')}  className="w-full text-left text-purple-800 border-b pb-3 border-gray-400 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">📊 View Report</button>
+                            <button onClick={() => router.push('/AppliedActivity')} className="w-full text-left text-purple-800 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">🔄 Applied Activity</button>
                         </div>
                         <div className="bg-[#dfccfa] p-4 rounded-lg col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
@@ -584,12 +584,12 @@ export default function DashboardCombind() {
                  
                 </div>
                 <div className="relative max-w-[1500px] mx-auto w-full pt-10 mb-10">
-                    <div className="bg-purple-800 bg-BGRec bg-[length:40px_40px] rounded-lg overflow-hidden">
-                        <div className="bg-gray-900/70">
+                    <div className="bg-BGRec bg-[length:40px_40px] rounded-lg overflow-hidden">
+                        <div className="">
                             {newActivities && Array.isArray(newActivities) && newActivities.length > 0 ?
                                 <div className=''>
                                     <div className='p-10 '>
-                                    <Activities theme={"black"} title="New Activity" cardData={newActivities}  />
+                                        <Activities theme={"black"} title="New Activity" cardData={newActivities}  />
                                     </div>
                                 </div>
                             : null}

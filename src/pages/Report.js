@@ -61,10 +61,6 @@ function Report() {
     <>
       <Header />
       <div className="container mx-auto p-4">
-        <button className="mb-4 flex items-center text-gray-600 hover:text-gray-800">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Go Back
-        </button>
         <h1 className="mb-6 text-2xl font-bold">Report</h1>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
