@@ -116,8 +116,6 @@ const Edit = () => {
 
             if (responseData.status === true) {
                 const data = responseData.data;
-                console.log(data);
-
                 setName(data?.name);
                 setShortName(data?.short_name);
                 setObjective(data?.objective);
@@ -127,6 +125,7 @@ const Edit = () => {
                 setDescription(data?.description);
                 setNote(data?.note);
                 setCorporateHierarchyOverview(data?.corporate_hierarchy_overview);
+
                 if (Array.isArray(data?.tag)) {
                     setTags(data?.tag);
                 } else {
