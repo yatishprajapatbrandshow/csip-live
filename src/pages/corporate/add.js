@@ -594,7 +594,7 @@ const Add = () => {
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                  router.push("ActivityList");
+                  router.push("activitylist");
                 }}
                 type="button"
                 className="mb-2 p-2 bg-blue-600 text-white rounded"

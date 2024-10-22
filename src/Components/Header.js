@@ -37,7 +37,7 @@ const Header = ({ session = false }) => {
     const [time, setTime] = useState("");
     const [date, setDate] = useState("");
     const [UserDataShow, setUserDataShow] = useState("");
-    
+
     const userData = useSelector((state) => state.session.userData);
     const userType = useSelector((state) => state.session.userType);
     const startSessionTrigger = useSelector((state) => state.session.startSessionTrigger);
@@ -159,7 +159,7 @@ const Header = ({ session = false }) => {
                                                                         {/* <p className="rounded-full bg-indigo-600/10 px-2.5 py-1.5 text-xs font-semibold text-indigo-600">New</p> */}
                                                                     </div>
                                                                     <p className="mt-2 text-sm leading-6 text-gray-600">
-                                                                    Efficiently customize and manage your courses with real-time insights and third-party integrations to streamline curriculum development.
+                                                                        Efficiently customize and manage your courses with real-time insights and third-party integrations to streamline curriculum development.
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -177,7 +177,7 @@ const Header = ({ session = false }) => {
                                                 }
                                             </div>
                                         ))}
-                                    </>: <>
+                                    </> : <>
                                         {MenuItemLinksForCorporate.map((item) => (
                                             <div>
                                                 {item.subMenu ?
@@ -214,7 +214,7 @@ const Header = ({ session = false }) => {
                                                                         {/* <p className="rounded-full bg-indigo-600/10 px-2.5 py-1.5 text-xs font-semibold text-indigo-600">New</p> */}
                                                                     </div>
                                                                     <p className="mt-2 text-sm leading-6 text-gray-600">
-                                                                    Efficiently customize and manage your courses with real-time insights and third-party integrations to streamline curriculum development.
+                                                                        Efficiently customize and manage your courses with real-time insights and third-party integrations to streamline curriculum development.
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -239,13 +239,15 @@ const Header = ({ session = false }) => {
                         <div className="flex items-center">
                             {isSession ?
                                 <>
-                                    <div className="flex-shrink-0">
-                                        <button onClick={openModal} type="button" className="relative inline-flex items-center gap-x-1.5 rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" >
-                                            <PlusIcon aria-hidden="true" className="-ml-0.5 h-5 w-5" />
-                                            Add Topic
-                                        </button>
-                                        <TopicModal isOpen={isModalOpen} onClose={closeModal} />
-                                    </div>
+                                    {
+                                        userData?.type === "Participant" && <div className="flex-shrink-0">
+                                            <button onClick={openModal} type="button" className="relative inline-flex items-center gap-x-1.5 rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" >
+                                                <PlusIcon aria-hidden="true" className="-ml-0.5 h-5 w-5" />
+                                                Add Topic
+                                            </button>
+                                            <TopicModal isOpen={isModalOpen} onClose={closeModal} />
+                                        </div>
+                                    }
                                     <div className="hidden md:ml-4 md:flex md:flex-shrink-0 md:items-center">
                                         {/* <button type="button" className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" >
                                             <span className="absolute -inset-1.5" />
