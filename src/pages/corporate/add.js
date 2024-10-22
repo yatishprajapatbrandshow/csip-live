@@ -15,7 +15,6 @@ const Add = () => {
   const editor = useRef(null);
   const router = useRouter();
   const userData = useSelector((state) => state.session.userData);
-
   const [topics, setTopics] = useState([]);
   const [step, setStep] = useState(0);
   const [name, setName] = useState("");
@@ -263,96 +262,6 @@ const Add = () => {
     setTopEmployees(newEmployees);
   };
 
-  //   try {
-  //     const response = await fetch(`${API_URL}activity/step`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(payload),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok');
-  //     }
-
-  //     const responseData = await response.json();
-  //     if (responseData.status === true) {
-  //       alert(`Step ${step} added successfully`);
-  //     }
-
-  //     setStep((prevStep) => prevStep + 1);
-  //   } catch (error) {
-  //     setErrorMessage(error.message);
-  //   }
-  // }
-
-  // const formData = {
-  //   name,
-  //   short_name: shortName,
-  //   objective,
-  //   short_desc: shortDesc
-  // };
-
-  // try {
-  //   const response = await fetch(`${API_URL}activity/add`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(formData),
-  //   });
-
-  //   if (!response.ok) {
-  //     throw new Error('Network response was not ok');
-  //   }
-
-  //   const data = await response.json();
-  //   console.log("API Response:", data);
-  //   setId(data?.data?.id);
-  //   setSid(data?.data?.sid);
-  //   setStep((prevStep) => prevStep + 1);
-
-  // } catch (error) {
-  //   console.error("Error submitting step 1:", error);
-  //   setErrorMessage("There was an error submitting your data. Please try again.");
-  // }
-
-  // const handleActivity = async () => {
-  //   const formData = {
-  //     name: name,
-  //     short_name: shortName,
-  //     objective: objective,
-  //     short_desc: shortDesc
-  //   };
-
-  //   console.log(JSON.stringify(formData));
-  //   try {
-  //     const response = await fetch(`${API_URL}activity/add`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(formData),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok');
-  //     }
-
-  //     const data = await response.json();
-  //     console.log(data)
-
-  //     setId(data?.data?.id);
-  //     setSid(data?.data?.sid);
-  //     setStep((prevStep) => prevStep + 1);
-
-  //   } catch (error) {
-  //     console.log(error);
-  //     setErrorMessage("There was an error submitting your data. Please try again.");
-  //   }
-
-  // }
 
   const addActivityAPI = async (step) => {
     const payload = {};
@@ -425,6 +334,7 @@ const Add = () => {
   };
 
   const fetchAddApi = async (payload) => {
+
     try {
       const response = await fetch(`${API_URL}activity/add`, {
         method: "POST",
@@ -451,6 +361,45 @@ const Add = () => {
   };
 
   const fetchStepApi = async (payload) => {
+    if (payload.tools_used) {
+      for (const tool of payload.tools_used) {
+        if (tool.image && typeof tool.image !== 'string') { // Ensure it's a file and not an already uploaded URL
+          console.log(`Uploading image for tool: ${tool.name || "Unnamed tool"}`);
+          try {
+            // Wait for the image upload to complete
+            const result = await handleUpload(tool.image);
+            console.log(result);
+
+            if (result?.fileUrl) {
+              tool.image = result?.fileUrl;
+            }
+          } catch (error) {
+            console.error(`Error uploading image for tool: ${tool.name || "Unnamed tool"}`, error);
+          }
+        }
+      }
+    }
+
+    if (payload.related_topic_news) {
+
+      for (const news of payload.related_topic_news) {
+        if (news.image && typeof news.image !== 'string') { // Ensure it's a file and not an already uploaded URL
+          console.log(`Uploading image for tool: ${news.name || "Unnamed news"}`);
+          try {
+            // Wait for the image upload to complete
+            const result = await handleUpload(news.image);
+
+
+            if (result?.fileUrl) {
+              news.image = result?.fileUrl;
+            }
+          } catch (error) {
+            console.error(`Error uploading image for tool: ${news.name || "Unnamed tool"}`, error);
+          }
+        }
+      }
+    }
+
     try {
       const response = await fetch(`${API_URL}activity/step`, {
         method: "POST",
@@ -542,18 +491,7 @@ const Add = () => {
   }, [searchTerm]);
 
 
-
-
-
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
-
-  const handleUpload = async () => {
-    if (!file) {
-      setUploadStatus('Please select a file first.');
-      return;
-    }
+  const handleUpload = async (file) => {
 
     const formData = new FormData();
     formData.append('fileUp', file); // Append the file to the form data
@@ -561,7 +499,6 @@ const Add = () => {
     for (const [key, value] of formData.entries()) {
       console.log(key, value); // This will log the key-value pairs in the FormData
     }
-
     try {
       const response = await fetch('/api/upload', {
         method: 'POST',
@@ -569,7 +506,8 @@ const Add = () => {
       });
 
       const result = await response.json();
-      console.log(result);
+
+      return result.data;
     } catch (error) {
       console.log("error here", error);
     }
@@ -1433,19 +1371,9 @@ const Add = () => {
                       </label>
                       <input
                         type="file"
-                        accept="image/*"
                         onChange={(e) => {
-                          // Convert the file to a base64 string or handle it as needed
-                          const file = e.target.files[0];
-                          if (file) {
-                            const reader = new FileReader();
-                            reader.onloadend = () => {
-                              handleNewsChange(index, "image", reader.result); // Store the base64 image data
-                            };
-                            reader.readAsDataURL(file);
-                          } else {
-                            handleNewsChange(index, "image", ""); // Clear the image if no file is selected
-                          }
+                          // Convert the file to a base64 string or handle it as 
+                          handleNewsChange(index, "image", e.target.files[0]); // Store the base64 image data
                         }}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                       />

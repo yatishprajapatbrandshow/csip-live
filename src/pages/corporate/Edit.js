@@ -446,7 +446,7 @@ const Edit = () => {
                         // Wait for the image upload to complete
                         const result = await handleUpload(tool.image);
                         if (result?.fileUrl) {
-                            tool.image = result?.fileUrl?.split('https://csip-image.blr1.digitaloceanspaces.com/img/content')[1]; // Replace the file with the uploaded URL
+                            tool.image = result?.fileUrl; // Replace the file with the uploaded URL
                         }
                     } catch (error) {
                         console.error(`Error uploading image for tool: ${tool.name || "Unnamed tool"}`, error);
@@ -454,7 +454,24 @@ const Edit = () => {
                 }
             }
         }
+        if (payload.related_topic_news) {
 
+            for (const news of payload.related_topic_news) {
+                if (news.image && typeof news.image !== 'string') { // Ensure it's a file and not an already uploaded URL
+                    console.log(`Uploading image for tool: ${news.name || "Unnamed news"}`);
+                    try {
+                        // Wait for the image upload to complete
+                        const result = await handleUpload(news.image);
+
+                        if (result?.fileUrl) {
+                            news.image = result?.fileUrl; // Replace the file with the uploaded URL
+                        }
+                    } catch (error) {
+                        console.error(`Error uploading image for tool: ${news.name || "Unnamed tool"}`, error);
+                    }
+                }
+            }
+        }
 
         try {
             const response = await fetch(`${API_URL}activity/step`, {
@@ -763,7 +780,10 @@ const Edit = () => {
                                                         >
                                                             {tag}
                                                             <button
-                                                                onClick={() => handleRemoveTag(tag)}
+                                                                onClick={(e) => {
+                                                                    e.preventDefault()
+                                                                    handleRemoveTag(tag)
+                                                                }}
                                                                 className="ml-2 text-red-500 hover:text-red-700"
                                                             >
                                                                 ✕
@@ -905,6 +925,7 @@ const Edit = () => {
                                                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                                                 />
                                                 <div className=' w-full h-14 mt-2 rounded-lg overflow-hidden flex justify-between px-5 items-center border-2'>
+                                                    {console.log(tool?.image)}
                                                     <img src={tool?.image} className='h-full' alt='tool-image' />
                                                 </div>
                                             </div>
@@ -1123,16 +1144,7 @@ const Edit = () => {
                                                 accept="image/*"
                                                 onChange={(e) => {
                                                     // Convert the file to a base64 string or handle it as needed
-                                                    const file = e.target.files[0];
-                                                    if (file) {
-                                                        const reader = new FileReader();
-                                                        reader.onloadend = () => {
-                                                            handleNewsChange(index, 'image', reader.result); // Store the base64 image data
-                                                        };
-                                                        reader.readAsDataURL(file);
-                                                    } else {
-                                                        handleNewsChange(index, 'image', ''); // Clear the image if no file is selected
-                                                    }
+                                                    handleNewsChange(index, 'image', reader.result); // Store the base64 image data
                                                 }}
                                                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                                             />
