@@ -429,7 +429,8 @@ console.log(data);
                )}
 
                {data.tools && (
-                  <div className='shadow-sm'>
+                <>
+                  {/* <div className='shadow-sm'>
                      <h2 className='text-lg mt-5 text-gray-800 font-bold'>Tools used</h2>
                      <table className="min-w-full bg-white mt-10">
                       <thead>
@@ -459,11 +460,40 @@ console.log(data);
                         ))}
                       </tbody>
                     </table>
-                  </div>
+                  </div> */}
+                   {data.tools.tools_used.map((tool) => (
+                      <div className="w-fit items-end overflow-hidden rounded-[2.5rem] border bg-white p-2 shadow-md shadow-gray-950/5">
+                        <div className="space-y-1.5 rounded-[2rem] border bg-gray-200/50 p-1.5 sm:w-[16rem]">
+                            <div className="space-y-3 rounded-b-lg rounded-t-[1.625rem] bg-white p-4">
+                                <div className="flex flex-col items-start justify-between">
+                                    <div className='w-10 h-10 bg-gray-200 rounded-lg overflow-hidden mb-2'>
+                                      <img src={`https://csip-image.blr1.digitaloceanspaces.com/csip-image/img/content/${tool.image}`} />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <div className="text-sm font-medium">{tool.name}</div>
+                                        <p className='text-xs text-justify' dangerouslySetInnerHTML={{__html: tool.description}} />        
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="rounded-b-[1.625rem] rounded-t-lg bg-white p-4">
+                                <div className="flex justify-between items-center">
+                                    <p className="flex gap-1.5 justify-start items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                                        <span className="text-sm">Show all snapshot</span>
+                                    </p>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="text-placeholder size-4">
+                                        <path fillRule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    ))}
+                </>
                 )}
                {data['jobs-and-role'] && (
                   <div className="mx-auto ">
-                  {jobsData.map((job, index) => (
+                  {data['jobs-and-role'].job_roles_and_description.map((job, index) => (
                     <div key={index} className="flex flex-col items-start pb-5 mb-5 border-b border-b-pink-200">
                       <h2 id={`job-${index}`} className="mt-2 text-lg font-bold text-slate-900">
                         {job.jobTitle}
@@ -472,11 +502,9 @@ console.log(data);
                         datetime="2022-02-24T00:00:00.000Z"
                         className="order-first font-mono text-sm leading-7 text-slate-500"
                       >
-                        {job.employmentType} | Average Salary: ${job.averageSalary}
+                        {job.employmentType} | Average Salary: {job.averageSalary}
                       </time>
-                      <p className="mt-1 text-base leading-7 text-slate-700">
-                        {job.description}
-                      </p>
+                      <p className="mt-1 text-sm leading-7 text-slate-700" dangerouslySetInnerHTML={{ __html: job.description}} />
                       <div className="mt-4 flex items-center gap-4">
                         <div
                           className=" flex justify-start items-start gap-4"

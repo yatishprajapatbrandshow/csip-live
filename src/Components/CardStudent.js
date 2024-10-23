@@ -35,9 +35,6 @@ const CardStudent = ({ activity, theme, type }) => {
         (state) => state.favouriteActivity.favouriteActivities 
     );
     let OrderDetNew;
-    
-console.log(activity);
-
     const toggleHeart = async (activity) => {
         if (!activity) {
             return
@@ -94,7 +91,6 @@ console.log(activity);
     const handleApply = async () => {
         try {
             const register = await Registration(activity, userData)
-            console.log(register)
             
             if (register && register.status) {
                 OrderCreate()
@@ -120,7 +116,6 @@ console.log(activity);
     }
 
     const initiatePayment = async () => {
-        console.log(OrderDetNew);
         try {
             const Payment = await Razorpay(activity, userData)
             if (Payment) {
