@@ -42,7 +42,6 @@ const Header = ({ session = false }) => {
     const userType = useSelector((state) => state.session.userType);
     const startSessionTrigger = useSelector((state) => state.session.startSessionTrigger);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    console.log(userType)
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
     const LogOut = () => {
@@ -54,7 +53,6 @@ const Header = ({ session = false }) => {
 
         const userData = getLocalStorageItem("userData")
         if (userData) {
-            console.log(userData)
             setUserDataShow(userData)
             dispatch(setUserData(userData));
             dispatch(setUserType(userData?.type));
@@ -99,7 +97,7 @@ const Header = ({ session = false }) => {
     return (
         <>
 
-            <Disclosure as="nav" className=" sticky top-0 z-10 bg-white/10 backdrop-blur-lg border-b border-b-white">
+            <Disclosure as="nav" className=" sticky top-0 z-10 bg-white/10 backdrop-blur-lg border-b border-b-white shadow-2xl shadow-black/10">
                 <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
@@ -115,7 +113,7 @@ const Header = ({ session = false }) => {
                                 : null}
                             <div className="flex flex-shrink-0 items-center">
                                 <img
-                                    alt="Your Company"
+                                    alt="CSIP"
                                     src="/images/logo.jpg"
                                     className="h-12 w-auto"
                                 />

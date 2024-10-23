@@ -100,7 +100,7 @@ const Edit = () => {
 
 
     const fetchAllCurriculum = async () => {
-        const APIURL = `${API_URL}activity/get-by-id?_id=${id}`;
+        const APIURL = `${API_URL}activity/get-by-id-for-edit?_id=${id}`;
         try {
             const response = await fetch(APIURL, {
                 headers: {
@@ -114,6 +114,7 @@ const Edit = () => {
             }
 
             const responseData = await response.json();
+            console.log(responseData);
 
             if (responseData.status === true) {
                 const data = responseData.data;
@@ -132,7 +133,21 @@ const Edit = () => {
                 } else {
                     setTags([])
                 }
-                setToolsUsed(data?.tools_used);
+
+                if (Array.isArray((data.tools_used))) {
+                    setToolsUsed(data?.tools_used);
+                } else {
+                    setToolsUsed([
+                        {
+                            name: '',
+                            description: '',
+                            // category: '',
+                            // version: '',
+                            // download: '',
+                            image: ''
+                        }
+                    ])
+                }
                 setSnapShot(data?.snap_shot);
                 setYoutubeVideoLink(data?.youtube_video_link);
                 setImageAssc(data?.image_assc);
@@ -258,7 +273,6 @@ const Edit = () => {
             image: ''
         }
     ]);
-
     // Function to handle changes in the input fields
     const handleToolChange = (index, field, value) => {
         const newTools = [...toolsUsed];
@@ -283,7 +297,7 @@ const Edit = () => {
 
     // Function to check if the last tool is filled with required fields
     const isLastToolFilled = () => {
-        const lastTool = toolsUsed[toolsUsed.length - 1];
+        const lastTool = toolsUsed[toolsUsed?.length - 1];
         // return lastTool?.name?.trim() !== '' && lastTool?.category?.trim() !== ''; // Only check required fields
         return lastTool?.name?.trim() !== ''  // Only check required fields
     };
@@ -910,7 +924,7 @@ const Edit = () => {
                             {step === 3 && (
                                 <form>
                                     <div className="mb-4">
-                                        {toolsUsed.map((tool, index) => (
+                                        {toolsUsed?.map((tool, index) => (
                                             <div key={index} className="mb-6 p-4 border rounded-md shadow-sm">
                                                 <h4 className="font-medium text-lg mb-2">Tool {index + 1}</h4>
                                                 <label className="block text-sm font-medium text-gray-700">Name</label>
@@ -1171,7 +1185,7 @@ const Edit = () => {
                                                 accept="image/*"
                                                 onChange={(e) => {
                                                     // Convert the file to a base64 string or handle it as needed
-                                                    handleNewsChange(index, 'image', reader.result); // Store the base64 image data
+                                                    handleNewsChange(index, 'image', e.target.files[0]); // Store the base64 image data
                                                 }}
                                                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                                             />

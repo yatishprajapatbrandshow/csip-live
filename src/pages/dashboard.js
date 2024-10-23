@@ -20,6 +20,7 @@ import DragAndDropTopic from '../Components/DragAndDrop';
 import RecordonDashboard from '../Components/RecordonDashbord';
 import { getLocalStorageItem } from '@/Config/localstorage';
 import PatterImage from '../../public/images/pattern.svg'
+import Footer from '@/Components/Footer';
 
 
 const reviews = [
@@ -86,10 +87,12 @@ export default function DashboardCombind() {
     const [loading, setLoading] = useState(true);
     const [ProfileStatus, setProfileStatus] = useState("");
     const [ActivityCurriculumStatus, setActivityCurriculumStatus] = useState("");
+    const [collegeData, setCollegeData] = useState("");
 
     const dispatch = useDispatch();
     const isTriggeredApply = useSelector((state) => state.trigger.applyTrigger);
     const userData = useSelector((state) => state.session.userData);
+    console.log("userData");
     // const openModal = () => setIsModalOpen(true);
     // const closeModal = () => setIsModalOpen(false);
     const { activities, Actloading, ActError } = useFetchActivities();
@@ -122,6 +125,7 @@ export default function DashboardCombind() {
 
     useEffect(() => {
         const userData = getLocalStorageItem("userData");
+        console.log(userData);
         if (userData) {
             setIsSession(true);
             if(userData.type !== "Participant"){
@@ -161,7 +165,6 @@ export default function DashboardCombind() {
 
     const fetchNewActivities = async (sid) => {
         const APIURL = `${API_URL}activity/get?participantId=${sid}`
-        console.log("responsexvcfvbData", APIURL)
         try {
             const response = await fetch(APIURL, {
                 headers: {
@@ -295,6 +298,7 @@ export default function DashboardCombind() {
             fetchCommentsData();
             fetchProfileStatus();
             fetchActivityCurriculumStatus();
+            fetchCollegeData();
         }
     }, [userData]);
 
@@ -322,7 +326,7 @@ export default function DashboardCombind() {
 
     const fetchProfileStatus = async () => {
         const participantId = userData?.sid;
-
+        
         try {
             const response = await fetch(`${API_URL}register/get?participant_id=${participantId}`, {
                 method: 'GET',
@@ -347,7 +351,6 @@ export default function DashboardCombind() {
 
     const fetchActivityCurriculumStatus = async () => {
         const participantId = userData?.sid;
-
         try {
             const response = await fetch(`${API_URL}dashboardInfo/getActivity-curriculum?participant_id=${participantId}`, {
                 method: 'GET',
@@ -363,6 +366,31 @@ export default function DashboardCombind() {
             
             if (responseData.status === true) {
                 setActivityCurriculumStatus(responseData?.data?.percentage);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+
+    const fetchCollegeData = async () => {
+        const participantId = userData?.sid;
+ 
+        try {
+            const response = await fetch(`${API_URL}college/get-by-participant-id?participant_id=${participantId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+ 
+            const responseData = await response.json();
+ 
+            if (responseData.status === true) {
+                setCollegeData(responseData?.data?.college)
             }
         } catch (error) {
             console.error("Error:", error);
@@ -444,16 +472,14 @@ export default function DashboardCombind() {
                                 <div className=''>
                                     <p className='text-lg font-bold mb-2 text-gray-800'>College Details:</p>
                                     <div className='flex gap-5'>
-                                        <img src="https://csip.fieindia.org/images/college-logo/logo-1-5c41a849a2339.jpg" 
+                                        <img src={collegeData?.collegelogo}
                                         className='w-16 h-16 rounded-lg' />
                                         <div className='flex-1'>
-                                            <p className='text-sm font-bold leading-4 text-gray-700'>Accurate Institute of Management & Technology</p>
-                                            <span className='text-sm flex justify-start text-gray-700 gap-1 mt-2'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-map-pin"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> Uttar Pradesh, Greater Noida</span>
+                                        <p className='text-sm font-bold leading-4 text-gray-700'>{collegeData?.collegename}</p>
+                                        <span className='text-sm flex justify-start text-gray-700 gap-1 mt-2'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-map-pin"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /><circle cx="12" cy="10" r="3" /></svg> {collegeData?.state}, {collegeData?.city}</span>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                
                             </div>
                             <div className='p-4 pt-2 grid grid-cols-2 gap-4'>
                                 <button onClick={() => router.push('/curriculum')} className="text-sm hardShadow flex justify-center items-center text-gray-700 bg-white/30 p-2 border border-rose-300 ">View Curriculum</button>
@@ -554,76 +580,72 @@ export default function DashboardCombind() {
 
                 
             </div>
-            <div className=" bg-gray-100 p-10">
-                <div className="relative max-w-[1500px] bg-gray-100 mx-auto w-full">
-                    <div className="grid divide-x divide-y divide-gray-100 dark:divide-gray-700 overflow-hidden rounded-3xl border border-gray-100 text-gray-600 dark:border-gray-700 sm:grid-cols-2 lg:grid-cols-4 lg:divide-y-0 xl:grid-cols-4">
-                        {featureData.map((feature, index) => (
-                            <div
-                            key={index}
-                            className="group relative bg-white dark:bg-gray-800 transition hover:z-[1] hover:shadow-2xl hover:shadow-gray-600/10"
-                            >
-                                <div className="relative space-y-8 py-12 p-8">
-                                    <img
-                                    src={feature.image}
-                                    alt={feature.title}
-                                    className="w-12"
-                                    width="512"
-                                    height="512"
-                                    />
-                                    <div className="space-y-2">
-                                    <h5 className="text-xl font-semibold text-gray-700 dark:text-white transition group-hover:text-secondary">
-                                        {feature.title}
-                                    </h5>
-                                    <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
-                                    </div>
-                                    <a href={feature.link} className="flex items-center justify-between group-hover:text-secondary">
-                                    <span className="text-sm">Read more</span>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="currentColor"
-                                        className="w-5 h-5 -translate-x-4 text-2xl opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100"
-                                    >
-                                        <path
-                                        fillRule="evenodd"
-                                        d="M12.97 3.97a.75.75 0 011.06 0l7.5 7.5a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 11-1.06-1.06l6.22-6.22H3a.75.75 0 010-1.5h16.19l-6.22-6.22a.75.75 0 010-1.06z"
-                                        clipRule="evenodd"
-                                        ></path>
-                                    </svg>
-                                    </a>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-            <div className="bg-gray-100">
-                <div className="relative max-w-[1500px] mx-auto w-full pt-10">
+            
+            <div className="">
+                <div className="relative max-w-[1500px] mx-auto w-full pt-10 px-10">
                     {favActivities && Array.isArray(favActivities) && favActivities.length > 0 ?
                         <Activities title="Favourite Activity" type={"favourite"} cardData={favActivities} />
                     : null}
 
                     {recommendedActivities && Array.isArray(recommendedActivities) && recommendedActivities.length > 0 ?
-                        <div className='p-10 bg-white rounded-xl'>
+                        <div className='bg-white rounded-xl'>
                             <Activities title="Recommended Activity" cardData={recommendedActivities} />
                         </div>
                     : null}
                  
                 </div>
-                <div className="relative max-w-[1500px] mx-auto w-full pt-10 mb-10">
-                    <div className="bg-BGRec bg-[length:40px_40px] rounded-lg overflow-hidden">
-                        <div className="">
-                            {newActivities && Array.isArray(newActivities) && newActivities.length > 0 ?
-                                <div className=''>
-                                    <div className='p-10 '>
-                                        <Activities theme={"black"} title="New Activity" cardData={newActivities}  />
+                <div className="relative max-w-[1500px] mx-auto w-full pt-10 mb-10 px-10">
+                    {newActivities && Array.isArray(newActivities) && newActivities.length > 0 ?
+                        <div className='bg-white rounded-xl'>
+                            <Activities title="New Activity" cardData={newActivities}  />
+                        </div>
+                    : null}
+                </div>
+                <div className=" bg-gray-100 p-10">
+                    <div className="relative max-w-[1500px] bg-gray-100 mx-auto w-full">
+                        <div className="grid divide-x divide-y divide-gray-100 dark:divide-gray-700 overflow-hidden rounded-3xl border border-gray-100 text-gray-600 dark:border-gray-700 sm:grid-cols-2 lg:grid-cols-4 lg:divide-y-0 xl:grid-cols-4">
+                            {featureData.map((feature, index) => (
+                                <div
+                                key={index}
+                                className="group relative bg-white dark:bg-gray-800 transition hover:z-[1] hover:shadow-2xl hover:shadow-gray-600/10"
+                                >
+                                    <div className="relative space-y-8 py-12 p-8">
+                                        <img
+                                        src={feature.image}
+                                        alt={feature.title}
+                                        className="w-12"
+                                        width="512"
+                                        height="512"
+                                        />
+                                        <div className="space-y-2">
+                                        <h5 className="text-xl font-semibold text-gray-700 dark:text-white transition group-hover:text-secondary">
+                                            {feature.title}
+                                        </h5>
+                                        <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
+                                        </div>
+                                        <a href={feature.link} className="flex items-center justify-between group-hover:text-secondary">
+                                        <span className="text-sm">Read more</span>
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="currentColor"
+                                            className="w-5 h-5 -translate-x-4 text-2xl opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+                                        >
+                                            <path
+                                            fillRule="evenodd"
+                                            d="M12.97 3.97a.75.75 0 011.06 0l7.5 7.5a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 11-1.06-1.06l6.22-6.22H3a.75.75 0 010-1.5h16.19l-6.22-6.22a.75.75 0 010-1.06z"
+                                            clipRule="evenodd"
+                                            ></path>
+                                        </svg>
+                                        </a>
                                     </div>
                                 </div>
-                            : null}
+                            ))}
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }
