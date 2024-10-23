@@ -257,7 +257,7 @@ const Header = ({ session = false }) => {
                                                 <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                                     <span className="absolute -inset-1.5" />
                                                     <span className="sr-only">Open user menu</span>
-                                                    <img alt="logo" src={`https://csip.fieindia.org/images/profile/${userData.participantpic}`} className="h-8 w-8 rounded-full" />
+                                                    <img alt="logo" src={`https://csip-image.blr1.digitaloceanspaces.com/csip-image/img/content/${userData?.participantpic}`} className="h-8 w-8 rounded-full" />
                                                 </MenuButton>
                                             </div>
                                             <MenuItems

@@ -35,6 +35,9 @@ export default function EditProfile() {
     const userData = getLocalStorageItem('userData');
     if (userData) {
       setUserProfileData(userData);
+      if (userData?.participantpic) {
+        setProfileImage(userData?.participantpic)
+      }
       setFormData(userData); // Directly populate formData with userProfileData
     }
   }, []);
@@ -107,23 +110,7 @@ export default function EditProfile() {
     setLocalStorageItem('userData', formData); // Assuming setLocalStorageItem updates the user data
     updateProfile();
   };
-  const updateProfile = async () => {
-    console.log(file);
-    
-    if (file) {
-      try {
-        // Wait for the image upload to complete
-        const result = await handleUpload(file);
-
-        if (result?.fileUrl) {
-          const imageUrl = result?.fileUrl.split('https://csip-image.blr1.digitaloceanspaces.com/img/content/')[1]; // Replace the file with the uploaded URL
-          setProfileImage(imageUrl)
-        }
-      } catch (error) {
-        console.error(`Error uploading profile image `, error);
-      }
-    }
-
+  const updateProfile = async (imageUrl) => {
     const payload = {
       sid: formData?.sid || "",
       name: formData?.name || "",
@@ -140,9 +127,9 @@ export default function EditProfile() {
       oldPassword: formData?.oldPassword || "",
       password: formData?.newPassword || "",
       r_password: formData?.retypePassword || "",
-      participantpic: profileImage || ""
+      participantpic: imageUrl || profileImage || ""
     }
-    
+
     try {
       const response = await fetch(`${API_URL}register/update`, {
         headers: {
@@ -154,6 +141,7 @@ export default function EditProfile() {
       const responseData = await response.json();
       if (responseData.status === true) {
         alert(responseData?.message)
+        setLocalStorageItem('userData', responseData.data);
         // setFormData({...formData,[newPassword]:"",[retypePassword]:""})
       } else {
         alert(responseData?.message)
@@ -163,7 +151,7 @@ export default function EditProfile() {
 
     }
   }
-  const handleUpload = useCallback(async () => {
+  const handleUpload = async () => {
     if (file) {
       const formData = new FormData();
       formData.append('fileUp', file); // Append the file to the form data
@@ -175,9 +163,10 @@ export default function EditProfile() {
         });
 
         const result = await response.json();
-
-        if (result?.fileUrl) {
-          const imageUrl = result?.fileUrl?.split('https://csip-image.blr1.digitaloceanspaces.com/img/content/')[1];
+        if (result?.data?.fileUrl) {
+          const imageUrl = result?.data?.fileUrl?.split('https://csip-image.blr1.digitaloceanspaces.com/img/content/')[1];
+          setProfileImage(imageUrl);
+          updateProfile(imageUrl)
 
         }
         setFile(null);
@@ -185,7 +174,13 @@ export default function EditProfile() {
         console.log("Error uploading image:", error);
       }
     }
-  }, [file]);
+  };
+  useEffect(() => {
+    if (file) {
+      handleUpload();
+      updateProfile();
+    }
+  }, [file])
   return (
     <>
       <Header />
@@ -252,9 +247,9 @@ export default function EditProfile() {
                     <div className="bg-gray-100 px-4 py-6 rounded-lg text-center">
                       {/* Image Preview */}
                       <div className="w-32 h-32 mx-auto bg-gray-300 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-                        {formData.profileImage ? (
+                        {profileImage ? (
                           <img
-                            src={URL.createObjectURL(formData.profileImage)}
+                            src={`https://csip-image.blr1.digitaloceanspaces.com/csip-image/img/content/${profileImage}`}
                             alt="Profile"
                             className="w-full h-full object-cover"
                           />
