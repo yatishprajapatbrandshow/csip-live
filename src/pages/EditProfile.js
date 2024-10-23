@@ -2,7 +2,7 @@
 import Header from "@/Components/Header";
 import { API_URL, API_URL_LOCAL } from "@/Config/Config";
 import { getLocalStorageItem, setLocalStorageItem } from "@/Config/localstorage"; // Assuming a function to set data in localStorage
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function EditProfile() {
   const [userProfileData, setUserProfileData] = useState({});
@@ -27,41 +27,11 @@ export default function EditProfile() {
     retypePassword: "",
     participantpic: "",
   });
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-    if (file) {
-      handleUpload()
-    }
-  };
-  const handleUpload = async () => {
-    if (!file) {
-      alert('Please select a file first.');
-      return;
-    }
-    const formData = new FormData();
-    formData.append('fileUp', file); // Append the file to the form data
 
-    for (const [key, value] of formData.entries()) {
-      console.log(key, value); // This will log the key-value pairs in the FormData
-    }
-
-    try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData, // Send the FormData object
-      });
-
-      const result = await response.json();
-      console.log(result);
-    } catch (error) {
-      console.log("error here", error);
-    }
-  };
   // Fetch user profile data from local storage on component mount
   useEffect(() => {
     const userData = getLocalStorageItem('userData');
     if (userData) {
-      console.log(userData);
       setUserProfileData(userData);
       setFormData(userData); // Directly populate formData with userProfileData
     }
@@ -131,7 +101,6 @@ export default function EditProfile() {
       }
     }
 
-    console.log(formData);
     // Save updated profile to local storage
     setLocalStorageItem('userData', formData); // Assuming setLocalStorageItem updates the user data
     updateProfile();
@@ -155,8 +124,7 @@ export default function EditProfile() {
       r_password: formData?.retypePassword || "",
       participantpic: formData?.participantpic || ""
     }
-    console.log(payload);
-    
+
     try {
       const response = await fetch(`${API_URL}register/update`, {
         headers: {
@@ -177,7 +145,34 @@ export default function EditProfile() {
 
     }
   }
+  const handleUpload = useCallback(async () => {
+    if (file) {
+      const formData = new FormData();
+      formData.append('fileUp', file); // Append the file to the form data
 
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData, // Send the FormData object
+        });
+
+        const result = await response.json();
+
+        if (result?.fileUrl) {
+          const imageUrl = result?.fileUrl?.split('https://csip-image.blr1.digitaloceanspaces.com/img/content/')[1];
+
+        }
+        setFile(null);
+      } catch (error) {
+        console.log("Error uploading image:", error);
+      }
+    }
+  }, [file]);
+  const handleFileChange = useCallback((e) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  }, []);
   return (
     <>
       <Header />

@@ -472,7 +472,7 @@ export default function DashboardCombind() {
                                 <div className=''>
                                     <p className='text-lg font-bold mb-2 text-gray-800'>College Details:</p>
                                     <div className='flex gap-5'>
-                                        <img src="https://csip.fieindia.org/images/college-logo/logo-1-5c41a849a2339.jpg" 
+                                        <img src={collegeData?.collegelogo}
                                         className='w-16 h-16 rounded-lg' />
                                         <div className='flex-1'>
                                         <p className='text-sm font-bold leading-4 text-gray-700'>{collegeData?.collegename}</p>
