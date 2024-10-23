@@ -18,6 +18,7 @@ import { useFetchActivities } from '@/hooks/useFetchActivities';
 import { storeFavouriteActivity } from '../../redux/actions/favouriteActivitySlice';
 import DragAndDropTopic from '../Components/DragAndDrop';
 import { getLocalStorageItem } from '@/Config/localstorage';
+import PatterImage from '../../public/images/pattern.svg'
 
 
 const reviews = [
@@ -102,6 +103,20 @@ export default function DashboardCombind() {
     const ProfileStatusCount = useCountUp(ProfileStatus?.profilePercentage || 0); // Assuming totalScore is a number
     const ActivityCurriculumStatusCount = useCountUp(ActivityCurriculumStatus?.percentage || 0); // Assuming totalScore is a number
     const [isSession, setIsSession] = useState(false);
+
+
+    const stats = [
+        { label: 'Topic Studying', count: topicStudyingCount },
+        { label: 'Activity Applied', count: activityAppliedCount, link: "/AppliedActivity" },
+        { label: 'Ongoing Activity', count: ongoingActivitiesCount, link: "/OngoingActivities" },
+        { label: 'Submission Pending', count: submissionPendingCount },
+        { label: 'Payment Pending', count: paymentPendingCount, link: "/PaymentPending" },
+        { label: 'Completed Activity', count: completedActivitiesCount, },
+        { label: 'Total Score', count: totalScoreCount, },
+        { label: 'Skill Endorsement from Corporate', count: 0, },
+        { label: 'Leaderboard is Being Evaluated...', count: null, },
+    ];
+
 
 
     useEffect(() => {
@@ -362,7 +377,7 @@ export default function DashboardCombind() {
             <div className="relative max-w-[1500px] mx-auto w-full">
                 <div className="p-6 bg-white space-y-6 font-sans">
                     <div className="grid grid-cols-12 gap-4">
-                        <div className="bg-pink-200 p-4 rounded-lg col-span-4 max-lg:col-span-8 max-md:col-span-12 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                        <div className="bg-pink-200 p-4 col-span-4 max-lg:col-span-8 max-md:col-span-12 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <div className="flex items-center justify-between hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <div>
                                     <h2 className="text-3xl  text-purple-800">{useCountUp(ProfileStatus?.profilePercentage || 0)}<sup className="text-[17px]">%</sup></h2>
@@ -384,7 +399,7 @@ export default function DashboardCombind() {
                                 <CircularProgressBar value={90} text="90%" color="text-pink-500" />
                             </div>
                         </div> */}
-                         <div className="bg-purple-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                         <div className="bg-purple-200 col-span-2 max-lg:col-span-4 p-4 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                 <h3 className="text-lg  text-purple-800 mb-2">Profile Status</h3>
                                 <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                                     {ProfileStatus ?
@@ -393,22 +408,28 @@ export default function DashboardCombind() {
                                 </div>
                                 <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
                             </div>
-                        <div className="bg-blue-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                        <div className="bg-blue-200 col-span-2 max-lg:col-span-4 p-4 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <h3 className="text-lg  text-purple-800 mb-2">Corporate Reviews</h3>
                             <ReviewSlider reviews={reviews} />
                         </div>
-                        <div className="bg-pink-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                            <h3 className="text-lg text-purple-800 mb-2">Points Earned</h3>
-                            <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                                <CircularProgressBar value={62} text="62" color="text-pink-500" />
+                        <div className="bg-white relative border border-red-100 col-span-2 shadow-lg max-lg:col-span-4 p-4 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                            <img src={`/images/pattern.svg`} className='w-40 h-40 absolute right-0 bottom-0' alt='backgrund pattern' />
+                            <div className='relative z-10'>
+                                <h3 className="text-lg text-purple-800 mb-2">Points Earned</h3>
+                                <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                                    <CircularProgressBar value={62} text="62" color="text-pink-500" />
+                                </div>
                             </div>
                         </div>
-                        <div className="bg-pink-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                            <h3 className="text-lg  text-purple-800 mb-2">Activity/Curriculum</h3>
-                            <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                                <CircularProgressBar value={ActivityCurriculumStatusCount} text={`${ActivityCurriculumStatusCount}%`} color="text-pink-500" />
+                        <div className="bg-white relative border border-red-100 col-span-2 shadow-lg max-lg:col-span-4 p-4 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                            <img src={`/images/pattern.svg`} className='w-40 h-40 absolute right-0 bottom-0' alt='backgrund pattern' />
+                            <div className='relative z-10'>
+                                <h3 className="text-lg  text-purple-800 mb-2">Activity/Curriculum</h3>
+                                <div className="flex justify-center hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                                    <CircularProgressBar value={ActivityCurriculumStatusCount} text={`${ActivityCurriculumStatusCount}%`} color="text-pink-500" />
+                                </div>
+                                <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
                             </div>
-                            <p className="text-center text-sm text-purple-600 mt-2">Completed</p>
                         </div>
                         {/* <div className="bg-pink-200 col-span-2 max-lg:col-span-4 p-4 rounded-lg hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
                             <h3 className="text-lg  text-purple-800 mb-2">Corporate Skill Endorsement</h3>
@@ -417,50 +438,102 @@ export default function DashboardCombind() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div className="bg-yellow-100 p-4 rounded-lg space-y-2 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                            <button onClick={() => router.push('/curriculum')} className="w-full text-left text-purple-800 border-b pb-3 border-gray-400 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5 ">👀 View Curriculum</button>
-                            <button onClick={() => router.push('/Report')}  className="w-full text-left text-purple-800 border-b pb-3 border-gray-400 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">📊 View Report</button>
-                            <button onClick={() => router.push('/AppliedActivity')} className="w-full text-left text-purple-800 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">🔄 Applied Activity</button>
+                        <div className="bg-rose-100 space-y-2 transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                            <div className='p-4  bg-rose-50'>
+                                <div className=''>
+                                    <p className='text-lg font-bold mb-2 text-gray-800'>College Details:</p>
+                                    <div className='flex gap-5'>
+                                        <img src="https://csip.fieindia.org/images/college-logo/logo-1-5c41a849a2339.jpg" 
+                                        className='w-16 h-16 rounded-lg' />
+                                        <div className='flex-1'>
+                                            <p className='text-sm font-bold leading-4 text-gray-700'>Accurate Institute of Management & Technology</p>
+                                            <span className='text-sm flex justify-start text-gray-700 gap-1 mt-2'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-map-pin"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> Uttar Pradesh, Greater Noida</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                            </div>
+                            <div className='p-4 pt-2 grid grid-cols-2 gap-4'>
+                                <button onClick={() => router.push('/curriculum')} className="text-sm hardShadow flex justify-center items-center text-gray-700 bg-white/30 p-2 border border-rose-300 ">View Curriculum</button>
+                                <button onClick={() => router.push('/Report')}  className="text-sm hardShadow flex justify-center items-center text-gray-700 bg-white/30 p-2 border border-rose-300">View Report</button>
+                            </div>
                         </div>
-                        <div className="bg-[#dfccfa] p-4 rounded-lg col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                            <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                                <div className="text-3xl  bg-white  text-purple-800 w-10 flex justify-center">{topicStudyingCount}</div>
-                                <p className="text-sm text-gray-800">Topic Studying</p>
-                            </div>
-                            <div onClick={() => router.push('/AppliedActivity')} className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5 cursor-pointer">
-                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{activityAppliedCount}</div>
-                                <p className="text-sm sm text-gray-800">Activity Applied</p>
-                            </div>
-                            <div onClick={() => router.push('/OngoingActivities')} className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5 cursor-pointer">
-                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{ongoingActivitiesCount}</div>
-                                <p className="text-sm sm text-gray-800">Ongoing Activity</p>
-                            </div>
-                            <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{submissionPendingCount}</div>
-                                <p className="text-sm sm text-gray-800">Submission Pending</p>
-                            </div>
-                            <div onClick={() => router.push('/PaymentPending')} className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5 cursor-pointer">
-                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{paymentPendingCount}</div>
-                                <p className="text-sm text-gray-800">Payment Pending</p>
-                            </div>
-                            <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{completedActivitiesCount}</div>
-                                <p className="text-sm text-gray-800">Completed Activity</p>
-                            </div>
-                            <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">{totalScoreCount}</div>
-                                <p className="text-sm text-gray-800">Total Score</p>
-                            </div>
-                            <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                                <div className="text-3xl  bg-white w-10 flex justify-center text-purple-800">0</div>
-                                <p className="text-sm text-gray-800">Skill Endorsement from Corporate</p>
-                            </div>
-                            <div className="flex items-center gap-2 border border-gray-100 p-1 hover:drop-shadow-lg transition-transform duration-200 ease-in transform hover:translate-y-0.5">
-                                <p className="text-sm text-gray-800 py-1.5">Leaderborad is Being Evaluated...</p>
-                            </div>
+                        <div className="bg-[#dfccfa] p-4 col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4  transition-transform duration-200 ease-in transform hover:translate-y-0.5">
+                            {stats.map((stat, index) => (
+                                <div
+                                    key={index}
+                                    onClick={()=> stat.link ? router.push(stat.link) : null }
+                                    className={`flex bg-purple-100 items-center hardShadow2 gap-2 border border-purple-300 p-1 transition-transform duration-200 ease-in transform hover:translate-y-0.5 ${
+                                        stat.link ? 'cursor-pointer' : ''
+                                    }`}
+                                >
+                                    <div className="text-2xl bg-purple-200 w-10 h-10 flex justify-center items-center font-bold text-purple-800">
+                                        {stat.count !== null ? stat.count : '-'}
+                                    </div>
+                                    <p className="text-sm text-gray-800">
+                                        {stat.label}
+                                    </p>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
+                    <div className="mx-auto w-fit items-end overflow-hidden rounded-[2.5rem] border bg-white p-2 shadow-md shadow-gray-950/5">
+  <div className="space-y-1.5 rounded-[2rem] border bg-gray-200/50 p-1.5 sm:w-[16rem]">
+    <div className="space-y-3 rounded-b-lg rounded-t-[1.625rem] bg-white p-4">
+      <div className="flex justify-between">
+        <div className="flex items-center gap-1.5 text-info-500">
+          <svg className="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M2 19v-6q0-.675.275-1.225T3 10.8V8q0-1.25.875-2.125T6 5h4q.575 0 1.075.213T12 5.8q.425-.375.925-.587T14 5h4q1.25 0 2.125.875T21 8v2.8q.45.425.725.975T22 13v6h-2v-2H4v2zm11-9h6V8q0-.425-.288-.712T18 7h-4q-.425 0-.712.288T13 8zm-8 0h6V8q0-.425-.288-.712T10 7H6q-.425 0-.712.288T5 8z"></path>
+          </svg>
+          <div className="text-sm font-medium">Sleep</div>
+        </div>
+        <div className="text-caption text-xs">5:45 AM</div>
+      </div>
+      <div className="flex items-end justify-between">
+        <div className="space-y-1">
+          <div className="text-sm font-medium">Time in Bed</div>
+          <div className="flex gap-3">
+            <div className="-space-x-0.5">
+              <span className="text-title align-baseline text-xl font-medium">5</span>
+              <span className="text-placeholder text-xs">hr</span>
+            </div>
+            <div className="-space-x-0.5">
+              <span className="text-title align-baseline text-xl font-medium">59</span>
+              <span className="text-placeholder text-xs">min</span>
+            </div>
+          </div>
+        </div>
+        {/* <div className="flex items-end gap-1">
+          <div aria-hidden="true" className="h-3 w-1.5 rounded bg-gray-200"></div>
+          <div aria-hidden="true" className="h-5 w-1.5 rounded bg-gray-200"></div>
+          <div aria-hidden="true" className="h-10 w-1.5 rounded bg-gray-200"></div>
+          <div aria-hidden="true" className="h-4 w-1.5 rounded bg-gray-200"></div>
+          <div aria-hidden="true" className="h-6 w-1.5 rounded bg-gray-200"></div>
+          <div aria-hidden="true" className="h-5 w-1.5 rounded bg-gray-200"></div>
+          <div aria-hidden="true" className="h-9 w-1.5 rounded bg-primary-500"></div>
+        </div> */}
+      </div>
+    </div>
+    <div className="rounded-b-[1.625rem] rounded-t-lg bg-white p-4">
+      <div className="flex justify-between">
+        <div className="flex gap-1.5">
+          <svg className="size-5" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32">
+            <g fill="none">
+              <path fill="#ff6723" d="M26 19.34c0 6.1-5.05 11.005-11.15 10.641c-6.269-.374-10.56-6.403-9.752-12.705c.489-3.833 2.286-7.12 4.242-9.67c.34-.445.689 3.136 1.038 2.742c.35-.405 3.594-6.019 4.722-7.991a.694.694 0 0 1 1.028-.213C18.394 3.854 26 10.277 26 19.34"></path>
+              <path fill="#ffb02e" d="M23 21.851c0 4.042-3.519 7.291-7.799 7.144c-4.62-.156-7.788-4.384-7.11-8.739C9.07 14.012 15.48 10 15.48 10S23 14.707 23 21.851"></path>
+            </g>
+          </svg>
+          <span className="text-sm">Show all Health Data</span>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="text-placeholder size-4">
+          <path fillRule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
 
 
                     <div className="grid grid-cols-5 gap-4">
@@ -573,7 +646,7 @@ export default function DashboardCombind() {
             <div className="bg-gray-100">
                 <div className="relative max-w-[1500px] mx-auto w-full pt-10">
                     {favActivities && Array.isArray(favActivities) && favActivities.length > 0 ?
-                        <Activities title="Favourite Activity" cardData={favActivities} />
+                        <Activities title="Favourite Activity" type={"favourite"} cardData={favActivities} />
                     : null}
 
                     {recommendedActivities && Array.isArray(recommendedActivities) && recommendedActivities.length > 0 ?

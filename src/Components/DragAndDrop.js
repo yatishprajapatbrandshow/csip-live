@@ -247,7 +247,7 @@ const DragAndDropTopic = () => {
     }
 
     return (
-        <div className="bg-gray-100 border border-gray-200 rounded-lg p-2 w-full">
+        <div className="bg-gray-100 border border-gray-200 rounded-lg p-2 w-[70%]">
             {loading ? (
                 <div className='min-h-72 grid grid-cols-2 gap-5 mb-2'>
                     <div className='col-span-2 h-20 bg-white rounded-lg' />
@@ -297,15 +297,15 @@ const DragAndDropTopic = () => {
                                         >
                                             {item.topic}
                                         </div>) :
-                                            <div
-                                                onClick={() => { handleAdd(item) }}
-                                                key={item.id}
-                                                className="draggable-item text-sm mb-1 rounded-lg text-pink-700 bg-pink-50 flex px-4 py-4"
-                                                draggable
-                                                onDragStart={(event) => handleDragStart(event, item, 'All Topics')}
-                                            >
-                                                {item.topic}
-                                            </div>
+                                        <div
+                                            onClick={() => { handleAdd(item) }}
+                                            key={item.id}
+                                            className="draggable-item text-sm mb-1 text-gray-700 bg-white/30 border border-rose-300 bg-pink-50 hardShadow flex p-2"
+                                            draggable
+                                            onDragStart={(event) => handleDragStart(event, item, 'All Topics')}
+                                        >
+                                            {item.topic}
+                                        </div>
                                     ))}
                                 </div>
                             </div>
@@ -321,7 +321,7 @@ const DragAndDropTopic = () => {
                                     <div
                                         onClick={() => { handleRemove(item) }}
                                         key={item.id}
-                                        className="draggable-item text-sm mb-1 rounded-lg text-green-700 bg-green-50 border border-green-200/70 flex px-4 py-4"
+                                        className="draggable-item text-sm mb-1 text-gray-700 bg-green-100 border border-green-300  hardShadowGreen flex p-2"
                                         draggable
                                         onDragStart={(event) => handleDragStart(event, item, 'Your Topics')}
                                     >

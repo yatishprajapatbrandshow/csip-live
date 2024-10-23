@@ -10,7 +10,7 @@ import CardStudent from './CardStudent';
 import CardCorporate from './CardCorporate';
 import { useFetchActivities } from '@/hooks/useFetchActivities';
 
-const Activities = ({ cardData, title, activityData, bgDesign, theme }) => {
+const Activities = ({ cardData, title, activityData, type, bgDesign, theme }) => {
     const { activities } = useFetchActivities();
 
 
@@ -57,7 +57,7 @@ const Activities = ({ cardData, title, activityData, bgDesign, theme }) => {
                         Array.isArray(cardData) && cardData.length ? (
                             cardData.map((activity) => (
                                 <div className='w-max'>
-                                    <CardStudent activity={activity} />
+                                    <CardStudent activity={activity} type={type} />
                                 </div>
                             ))
                         ) : null // Optionally handle the case where both arrays are empty

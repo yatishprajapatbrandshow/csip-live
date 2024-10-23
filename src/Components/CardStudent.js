@@ -23,7 +23,7 @@ import { setOrderID, getOrderID, removeOrderID } from '../../redux/actions/order
 import { addFavouriteActivity, removeFavouriteActivity } from '../../redux/actions/favouriteActivitySlice';
 
 
-const CardStudent = ({ activity, theme }) => {
+const CardStudent = ({ activity, theme, type }) => {
     const router = useRouter();
     const dispatch = useDispatch();
     const userData = useSelector((state) => state.session.userData);
@@ -241,7 +241,7 @@ const CardStudent = ({ activity, theme }) => {
 
     return (
         <>
-            <div className="bg-white rounded-2xl overflow-hidden w-[300px] shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2 hover:scale-105">
+            <div className={`${type === "favourite" ? "bg-red-100": "bg-white"} rounded-2xl overflow-hidden w-[300px] shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2 hover:scale-105`}>
                 <div className="relative h-40 ">
                     {activity.image_assc ?
                         <Image
