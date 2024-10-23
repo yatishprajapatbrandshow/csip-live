@@ -1,8 +1,8 @@
 import { API_URL, API_URL_LOCAL } from '@/Config/Config';
 import { Check } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { applyTrigger } from '../../redux/actions/triggerSlice';
+import { useDispatch, useSelector } from "react-redux";
 
 // Fetch all topics from the API
 const fetchAllTopics = async (participantId) => {
@@ -20,6 +20,7 @@ const fetchAllTopics = async (participantId) => {
         });
 
         const responseData = await response.json();
+        
 
         if (responseData.status === true) {
             return responseData.data;
@@ -70,6 +71,7 @@ const addTopicToYourTopics = async (participantId, topicId) => {
         participant_id: participantId,
         TopicsList: [topicId],
     };
+    console.log(dataToSend);
 
     try {
         const response = await fetch(API_URL_ADD, {
@@ -81,7 +83,7 @@ const addTopicToYourTopics = async (participantId, topicId) => {
         });
 
         const responseData = await response.json();
-
+        console.log(responseData);
         if (responseData.status === true) {
 
             // console.log(`Added ${topic.text} to Your Topics successfully.`);
@@ -97,27 +99,32 @@ const DragAndDropTopic = () => {
     const [yourTopics, setYourTopics] = useState([]);
     const [dragFrom, setDragFrom] = useState("");
     const [loading, setLoading] = useState(true);
-    const userData = { sid: 2147483647 }; // Replace with your actual participant ID logic
+    
+    const dispatch = useDispatch();
+    const userData = useSelector((state) => state.session.userData);
     const [showAddModal, setShowAddModal] = useState(false);
     const [newTopicText, setNewTopicText] = useState('');
-    const dispatch = useDispatch();
+console.log(userData);
+    
+    
     // Fetch all topics on component mount
     useEffect(() => {
         const fetchTopics = async () => {
             setLoading(true);
-            const topics = await fetchAllTopics(userData.sid);
+            const topics = await fetchAllTopics(userData?.sid);
             setYourTopics(topics);
             await onSearch(''); // Fetch default 10 topics
             setLoading(false);
         };
         fetchTopics();
-    }, [userData.sid]);
+    }, [userData]);
 
     // Search for topics based on the input term
     const onSearch = async (term) => {
 
         if (term.length < 1) {
             // Fetch default topics when there is no search term
+            console.log(JSON.stringify({ TopicSearch: '', participant_id: userData?.sid }))
             try {
                 const response = await fetch(`${API_URL}topic`, {
                     method: 'POST',

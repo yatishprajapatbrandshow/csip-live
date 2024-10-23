@@ -92,6 +92,7 @@ export default function DashboardCombind() {
     const dispatch = useDispatch();
     const isTriggeredApply = useSelector((state) => state.trigger.applyTrigger);
     const userData = useSelector((state) => state.session.userData);
+    console.log("userData");
     // const openModal = () => setIsModalOpen(true);
     // const closeModal = () => setIsModalOpen(false);
     const { activities, Actloading, ActError } = useFetchActivities();
@@ -124,6 +125,7 @@ export default function DashboardCombind() {
 
     useEffect(() => {
         const userData = getLocalStorageItem("userData");
+        console.log(userData);
         if (userData) {
             setIsSession(true);
             if(userData.type !== "Participant"){
@@ -163,7 +165,6 @@ export default function DashboardCombind() {
 
     const fetchNewActivities = async (sid) => {
         const APIURL = `${API_URL}activity/get?participantId=${sid}`
-        console.log("responsexvcfvbData", APIURL)
         try {
             const response = await fetch(APIURL, {
                 headers: {
@@ -325,7 +326,7 @@ export default function DashboardCombind() {
 
     const fetchProfileStatus = async () => {
         const participantId = userData?.sid;
-
+        
         try {
             const response = await fetch(`${API_URL}register/get?participant_id=${participantId}`, {
                 method: 'GET',
@@ -350,7 +351,6 @@ export default function DashboardCombind() {
 
     const fetchActivityCurriculumStatus = async () => {
         const participantId = userData?.sid;
-
         try {
             const response = await fetch(`${API_URL}dashboardInfo/getActivity-curriculum?participant_id=${participantId}`, {
                 method: 'GET',
@@ -582,7 +582,7 @@ export default function DashboardCombind() {
             </div>
             
             <div className="">
-                <div className="relative max-w-[1500px] mx-auto w-full pt-10">
+                <div className="relative max-w-[1500px] mx-auto w-full pt-10 px-10">
                     {favActivities && Array.isArray(favActivities) && favActivities.length > 0 ?
                         <Activities title="Favourite Activity" type={"favourite"} cardData={favActivities} />
                     : null}
@@ -594,7 +594,7 @@ export default function DashboardCombind() {
                     : null}
                  
                 </div>
-                <div className="relative max-w-[1500px] mx-auto w-full pt-10 mb-10">
+                <div className="relative max-w-[1500px] mx-auto w-full pt-10 mb-10 px-10">
                     {newActivities && Array.isArray(newActivities) && newActivities.length > 0 ?
                         <div className='bg-white rounded-xl'>
                             <Activities title="New Activity" cardData={newActivities}  />

@@ -42,7 +42,6 @@ const Header = ({ session = false }) => {
     const userType = useSelector((state) => state.session.userType);
     const startSessionTrigger = useSelector((state) => state.session.startSessionTrigger);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    console.log(userType)
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
     const LogOut = () => {
@@ -54,7 +53,6 @@ const Header = ({ session = false }) => {
 
         const userData = getLocalStorageItem("userData")
         if (userData) {
-            console.log(userData)
             setUserDataShow(userData)
             dispatch(setUserData(userData));
             dispatch(setUserType(userData?.type));
