@@ -6,9 +6,11 @@ import { useCallback, useEffect, useState } from "react";
 
 export default function EditProfile() {
   const [userProfileData, setUserProfileData] = useState({});
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState('');
   const [fileUrl, setFileUrl] = useState('');
   const [activeLink, setActivelink] = useState(1);
+  const [profileImage, setProfileImage] = useState('')
+  // const []
   const [formData, setFormData] = useState({
     sid: "",
     name: "",
@@ -106,6 +108,22 @@ export default function EditProfile() {
     updateProfile();
   };
   const updateProfile = async () => {
+    console.log(file);
+    
+    if (file) {
+      try {
+        // Wait for the image upload to complete
+        const result = await handleUpload(file);
+
+        if (result?.fileUrl) {
+          const imageUrl = result?.fileUrl.split('https://csip-image.blr1.digitaloceanspaces.com/img/content/')[1]; // Replace the file with the uploaded URL
+          setProfileImage(imageUrl)
+        }
+      } catch (error) {
+        console.error(`Error uploading profile image `, error);
+      }
+    }
+
     const payload = {
       sid: formData?.sid || "",
       name: formData?.name || "",
@@ -122,9 +140,9 @@ export default function EditProfile() {
       oldPassword: formData?.oldPassword || "",
       password: formData?.newPassword || "",
       r_password: formData?.retypePassword || "",
-      participantpic: formData?.participantpic || ""
+      participantpic: profileImage || ""
     }
-
+    
     try {
       const response = await fetch(`${API_URL}register/update`, {
         headers: {
@@ -168,11 +186,6 @@ export default function EditProfile() {
       }
     }
   }, [file]);
-  const handleFileChange = useCallback((e) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
-    }
-  }, []);
   return (
     <>
       <Header />
@@ -267,9 +280,12 @@ export default function EditProfile() {
                       <input
                         type="file"
                         id="profile-image-input"
-                        accept="image/*"
                         style={{ display: "none" }} // Hide the input
-                        onChange={(e) => handleFileChange(e)}
+                        onChange={(e) => {
+                          e.preventDefault()
+                          console.log(e.target.files[0]);
+                          setFile(e.target.files[0]);
+                        }}
                       />
 
                       {/* Button to trigger file input */}

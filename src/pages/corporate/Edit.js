@@ -1185,7 +1185,7 @@ const Edit = () => {
                                                 accept="image/*"
                                                 onChange={(e) => {
                                                     // Convert the file to a base64 string or handle it as needed
-                                                    handleNewsChange(index, 'image', reader.result); // Store the base64 image data
+                                                    handleNewsChange(index, 'image', e.target.files[0]); // Store the base64 image data
                                                 }}
                                                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                                             />
