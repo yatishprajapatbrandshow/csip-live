@@ -21,7 +21,7 @@ const handleApply = async (activity, userData) => {
             });
             const responseData = await response.json();
             console.log(responseData);
-                if (responseData.status === true) {
+                if (responseData.status === true || responseData.message === "Already Applied For This Activity" ) {
                     return responseData
                 } else {
                     return false

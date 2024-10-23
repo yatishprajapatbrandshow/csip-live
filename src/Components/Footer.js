@@ -1,4 +1,5 @@
 import { ChevronRight, Facebook, Linkedin, Twitter } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
 
 function Footer() {
@@ -15,11 +16,11 @@ function Footer() {
             </div>
             <div className="py-6 flex justify-between max-sm:flex-col max-sm:gap-4">
                 <ul>
-                    <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} />About</li>
-                    <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} />Contact</li>
-                    <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} />Refund Policy</li>
-                    <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} />Privacy Policy</li>
-                    <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} />Term and Conditions</li>
+                    <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} /><Link href="/about">About</Link></li>
+                    <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} /><Link href="/contact">Contact</Link></li>
+                    <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} /><Link href="/refund-policy">Refund Policy</Link></li>
+                    <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} /><Link href="/privacy-policy">Privacy Policy</Link></li>
+                    <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} /><Link href="/term-and-condition">Term and Conditions</Link></li>
                 </ul>
                 <div className="flex flex-col justify-between gap-2 max-sm:gap-1 max-sm:px-0 max-sm:w-full text-base font-medium text-gray-800  w-[60%] pr-10">
                     <h3>Get In Touch</h3>
