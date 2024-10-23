@@ -436,9 +436,9 @@ console.log(data);
                         <tr className='bg-blue-100 '>
                           <th className="py-4 text-sm font-semibold px-4 ">ID</th>
                           <th className="py-4 text-sm font-semibold px-4 ">Image</th>
-                          <th className="py-4 text-sm font-semibold px-4 ">Name</th>
-                          <th className="py-4 text-sm font-semibold px-4 ">Description</th>
-                          <th className="py-4 text-sm font-semibold px-4 ">Category</th>
+                          <th className="py-4 text-left text-sm font-semibold px-4 ">Name</th>
+                          <th className="py-4 text-left text-sm font-semibold px-4 ">Description</th>
+                          <th className="py-4 text-sm font-semibold px-4 ">SnapShot</th>
                           <th className="py-4 text-sm font-semibold px-4 ">Version</th>
                           <th className="py-4 text-sm font-semibold px-4 ">Download</th>
                         </tr>
@@ -451,8 +451,8 @@ console.log(data);
                               <img src={`https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/1024px-Visual_Studio_Code_1.35_icon.svg.png`} alt={tool.name} className="h-8 w-8 object-contain" />
                             </td>
                             <td className="py-2 text-sm px-4">{tool.name}</td>
-                            <td className="py-2 text-sm px-4">{tool.description.slice(0,50)}...</td>
-                            <td className="py-2 text-sm px-4">{tool.category}</td>
+                            <td className="py-2 text-sm px-4" dangerouslySetInnerHTML={{__html: tool.description}} />
+                            <td className="py-2 text-sm px-4 bg-blue-300 text-center">View</td>
                             <td className="py-2 text-sm px-4">{tool.version}</td>
                             <td className="py-2 text-sm px-4 text-gray-500"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></td>
                           </tr>
