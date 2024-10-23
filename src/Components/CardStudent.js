@@ -245,7 +245,7 @@ const CardStudent = ({ activity, theme, type }) => {
                 <div className="relative h-40 ">
                     {activity.image_assc ?
                         <Image
-                            src={`https://csip.fieindia.org/images/activity/${activity.image_assc}`}
+                            // src={activity?.image_assc}
                             alt={activity.title}
                             layout="fill"
                             objectFit="cover"
@@ -289,7 +289,7 @@ const CardStudent = ({ activity, theme, type }) => {
                     </div>
                 </div>
                 <div className="p-4 pb-2 pt-8 border-t border-gray-50">
-                    <h2 className="text-sm pb-1 mb-1 border-b border-gray-200">{activity.short_name}</h2>
+                    <h2 className="text-sm pb-1 mb-1 border-b border-gray-200">{activity.short_name}</h2>                    
                     <div>
                         <p className='text-sm font-light '><span className='font-medium mr-2'>Start date:</span> {useFormattedDate(activity.activity_start_date, 1)}</p>
                         <p className='text-sm font-light '><span className='font-medium mr-2'>Fee:</span> {activity.amount}</p>

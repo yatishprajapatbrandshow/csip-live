@@ -247,7 +247,7 @@ const DragAndDropTopic = () => {
     }
 
     return (
-        <div className="bg-gray-100 border border-gray-200 rounded-lg p-2 w-[70%]">
+        <div className="bg-gray-100 border border-gray-200 rounded-lg p-2 w-full">
             {loading ? (
                 <div className='min-h-72 grid grid-cols-2 gap-5 mb-2'>
                     <div className='col-span-2 h-20 bg-white rounded-lg' />
