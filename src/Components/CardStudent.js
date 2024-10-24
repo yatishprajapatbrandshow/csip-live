@@ -32,7 +32,7 @@ const CardStudent = ({ activity, theme, type }) => {
     const [showPopup, setShowPopup] = useState(false);
     const OrderDet = useSelector((state) => state.orderId.orderId);
     const favouriteActivities = useSelector(
-        (state) => state.favouriteActivity.favouriteActivities 
+        (state) => state.favouriteActivity.favouriteActivities
     );
     let OrderDetNew;
     const toggleHeart = async (activity) => {
@@ -60,7 +60,7 @@ const CardStudent = ({ activity, theme, type }) => {
 
             const responseData = await response.json();
             console.log(responseData);
-            
+
             if (responseData.status === true) {
                 dispatch(applyTrigger())
                 if (responseData.status === true) {
@@ -78,7 +78,7 @@ const CardStudent = ({ activity, theme, type }) => {
         const formattedName = activity.short_name.replace(/\s+/g, '-').toLowerCase();
         router.push({
             pathname: formattedName,
-            query: { item: activity._id }
+            query: { item: activity._id + "-" + userData?.sid }
         });
 
     };
@@ -91,7 +91,7 @@ const CardStudent = ({ activity, theme, type }) => {
     const handleApply = async () => {
         try {
             const register = await Registration(activity, userData)
-            
+
             if (register && register.status) {
                 OrderCreate()
             }
@@ -101,7 +101,7 @@ const CardStudent = ({ activity, theme, type }) => {
     }
 
     const OrderCreate = async () => {
-        
+
         try {
             const order = await CreateOrder(activity, userData)
             if (order && order.status) {
@@ -133,7 +133,7 @@ const CardStudent = ({ activity, theme, type }) => {
     // await handleCreatePayment(responseData?.data, paydata);
     // dispatch(applyTrigger());
 
-   
+
     const GetDetails = async (Payment) => {
 
         try {
@@ -201,9 +201,9 @@ const CardStudent = ({ activity, theme, type }) => {
     const Ataimpt = async () => {
         const loadingToastId = toast.loading("Loading...");
         try {
-            
+
             const response = await AttemptActivity(activity, userData);
-            
+
             console.log(activity.sid)
             if (response.message === "Study created successfully." || response.message === "Already Studying this Activity") {
                 toast.update(loadingToastId, {
@@ -216,7 +216,7 @@ const CardStudent = ({ activity, theme, type }) => {
                     pathname: '/activity',
                     query: { item: activity.sid }
                 });
-            }else{
+            } else {
                 throw new Error("else hit")
             }
         } catch (error) {
@@ -236,11 +236,11 @@ const CardStudent = ({ activity, theme, type }) => {
 
     return (
         <>
-            <div className={`${type === "favourite" ? "bg-red-100": "bg-white"} CardShadow rounded-2xl overflow-hidden w-[300px] transition-all hover:-translate-y-2 hover:scale-105`}>
+            <div className={`${type === "favourite" ? "bg-red-100" : "bg-white"} CardShadow rounded-2xl overflow-hidden w-[300px] transition-all hover:-translate-y-2 hover:scale-105`}>
                 <div className="relative h-40 ">
                     {activity.image_assc ?
                         <img
-                        src={`${activity?.image_assc}`}
+                            src={`${activity?.image_assc}`}
                             alt={activity.title}
                             layout="fill"
                             objectFit="cover"
@@ -282,7 +282,7 @@ const CardStudent = ({ activity, theme, type }) => {
                     </div>
                 </div>
                 <div className="p-4 pb-2 pt-8 border-t border-gray-50">
-                    <h2 className="text-sm pb-1 mb-1 border-b border-gray-200">{activity.short_name}</h2>                    
+                    <h2 className="text-sm pb-1 mb-1 border-b border-gray-200">{activity.short_name}</h2>
                     {/* <h2 className="text-sm pb-1 mb-1 border-b border-gray-200">{activity?.image_assc}</h2>                     */}
                     <div>
                         <p className='text-sm font-light '><span className='font-medium mr-2'>Start date:</span> {useFormattedDate(activity.activity_start_date, 1)}</p>
@@ -309,8 +309,8 @@ const CardStudent = ({ activity, theme, type }) => {
                                 Pay Now
                             </button>
                         ) : activity?.paymentStatus === "success" && activity?.activityProgress === 'Paid' ? (
-                            <button 
-                                onClick={()=> Ataimpt()}
+                            <button
+                                onClick={() => Ataimpt()}
                                 className="bg-white bg-pattern bg-no-repeat bg-[length:100px_100px] bg-right w-full text-gray-800 text-sm transition-colors">
                                 Attempt
                             </button>

@@ -104,7 +104,6 @@ const DragAndDropTopic = () => {
     const userData = useSelector((state) => state.session.userData);
     const [showAddModal, setShowAddModal] = useState(false);
     const [newTopicText, setNewTopicText] = useState('');
-console.log(userData);
     
     
     // Fetch all topics on component mount
@@ -124,7 +123,7 @@ console.log(userData);
 
         if (term.length < 1) {
             // Fetch default topics when there is no search term
-            console.log(JSON.stringify({ TopicSearch: '', participant_id: userData?.sid }))
+            // console.log(JSON.stringify({ TopicSearch: '', participant_id: userData?.sid }))
             try {
                 const response = await fetch(`${API_URL}topic`, {
                     method: 'POST',
