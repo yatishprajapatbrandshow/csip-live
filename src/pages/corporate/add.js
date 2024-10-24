@@ -17,7 +17,7 @@ const Add = () => {
   const router = useRouter();
   const userData = useSelector((state) => state.session.userData);
   const [topics, setTopics] = useState([]);
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(0);
   const [name, setName] = useState("");
   const [shortName, setShortName] = useState("");
   const [objective, setObjective] = useState("");
