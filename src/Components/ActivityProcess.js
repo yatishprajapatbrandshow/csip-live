@@ -536,7 +536,17 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
           <div className="mx-auto ">
             <p className='text-xl font-bold capitalize mb-4'>Video podcast link</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {studyMaterials.map((material) => (
+              {data['video-podcast-link'].youtube_video_link.map((link, index) => (
+                <div key={index} className="bg-white overflow-hidden">
+                  <button
+                    onClick={() => window.open(link, '_blank')}
+                    className=" hover:underline bg-blue-600 text-white p-4"
+                  >
+                    {`Watch tutorial ${index + 1}`}
+                  </button>
+                </div>
+              ))}
+              {/* {studyMaterials.map((material) => (
                 <div key={material.id} className="bg-white rounded-lg overflow-hidden">
                   <div className="relative">
                     <Image
@@ -564,19 +574,16 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
         )}
-        {data['related-topic-news'] && (
-          console.log(),
 
+        {data['related-topic-news'] && (
           < div className="mx-auto ">
             <p className='text-xl font-bold capitalize mb-4'>Related topic news</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {data['related-topic-news'].related_topic_news?.map((material) => (
-                console.log(material),
-
                 <div key={material.id} className="bg-white rounded-lg overflow-hidden">
                   <div className="relative">
                     <img
@@ -589,10 +596,10 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
                     <div className="flex items-start space-x-3">
                       <div className="flex-1 min-w-0">
                         <h3 className="text-sm font-semibold line-clamp-2">{material.title}</h3>
-                        <p className="text-xs text-gray-600 mt-1">{material.description}</p>
-                        <p className="text-xs text-gray-600 mt-1">Duration: {material.duration}</p>
-                        <p className="text-xs text-gray-600 mt-1">What you will learn:</p>
-                        <a href={material.link} className="text-sm mt-3 block text-blue-500 hover:underline">Start Learning</a>
+                        <p className="text-xs text-gray-600 mt-1" dangerouslySetInnerHTML={{ __html: material.description }} />
+                        {/* <p className="text-xs text-gray-600 mt-1">Duration: {material.duration}</p>
+                        <p className="text-xs text-gray-600 mt-1">What you will learn:</p> */}
+                        <button onClick={() => window.open(material.link, '_blank')} className='text-sm mt-3 block text-blue-500 hover:underline'>Start Learning</button>
                       </div>
                     </div>
                   </div>
@@ -601,20 +608,22 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
             </div>
           </div>
         )}
+
         {data['top-employees'] && (
           <div className="mx-auto w-full">
             <p className='text-xl font-bold capitalize mb-4'>top employees</p>
             <div className="container mx-auto pt-2">
               <div className="flex gap-4 flex-wrap">
-                {TopEmp.map((employee, index) => (
-                  <div key={index} className="border p-4 rounded-lg shadow-md flex flex-col justify-center items-center">
-                    <img src={employee.image} alt={employee.name} className="rounded-full w-24 h-24 mb-2" />
-                    <h2 className="text-sm font-semibold">{employee.name}</h2>
+                {data['top-employees'].top_employees.map((employee, index) => (
+                  <div key={index} className="border p-4 rounded-lg shadow-md flex flex-col justify-center items-start min-w-60">
+                    {/* <img src={employee.image} alt={employee.name} className="rounded-full w-24 h-24 mb-2" /> */}
+                    <h2 className="text-sm text-left font-semibold">Name: {employee.name}</h2>
+                    <h2 className="text-sm text-left font-semibold">Company Name: {employee.companyName}</h2>
                     <a
-                      href={employee.linkedin}
+                      href={employee.linkedInProfile}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-500 text-xs"
+                      className="text-blue-500 text-xs mt-4"
                     >
                       View LinkedIn Profile
                     </a>
@@ -625,7 +634,6 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
 
           </div>
         )}
-
 
 
       </> : null
