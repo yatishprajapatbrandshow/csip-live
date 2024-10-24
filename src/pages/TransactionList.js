@@ -39,7 +39,7 @@ function TransactionList() {
                     <div className="sm:flex-auto">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">Transaction List</h1>
                         <p className="mt-2 text-sm text-gray-700">
-                            A list of all the users in your account including their name, title, email and role.
+                            A list of your all transactions.
                         </p>
                     </div>
                     {/* <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
