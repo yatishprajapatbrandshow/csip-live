@@ -148,7 +148,11 @@ const Edit = () => {
                     ])
                 }
                 setSnapShot(data?.snap_shot);
-                setYoutubeVideoLink(data?.youtube_video_link);
+                if (Array.isArray(data?.youtube_video_link)) {
+                    setYoutubeVideoLink(data?.youtube_video_link);
+                } else {
+                    setYoutubeVideoLink([''])
+                }
                 setImageAssc(data?.image_assc);
                 setJobRolesAndDescription(data?.job_roles_and_description);
                 setRelatedTopicNews(data?.related_topic_news);
