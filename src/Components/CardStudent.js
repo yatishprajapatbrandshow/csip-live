@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { applyTrigger } from '../../redux/actions/triggerSlice';
 import { API_URL } from '@/Config/Config';
 import { useRouter } from 'next/router';
-import useRazorpay from '@/hooks/useRazorpay';
 import { encrypt } from '@/utils/cryptoUtils';
 import useFormattedDate from '@/hooks/useDateFormate';
 import DefaultIMG from '/public/images/image-banner.jpg';
@@ -15,13 +14,12 @@ import DefaultLogo from '/public/images/images.png';
 import PopUp from './PopUp';
 import Registration from '../function/Registration';
 import CreateOrder from '../function/CreateOrder';
-import Razorpay from '../function/initiatePayment';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AttemptActivity from '../function/AttemptActivity';
 import { setOrderID, getOrderID, removeOrderID } from '../../redux/actions/orderIdSlice';
 import { addFavouriteActivity, removeFavouriteActivity } from '../../redux/actions/favouriteActivitySlice';
-
+import useRazorpay from '@/function/initiatePayment';
 
 const CardStudent = ({ activity, theme, type }) => {
     const router = useRouter();
@@ -34,6 +32,7 @@ const CardStudent = ({ activity, theme, type }) => {
     const favouriteActivities = useSelector(
         (state) => state.favouriteActivity.favouriteActivities
     );
+    const { triggerRazorpay } = useRazorpay();
     let OrderDetNew;
     const toggleHeart = async (activity) => {
         if (!activity) {
@@ -117,7 +116,7 @@ const CardStudent = ({ activity, theme, type }) => {
 
     const initiatePayment = async () => {
         try {
-            const Payment = await Razorpay(activity, userData)
+            const Payment = await triggerRazorpay(activity, userData)
             if (Payment) {
                 console.log("step 3")
                 GetDetails("pay_P8osHZXRb09Oy8")
@@ -198,7 +197,7 @@ const CardStudent = ({ activity, theme, type }) => {
 
 
 
-    const Ataimpt = async () => {
+    const Attempt = async () => {
         const loadingToastId = toast.loading("Loading...");
         try {
 
@@ -229,9 +228,6 @@ const CardStudent = ({ activity, theme, type }) => {
             });
         }
     };
-
-
-
 
 
     return (
@@ -310,7 +306,7 @@ const CardStudent = ({ activity, theme, type }) => {
                             </button>
                         ) : activity?.paymentStatus === "success" && activity?.activityProgress === 'Paid' ? (
                             <button
-                                onClick={() => Ataimpt()}
+                                onClick={() => Attempt()}
                                 className="bg-white bg-pattern bg-no-repeat bg-[length:100px_100px] bg-right w-full text-gray-800 text-sm transition-colors">
                                 Attempt
                             </button>
