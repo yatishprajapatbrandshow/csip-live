@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { applyTrigger } from '../../redux/actions/triggerSlice';
 import { API_URL } from '@/Config/Config';
 import { useRouter } from 'next/router';
-import useRazorpay from '@/hooks/useRazorpay';
+import useRazorpay from '@/function/initiatePayment';
 import { encrypt } from '@/utils/cryptoUtils';
 import useFormattedDate from '@/hooks/useDateFormate';
 import DefaultIMG from '/public/images/image-banner.jpg';
@@ -15,7 +15,6 @@ import DefaultLogo from '/public/images/images.png';
 import PopUp from './PopUp';
 import Registration from '../function/Registration';
 import CreateOrder from '../function/CreateOrder';
-import Razorpay from '../function/initiatePayment';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AttemptActivity from '../function/AttemptActivity';
@@ -31,16 +30,18 @@ const CardStudent = ({ activity, theme, type }) => {
     // const { initiatePayment } = useRazorpay();
     const [showPopup, setShowPopup] = useState(false);
     const OrderDet = useSelector((state) => state.orderId.orderId);
+    const { triggerRazorpay } = useRazorpay();
     const favouriteActivities = useSelector(
         (state) => state.favouriteActivity.favouriteActivities 
     );
     let OrderDetNew;
+    console.log(activity);
     const toggleHeart = async (activity) => {
         if (!activity) {
             return
         }
         setIsToggled(!isToggled);
-        console.log(activity?.sid);
+        
 
         try {
             const response = await fetch(`${API_URL}favourite-activity/`, {
@@ -117,7 +118,7 @@ const CardStudent = ({ activity, theme, type }) => {
 
     const initiatePayment = async () => {
         try {
-            const Payment = await Razorpay(activity, userData)
+            const Payment = await triggerRazorpay(activity, userData)
             if (Payment) {
                 console.log("step 3")
                 GetDetails("pay_P8osHZXRb09Oy8")
