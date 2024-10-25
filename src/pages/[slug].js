@@ -94,7 +94,7 @@ const landing = ({ initialData, success }) => {
             }
         } catch (error) {
             console.log(error)
-        } 
+        }
     }
 
     const OrderCreate = async () => {
@@ -188,6 +188,7 @@ const landing = ({ initialData, success }) => {
     }
 
     const Attempt = async () => {
+        const activity = initialData?.data;
         const loadingToastId = toast.loading("Loading...");
         try {
 
@@ -221,7 +222,6 @@ const landing = ({ initialData, success }) => {
 
     useEffect(() => {
         if (initialData && success) {
-            console.log(initialData);
             setAllCurriculum(initialData.data);
             setLoader(false); // Hide loader once data is set
         } else {
@@ -261,9 +261,9 @@ const landing = ({ initialData, success }) => {
                             <span className='font-montserrat2 text-3xl'>₹{amount}/-</span>
                             <div className="mt-10 flex justify-start gap-x-6">
                                 {
-                                    initialData?.data?.paymentStatus === "pending" && initialData?.data?.status === 'Active' ? (
-                                        <button onClick={() => { OrderDetNew = initialData?.data?.orderId, initiatePayment() }} className="group inline-flex items-center justify-center rounded-full py-2.5 px-4 text-sm font-montserrat2 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-slate-900 text-white hover:bg-slate-700 hover:text-slate-100 active:bg-slate-800 active:text-slate-300 focus-visible:outline-slate-900">Pay Now</button>
-                                    ) : initialData?.paymentStatus === "success" && initialData?.data?.activityProgress === 'Paid' ? (
+                                    initialData?.data?.paymentStatus === "pending" && initialData?.data?.status === true && initialData?.data?.activityStatus === 'Active' ? (
+                                        <button onClick={() => { OrderDetNew = initialData?.data?.orderId, handleApply() }} className="group inline-flex items-center justify-center rounded-full py-2.5 px-4 text-sm font-montserrat2 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-slate-900 text-white hover:bg-slate-700 hover:text-slate-100 active:bg-slate-800 active:text-slate-300 focus-visible:outline-slate-900">Pay Now</button>
+                                    ) : initialData?.data?.paymentStatus === "success" && initialData?.data?.activityProgress === 'Paid' ? (
                                         <button onClick={() => Attempt()} className="group inline-flex items-center justify-center rounded-full py-2.5 px-4 text-sm font-montserrat2 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-slate-900 text-white hover:bg-slate-700 hover:text-slate-100 active:bg-slate-800 active:text-slate-300 focus-visible:outline-slate-900">Attempt</button>
                                     ) : (
                                         <button onClick={handlePopUp} className="group inline-flex items-center justify-center rounded-full py-2.5 px-4 text-sm font-montserrat2 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-slate-900 text-white hover:bg-slate-700 hover:text-slate-100 active:bg-slate-800 active:text-slate-300 focus-visible:outline-slate-900">Apply For Activity</button>
@@ -521,48 +521,55 @@ export default landing;
 
 export async function getServerSideProps(context) {
     const { item } = context.query;
+    if (item) {
+        const [id, usersid] = item?.split('-')
+        console.log(id, usersid);
 
-    const fetchAllCurriculum = async (item) => {
-        const APIURL = `${API_URL}activity/get-by-id?_id=${item}`;
-        try {
-            const response = await fetch(APIURL, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                method: "GET",
-            });
+        const fetchAllCurriculum = async (item, usersid) => {
 
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
+            const APIURL = `${API_URL}activity/get-by-id?_id=${item}&&participantId=${parseInt(usersid)}`;
+            try {
+                const response = await fetch(APIURL, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    method: "GET",
+                });
 
-            const responseData = await response.json();
-            if (responseData.status === true) {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                const responseData = await response.json();
+                console.log(responseData);
+
+                if (responseData.status === true) {
+                    return {
+                        props: {
+                            initialData: responseData,
+                            success: true,
+                        },
+                    };
+                }
+            } catch (error) {
                 return {
                     props: {
-                        initialData: responseData,
-                        success: true,
+                        initialData: null,
+                        success: false,
                     },
                 };
             }
-        } catch (error) {
-            return {
-                props: {
-                    initialData: null,
-                    success: false,
-                },
-            };
+        };
+
+        if (id && usersid) {
+            return await fetchAllCurriculum(id, usersid);
         }
-    };
 
-    if (item) {
-        return await fetchAllCurriculum(item);
+        return {
+            props: {
+                initialData: null,
+                success: false,
+            },
+        };
     }
-
-    return {
-        props: {
-            initialData: null,
-            success: false,
-        },
-    };
 }

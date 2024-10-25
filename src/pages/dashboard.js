@@ -92,7 +92,7 @@ export default function DashboardCombind() {
     const dispatch = useDispatch();
     const isTriggeredApply = useSelector((state) => state.trigger.applyTrigger);
     const userData = useSelector((state) => state.session.userData);
-    console.log("userData");
+    // console.log("userData");
     // const openModal = () => setIsModalOpen(true);
     // const closeModal = () => setIsModalOpen(false);
     const { activities, Actloading, ActError } = useFetchActivities();

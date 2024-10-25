@@ -29,7 +29,7 @@ const Add = () => {
   const [corporateHierarchyOverview, setCorporateHierarchyOverview] = useState("");
   // const [tag, setTag] = useState("");
   const [snapShot, setSnapShot] = useState("");
-  const [youtubeVideoLink, setYoutubeVideoLink] = useState("");
+  const [youtubeVideoLink, setYoutubeVideoLink] = useState([""]);
   const [imageAssc, setImageAssc] = useState("");
   const [entryType, setEntryType] = useState("");
   const [activityCategory, setActivityCategory] = useState("");
@@ -262,6 +262,24 @@ const Add = () => {
   const removeEmployee = (index) => {
     const newEmployees = topEmployees.filter((_, i) => i !== index);
     setTopEmployees(newEmployees);
+  };
+
+
+
+  // Youtube video multiple ulrs 
+  const handleInputChange = (index, value) => {
+    const newLinks = [...youtubeVideoLink];
+    newLinks[index] = value;
+    setYoutubeVideoLink(newLinks);
+  };
+
+  const handleAddInput = () => {
+    setYoutubeVideoLink([...youtubeVideoLink, '']); // Add a new empty input
+  };
+
+  const handleRemoveInput = (index) => {
+    const newLinks = youtubeVideoLink.filter((_, i) => i !== index);
+    setYoutubeVideoLink(newLinks); // Remove the input at the specified index
   };
 
 
@@ -1123,16 +1141,32 @@ const Add = () => {
               {step === 4 && (
                 <form>
                   <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Youtube Video Link
-                    </label>
-                    <input
-                      type="text"
-                      name="youtube_video_link"
-                      value={youtubeVideoLink || ""}
-                      onChange={(e) => setYoutubeVideoLink(e.target.value)}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                    />
+                    <label className="block text-sm font-medium text-gray-700">YouTube Video Links</label>
+                    {youtubeVideoLink?.map((link, index) => (
+                      <div key={index} className="flex items-center mt-2">
+                        <input
+                          type="text"
+                          name={`youtube_video_link_${index}`}
+                          value={link}
+                          onChange={(e) => handleInputChange(index, e.target.value)}
+                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveInput(index)}
+                          className="ml-2 text-red-600"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={handleAddInput}
+                      className="mt-2 text-blue-600"
+                    >
+                      Add Another Video Link
+                    </button>
                   </div>
 
 

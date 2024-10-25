@@ -20,7 +20,7 @@ function Footer() {
                     <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} /><Link href="/contact">Contact</Link></li>
                     <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} /><Link href="/refund-policy">Refund Policy</Link></li>
                     <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} /><Link href="/privacy-policy">Privacy Policy</Link></li>
-                    <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} /><Link href="/term-and-condition">Term and Conditions</Link></li>
+                    <li className='flex gap-1 text-sm font-medium text-gray-800'><ChevronRight width={15} /><Link href="/terms-and-condition">Term and Conditions</Link></li>
                 </ul>
                 <div className="flex flex-col justify-between gap-2 max-sm:gap-1 max-sm:px-0 max-sm:w-full text-base font-medium text-gray-800  w-[60%] pr-10">
                     <h3>Get In Touch</h3>

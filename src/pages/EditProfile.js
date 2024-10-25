@@ -3,7 +3,8 @@ import Header from "@/Components/Header";
 import { API_URL, API_URL_LOCAL } from "@/Config/Config";
 import { getLocalStorageItem, setLocalStorageItem } from "@/Config/localstorage"; // Assuming a function to set data in localStorage
 import { useCallback, useEffect, useState } from "react";
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function EditProfile() {
   const [userProfileData, setUserProfileData] = useState({});
   const [file, setFile] = useState('');
@@ -141,7 +142,7 @@ export default function EditProfile() {
       const responseData = await response.json();
       if (responseData.status === true) {
         alert(responseData?.message)
-        setLocalStorageItem('userData', responseData.data);
+        setLocalStorageItem('userData', responseData?.data);
         // setFormData({...formData,[newPassword]:"",[retypePassword]:""})
       } else {
         alert(responseData?.message)
@@ -185,6 +186,7 @@ export default function EditProfile() {
     <>
       <Header />
       <div className="flex w-full flex-col gap-4 lg:flex-row min-h-[80vh] bg-white py-10">
+        <ToastContainer position="top-right" autoClose={2000} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
         {/* Sidebar */}
         <aside className="w-full lg:w-64 bg-white p-6 rounded-lg shadow-lg">
           <h2 className="text-xl font-semibold mb-4">Account Settings</h2>
