@@ -46,7 +46,166 @@ const Add = () => {
   const [id, setId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");
+  const [AllComments, setAllComments] = useState([]);
+  const [activityId, setActivityId] = useState(null);
+  const [comment, setComment] = useState({
+    commentId: null,
+    name: '',
+    email: '',
+    designation: '',
+    companyName: '',
+    commentText: '',
+    profilePic: '',
+    parentId: 0,
+    pageUrl: '',
+  });
 
+  // Function to update a comment using POST API
+  const fetchComments = async (activity) => {
+    try {
+      const response = await fetch(`${API_URL_LOCAL}new-comments?activity_id=${activity}`, { // Use the POST API for updating
+        method: 'GET', // Using POST for updating
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update comment');
+      }
+
+      const responseData = await response.json();
+      if (responseData.status) {
+        setAllComments(responseData.data);
+      }
+      // Update the AllComments state with the new updated comment data
+      alert('Comment updated successfully!');
+    } catch (error) {
+      console.error('Error updating comment:', error);
+      alert('Error updating comment: ' + error.message);
+    }
+  };
+  // useEffect(() => {
+  //   if (activityId) {
+  //     fetchComments(activityId);
+  //   }
+  // }, [activityId])
+  const updateCommentAPI = async (commentId) => {
+
+    try {
+      const response = await fetch(`${API_URL_LOCAL}new-comments/update-comment`, { // Use the POST API for updating
+        method: 'POST', // Using POST for updating
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...comment, commentId }), // Include the commentId in0 the body
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update comment');
+      }
+
+      const updatedComment = await response.json();
+
+      // Update the AllComments state with the new updated comment data
+      setAllComments((prevComments) =>
+        prevComments.map((item) =>
+          item.commentId === updatedComment.data.commentId ? updatedComment.data : item
+        )
+      );
+
+      alert('Comment updated successfully!');
+    } catch (error) {
+      console.error('Error updating comment:', error);
+      alert('Error updating comment: ' + error.message);
+    }
+  };
+  const addCommentAPI = async () => {
+    console.log(comment);
+    const payload = {
+      name: comment.name,
+      email: comment.email,
+      designation: comment.designation,
+      companyName: comment.companyName,
+      comment: comment.commentText,
+      profilePic: comment.profilePic,
+      parentId: comment.parentId,
+      pageUrl: comment.pageUrl,
+      activity_id: id
+    }
+    try {
+      const response = await fetch(`${API_URL_LOCAL}new-comments/add-comment`, { // Use the POST API for updating
+        method: 'POST', // Using POST for updating
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...payload }), // Include the commentId in0 the body
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update comment');
+      }
+
+      const newComment = await response.json();
+
+      // Update the AllComments state with the new updated comment data
+      setAllComments((prevComments) =>
+        prevComments.map((item) =>
+          item.commentId === newComment.data.commentId ? newComment.data : item
+        )
+      );
+
+      fetchComments(id)
+      alert('Comment updated successfully!');
+    } catch (error) {
+      console.error('Error updating comment:', error);
+      alert('Error updating comment: ' + error.message);
+    }
+  };
+  const [isAddingNewComment, setIsAddingNewComment] = useState(true); // Always true when no comments
+  const [isEditing, setIsEditing] = useState(false);
+  const [editCommentIndex, setEditCommentIndex] = useState(null);
+
+  // Handle input change in the comment form
+  const handleCommentChange = (e) => {
+    const { name, value } = e.target;
+    setComment((prevComment) => ({
+      ...prevComment,
+      [name]: value,
+    }));
+  };
+
+
+  // Handle click on Edit
+  const onEdit = (index) => {
+    setComment(AllComments[index]); // Pre-fill the form with selected comment data
+    setIsEditing(true);
+    setIsAddingNewComment(true); // Show the form when editing
+    setEditCommentIndex(index);
+  };
+
+  // Handle click on Reply
+  const onReply = (item) => {
+    setIsAddingNewComment(true);
+    setIsEditing(false);
+    setComment({ ...comment, parentId: item.parentId });
+  };
+
+  // Add new comment button
+  const handleAddNewComment = () => {
+    setIsAddingNewComment(true);
+    setIsEditing(false); // Reset editing state
+    setComment({
+      name: '',
+      email: '',
+      designation: '',
+      companyName: '',
+      commentText: '',
+      profilePic: '',
+      parentId: 0,
+      pageUrl: '',
+    });
+  };
   const [isSession, setIsSession] = useState(false);
 
   useEffect(() => {
@@ -73,7 +232,7 @@ const Add = () => {
     "Activity Details",
     "Participant and Approval",
     "Activity and Submission Dates",
-    "Empty",
+    "Comments",
     "Top Employees",
   ];
 
@@ -100,6 +259,25 @@ const Add = () => {
       handleAddTag();
     }
   };
+  // const [comment, setComment] = useState({
+  //   name: '',
+  //   email: '',
+  //   designation: '',
+  //   companyName: '',
+  //   commentText: '', // Renamed to commentText to avoid confusion with state name
+  //   profilePic: '',
+  //   parentId: 0,
+  //   pageUrl: '',
+  // });
+
+
+  // const handleCommentChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setComment((prevComment) => ({
+  //     ...prevComment,
+  //     [name]: value,
+  //   }));
+  // };
 
 
   // Job Roles And Description Functionality
@@ -1736,85 +1914,150 @@ const Add = () => {
                 </form>
               )}
               {step === 10 && (
-                <form>
-                  {/* {topEmployees.map((employee, index) => (
-                    <div key={index} className="mb-6 p-4 border rounded-md shadow-sm">
-                      <h4 className="font-medium text-lg mb-2">Employee {index + 1}</h4>
-
-                      <label className="block text-sm font-medium text-gray-700">
-                        Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={employee.name}
-                        onChange={(e) => handleEmployeeChange(index, 'name', e.target.value)}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                        required
-                      />
-
-                      <label className="block text-sm font-medium text-gray-700 mt-2">
-                        Company Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={employee.companyName}
-                        onChange={(e) => handleEmployeeChange(index, 'companyName', e.target.value)}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                        required
-                      />
-
-                      <label className="block text-sm font-medium text-gray-700 mt-2">
-                        LinkedIn Profile
-                      </label>
-                      <input
-                        type="url"
-                        value={employee.linkedInProfile}
-                        onChange={(e) => handleEmployeeChange(index, 'linkedInProfile', e.target.value)}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                      />
+                <div>
+                  {AllComments.length > 0 ? (
+                    <div>
+                      {AllComments.map((item, index) => (
+                        <div
+                          key={index}
+                          className="p-4 border border-gray-300 rounded-lg shadow-md mb-4 transition-transform duration-200 hover:shadow-lg"
+                        >
+                          <div className="flex items-start">
+                            <img
+                              src={item.profilePic}
+                              alt={item.name}
+                              className="w-12 h-12 rounded-full border border-gray-200 mr-4"
+                            />
+                            <div className="w-full flex justify-between">
+                              <div className="flex flex-col">
+                                <div className="flex justify-start items-center gap-2">
+                                  <h4 className="text-lg font-semibold text-gray-800">{item.name}</h4>
+                                  <p className="text-sm text-gray-600">
+                                    {item.designation} at {item.companyName}
+                                  </p>
+                                </div>
+                                <p className="text-base text-gray-700 mt-1">{item.commentText}</p>
+                              </div>
+                              <div className="flex gap-2">
+                                <button
+                                  onClick={() => onEdit(index)}
+                                  className="px-3 text-sm text-blue-600 border border-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition duration-200 h-max py-1"
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  onClick={() => onReply(item)}
+                                  className="px-3 text-sm text-blue-600 border border-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition duration-200 h-max py-1"
+                                >
+                                  Reply
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
 
                       <button
-                        type="button"
-                        onClick={() => removeEmployee(index)}
-                        className="mt-2 p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                        onClick={handleAddNewComment}
+                        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md"
                       >
-                        Remove Employee
+                        Add New Comment
                       </button>
                     </div>
-                  ))}
-
-                  <button
-                    type="button"
-                    onClick={addEmployee}
-                    className="mt-4 p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                    disabled={topEmployees.some(emp => !emp.name || !emp.companyName)}
-                  >
-                    Add Another Employee
-                  </button> */}
-
-                  <div className="flex gap-4">
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setStep((pre) => (pre -= 1));
-                      }}
-                      type="button"
-                      className="mt-4 p-2 bg-blue-600 text-white rounded "
-                    >
-                      Back
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        addActivityAPI(10);
-                      }}
-                      type="button"
-                      className="mt-4 p-2 bg-blue-600 text-white rounded"
-                    >
-                      Next
-                    </button>
-                  </div>
-                </form>
+                  ) : null}
+                  {AllComments.length === 0 && <div className="w-full py-2 bg-gray-100 px-2 rounded-md mb-4">
+                    No Comments Here ? Add Comments
+                  </div>}
+                  {/* Show form if there are no comments or the "Add/Edit" button is clicked */}
+                  {AllComments.length === 0 || isAddingNewComment ? (
+                    <form>
+                      <label className="block text-sm font-medium text-gray-700">Name</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={comment.name}
+                        onChange={handleCommentChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        required
+                      />
+                      <label className="block text-sm font-medium text-gray-700">Email</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={comment.email}
+                        onChange={handleCommentChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        required
+                      />
+                      <label className="block text-sm font-medium text-gray-700">Designation</label>
+                      <input
+                        type="text"
+                        name="designation"
+                        value={comment.designation}
+                        onChange={handleCommentChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                      />
+                      <label className="block text-sm font-medium text-gray-700">Company Name</label>
+                      <input
+                        type="text"
+                        name="companyName"
+                        value={comment.companyName}
+                        onChange={handleCommentChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                      />
+                      <label className="block text-sm font-medium text-gray-700">Comment</label>
+                      <textarea
+                        name="commentText"
+                        value={comment.commentText}
+                        onChange={handleCommentChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        required
+                      />
+                      <label className="block text-sm font-medium text-gray-700">Profile Picture URL</label>
+                      <input
+                        type="text"
+                        name="profilePic"
+                        value={comment.profilePic}
+                        onChange={handleCommentChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                      />
+                      <label className="block text-sm font-medium text-gray-700">Parent ID</label>
+                      <input
+                        type="number"
+                        name="parentId"
+                        value={comment.parentId}
+                        onChange={handleCommentChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                      />
+                      <label className="block text-sm font-medium text-gray-700">Page URL</label>
+                      <input
+                        type="text"
+                        name="pageUrl"
+                        value={comment.pageUrl}
+                        onChange={handleCommentChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        required
+                      />
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          {
+                            console.log(isEditing);
+                          }
+                          if (isEditing) {
+                            updateCommentAPI(comment?.commentId); // Update the comment using POST
+                          } else {
+                            addCommentAPI(); // Add a new comment
+                          }
+                        }}
+                        type="button"
+                        className="mt-4 p-2 bg-blue-600 text-white rounded"
+                      >
+                        {isEditing ? 'Update Comment' : 'Submit'}
+                      </button>
+                    </form>
+                  ) : null}
+                </div>
               )}
               {step === 11 && (
                 <form>
