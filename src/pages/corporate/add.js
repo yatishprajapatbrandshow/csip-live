@@ -17,7 +17,7 @@ const Add = () => {
   const router = useRouter();
   const userData = useSelector((state) => state.session.userData);
   const [topics, setTopics] = useState([]);
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(5);
   const [name, setName] = useState("");
   const [shortName, setShortName] = useState("");
   const [objective, setObjective] = useState("");
@@ -1226,8 +1226,7 @@ const Add = () => {
                         <label className="block text-sm font-medium text-gray-700">
                           Job Title <span className="text-red-500">*</span>
                         </label>
-                        <input
-                          type="text"
+                        <textarea
                           value={jobRole.jobTitle}
                           onChange={(e) =>
                             handleJobRoleChange(
@@ -1236,16 +1235,17 @@ const Add = () => {
                               e.target.value
                             )
                           }
-                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md resize-none"
                           required
+                          rows="3"
                         />
 
                         <label className="block text-sm font-medium text-gray-700 mt-2">
                           Job Role <span className="text-red-500">*</span>
                         </label>
-                        <input
-                          type="text"
+                        <textarea
                           value={jobRole.jobRole}
+                          rows="3"
                           onChange={(e) =>
                             handleJobRoleChange(
                               index,
@@ -1253,24 +1253,19 @@ const Add = () => {
                               e.target.value
                             )
                           }
-                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md resize-none"
                           required
                         />
 
-                        <label className="block text-sm font-medium text-gray-700 mt-2">
-                          Description
-                        </label>
-                        <textarea
-                          value={jobRole.description}
-                          onChange={(e) =>
-                            handleJobRoleChange(
-                              index,
-                              "description",
-                              e.target.value
-                            )
-                          }
-                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                          rows="3"
+                        <label className="block text-sm font-medium text-gray-700 mt-2">Description</label>
+
+                        <JoditEditor
+                          value={jobRole?.description}
+                          config={{
+                            readonly: false,
+                            height: 400,
+                          }}
+                          onBlur={(newContent) => handleJobRoleChange(index, 'description', newContent)}
                         />
 
                         <label className="block text-sm font-medium text-gray-700 mt-2">

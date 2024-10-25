@@ -1110,21 +1110,23 @@ const Edit = () => {
                                                 <h4 className="font-medium text-lg mb-2">Job Role {index + 1}</h4>
 
                                                 <label className="block text-sm font-medium text-gray-700">Job Title <span className="text-red-500">*</span></label>
-                                                <input
+                                                <textarea
                                                     type="text"
                                                     value={jobRole.jobTitle}
                                                     onChange={(e) => handleJobRoleChange(index, 'jobTitle', e.target.value)}
-                                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md resize-none"
                                                     required
+                                                    rows="3"
                                                 />
 
                                                 <label className="block text-sm font-medium text-gray-700 mt-2">Job Role <span className="text-red-500">*</span></label>
-                                                <input
+                                                <textarea
                                                     type="text"
                                                     value={jobRole.jobRole}
                                                     onChange={(e) => handleJobRoleChange(index, 'jobRole', e.target.value)}
-                                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md resize-none"
                                                     required
+                                                    rows="3"
                                                 />
 
                                                 <label className="block text-sm font-medium text-gray-700 mt-2">Description</label>
