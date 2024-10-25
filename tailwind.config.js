@@ -17,6 +17,7 @@ module.exports = {
         'bgForm': "url('/images/845.jpg')",
         'pattern': "url('/images/pattern.svg')",
         'BGRec': "url('/images/bacground-paper.png')",
+        'BG1': "url('/images/hero-illustration.svg')",
       },
       fontFamily: {
         'montserrat': ['"My Font"'],

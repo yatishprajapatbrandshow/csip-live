@@ -85,7 +85,7 @@ const AboutSlug = () => {
 
 
     return (
-        <div>
+        <div className='bg-slate-100 min-h-screen bg-BG1 bg-cover'>
             <div className="relative max-w-[1500px] mx-auto w-full">
                 <ActivityHeader data={ActivityList} />
                 <div class="relative flex h-full flex-col px-4 pt-14 sm:px-6 lg:px-8 lg:ml-72 xl:ml-80">

@@ -462,9 +462,9 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
   };
 
 
-
+console.log(data);
   return (
-    <section className='mt-5 pb-32'>
+    <section className='mt-5 pb-56 '>
       {data === "inProcess" ? <>
         <p>Loading ...</p>
       </> : data && data !== "inProcess" ? <>
@@ -472,27 +472,48 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
         {data.objective && (
           <div>
             <p className='px-3 text-sm py-1 rounded-full border border-green-400/50 w-max bg-green-50'>{data.objective.short_name}</p>
-            <p className='text-lg mt-5 text-gray-800 font-bold'>{data.objective.name}</p>
+            <p className='text-[70px] mt-5 text-gray-700 font-bold'>{data.objective.name}</p>
             {/* <p className="text-base text-justify font-light mt-5 text-gray-700"
                         dangerouslySetInnerHTML={{ __html: data.objective.short_desc }} /> */}
-            <p className="text-base text-justify font-light mt-5 text-gray-700"
+            <p className="text-left insiteFont font-light mt-5 text-gray-700"
               dangerouslySetInnerHTML={{ __html: data.objective.objective }} />
           </div>
         )}
 
 
         {data['virtual-scenario'] && (
-          <div>
-            <h2 className='text-lg mt-5 text-gray-800 font-bold'>{data['virtual-scenario'].case_scenario_title}</h2>
-            <p className='text-base text-justify font-light mt-5 text-gray-700' dangerouslySetInnerHTML={{__html: data['virtual-scenario'].case_scenario}} />
-            {/* You can also render description or note if needed */}
-            {data['virtual-scenario'].description && (
-              <p className="text-base text-justify font-light mt-5 text-gray-700"
-                dangerouslySetInnerHTML={{ __html: data['virtual-scenario'].description }} />
-            )}
-            {data['virtual-scenario'].note && (
-              <p className='text-base text-justify font-light mt-5 text-gray-700' dangerouslySetInnerHTML={{__html: data['virtual-scenario'].note}} />
-            )}
+          <div >
+            <h2 className='text-4xl mt-5 text-gray-700 font-bold'>{data['virtual-scenario'].case_scenario_title}</h2>
+            {data['virtual-scenario'].video_url ? 
+            <>
+            <div className='bg-white w-max shadow-2xl mt-10 shadow-black/10 p-5 rounded-lg mb-10'>
+              {data['virtual-scenario'].video_url && (
+                <div className="w-full min-w-[800px] max-md:min-w-max  aspect-video rounded-lg overflow-hidden ">
+                  <iframe
+                  width="100%"
+                  height="100%"
+                  className='aspect-square'
+                    src={data['virtual-scenario'].video_url.replace("youtu.be/", "youtube.com/embed/")}
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              )}
+            </div>
+            </>
+            : null}
+              <p className='mt-5 text-gray-700 ' dangerouslySetInnerHTML={{__html: data['virtual-scenario'].case_scenario}} />
+
+              {/* You can also render description or note if needed */}
+              {data['virtual-scenario'].description && (
+                <p className="insiteFont text-justify font-light mt-5 text-gray-700"
+                  dangerouslySetInnerHTML={{ __html: data['virtual-scenario'].description }} />
+              )}
+              {data['virtual-scenario'].note && (
+                <p className='insiteFont text-justify font-light mt-5 text-gray-700' dangerouslySetInnerHTML={{__html: data['virtual-scenario'].note}} />
+              )}
           </div>
         )}
 
@@ -502,16 +523,16 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
 
         {data.hierarchy && (
           <div >
-            <h2 className='text-lg mt-5 text-gray-800 font-bold'>Hierarchy</h2>
-            {/* <p>{data.hierarchy.corporate_hierarchy_overview}</p> */}
-            <div className='mt-10'>
+            <h2 className='text-4xl mb-4 mt-5 text-gray-700 font-bold'>Hierarchy</h2>
+            <p dangerouslySetInnerHTML={{__html: data.hierarchy.corporate_hierarchy_overview}} />
+            {/* <div className='mt-10'>
               {Text.map((item, index) => (
                 <div className='mb-4'>
                   <p className="relative text-xl/7 text-gray-700">{item.title}</p>
                   <p className="text-sm/6 font-normal text-gray-700">{item.description}</p>
                 </div>
               ))}
-            </div>
+            </div> */}
             {/* <ul className='grid grid-cols-3 gap-5 mt-5'>
                         {Text.map((item, index)=>(
                             <>
@@ -550,6 +571,7 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
 
         {data.tools && (
           <>
+          <h2 className='text-4xl mt-5 text-gray-700 font-bold mb-4'>Tools</h2>
             {/* <div className='shadow-sm'>
                      <h2 className='text-lg mt-5 text-gray-800 font-bold'>Tools used</h2>
                      <table className="min-w-full bg-white mt-10">
@@ -615,40 +637,50 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
         )}
         {data['jobs-and-role'] && (
           <div className="mx-auto ">
+            <h2 className='text-4xl mt-5 text-gray-700 font-bold mb-4'>Jobs and role</h2>
             {data['jobs-and-role'].job_roles_and_description.map((job, index) => (
               <div key={index} className="flex flex-col items-start pb-5 mb-5 border-b border-b-pink-200">
-                <h2 id={`job-${index}`} className="mt-2 text-lg font-bold text-slate-900">
-                  {job.jobTitle}
-                </h2>
-                <time
-                  datetime="2022-02-24T00:00:00.000Z"
-                  className="order-first font-mono text-sm leading-7 text-slate-500"
-                >
-                  {job.employmentType} | Average Salary: {job.averageSalary}
-                </time>
-                <p className="mt-1 text-sm leading-7 text-slate-700" dangerouslySetInnerHTML={{ __html: job.description }} />
-                <div className="mt-4 flex items-center gap-4">
-                  <div
-                    className=" flex justify-start items-start gap-4"
+                {job.jobTitle ? <>
+                  <h2 id={`job-${index}`} className="mt-2 text-lg font-bold text-slate-900">
+                    {job.jobTitle}
+                  </h2>
+                </> : null}
+                {job.employmentType ? <>
+                  <time
+                    datetime="2022-02-24T00:00:00.000Z"
+                    className="order-first font-mono text-sm leading-7 text-slate-500"
                   >
-                    <svg
-                      aria-hidden="true"
-                      viewBox="0 0 10 10"
-                      className="h-2.5 w-2.5 fill-current text-pink-500"
+                    {job.employmentType} | Average Salary: {job.averageSalary}
+                  </time>
+                </> :null}
+                {job.description ? 
+                <p className="mt-1 text-sm leading-7 text-slate-700" dangerouslySetInnerHTML={{ __html: job.description }} />
+                : null}
+                {job.jobRole ? 
+                <p className="mt-1 text-sm leading-7 text-slate-700" dangerouslySetInnerHTML={{ __html: job.jobRole }} />
+                : null}
+                {job.skillsRequired && job.skillsRequired.length > 0 ? 
+                  <div className="mt-4 flex items-center gap-4">
+                    <div
+                      className=" flex justify-start items-start gap-4"
                     >
-                      <path d="M8.25 4.567a.5.5 0 0 1 0 .866l-7.5 4.33A.5.5 0 0 1 0 9.33V.67A.5.5 0 0 1 .75.237l7.5 4.33Z"></path>
-                    </svg>
-                    <div className='flex flex-wrap gap-2'>
-                      {job.skillsRequired ?
-                        job.skillsRequired.map((item, index) => (
-                          <span className='text-sm font-medium text-pink-500 border border-pink-500 py-0 px-2 rounded-md' key={index}>{item}</span>
-                        ))
-                        : null}
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 10 10"
+                        className="h-2.5 w-2.5 fill-current text-pink-500"
+                      >
+                        <path d="M8.25 4.567a.5.5 0 0 1 0 .866l-7.5 4.33A.5.5 0 0 1 0 9.33V.67A.5.5 0 0 1 .75.237l7.5 4.33Z"></path>
+                      </svg>
+                      <div className='flex flex-wrap gap-2'>
+                        {job.skillsRequired ?
+                          job.skillsRequired.map((item, index) => (
+                            <span className='text-sm font-medium text-pink-500 border border-pink-500 py-0 px-2 rounded-md' key={index}>{item}</span>
+                          ))
+                          : null}
+                      </div>
                     </div>
                   </div>
-
-
-                </div>
+                : null }
               </div>
             ))}
           </div>
@@ -656,7 +688,7 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
 
         {data['video-podcast-link'] && (
           <div className="mx-auto ">
-            <p className='text-xl font-bold capitalize mb-4'>Video podcast link</p>
+            <h2 className='text-4xl mt-5 text-gray-700 font-bold mb-4'>Video podcast link</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {data['video-podcast-link'].youtube_video_link.map((link, index) => (
                 <div key={index} className="bg-white overflow-hidden">
@@ -681,7 +713,7 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
                   </div>
                   <div className="pt-4">
                     <div className="flex items-start space-x-3">
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 p-4 pt-0">
                         <h3 className="text-sm font-semibold line-clamp-2">{material.title}</h3>
                         <p className="text-xs text-gray-600 mt-1">{material.description}</p>
                         {/* <p className="text-xs text-gray-600 mt-1">Duration: {material.duration}</p> */}
@@ -703,18 +735,26 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
 
         {data['related-topic-news'] && (
           < div className="mx-auto ">
-            <p className='text-xl font-bold capitalize mb-4'>Related topic news</p>
+            <h2 className='text-4xl mt-5 text-gray-700 font-bold mb-4'>Related topic news</h2>            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {data['related-topic-news'].related_topic_news?.map((material) => (
                 <div key={material.id} className="bg-white rounded-lg overflow-hidden">
                   <div className="relative">
-                    <img
-                      src={`https://csip-image.blr1.digitaloceanspaces.com/csip-image/img/content/${material?.image}`}
-                      alt={material.title}
-                      className="w-full h-52 object-cover"
-                    />
+                    {material?.image ? 
+                      <img
+                        src={`https://csip-image.blr1.digitaloceanspaces.com/csip-image/img/content/${material?.image}`}
+                        alt={material.title}
+                        className="w-full h-52 object-cover"
+                      />
+                      : 
+                      <img
+                        src={`/images/csip-banner.jpg`}
+                        alt={material.title}
+                        className="w-full h-52 object-cover"
+                      />
+                    }
                   </div>
-                  <div className="pt-4">
+                  <div className="p-4">
                     <div className="flex items-start space-x-3">
                       <div className="flex-1 min-w-0">
                         <h3 className="text-sm font-semibold line-clamp-2">{material.title}</h3>
@@ -733,7 +773,7 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
 
         {data['top-employees'] && (
           <div className="mx-auto w-full">
-            <p className='text-xl font-bold capitalize mb-4'>top employees</p>
+            <h2 className='text-4xl mt-5 text-gray-700 font-bold mb-4'>Top employees</h2>
             <div className="container mx-auto pt-2">
               <div className='grid grid-cols-2 gap-5'>
               {data['top-employees'].top_employees.map((employee, index) => (
@@ -745,8 +785,8 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
           </div>
         )}
         {data['comment-student'] && (
-          <div className="mx-auto w-full">
-            <p className='text-xl font-bold capitalize mb-4'>Student</p>
+          <div className="mx-auto w-full">            
+            <h2 className='text-4xl mt-5 text-gray-700 font-bold mb-4'>Student Comments</h2>
             <div className="container mx-auto pt-2">
               <div className="grid grid-cols-3 gap-2">
                 {commentData.map((testimonial, index) => (
@@ -780,7 +820,7 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
         )}
         {data['forum-for-corporate-discussion'] && (
         <div className="">
-        <h2 className="text-2xl font-bold mb-6">Forum for corporate discussion</h2>
+        <h2 className='text-4xl mt-5 text-gray-700 font-bold mb-4'>Forum for corporate discussion</h2>
         {testimonialsData.testimonials.map((testimonial) => (
           <div key={testimonial.id} className="mb-8 p-4 relative after:absolute after:w-1 after:h-full after:bg-gray-100 after:top-0 after:left-10 after:hidden">
             <div className=''>
@@ -791,24 +831,23 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
                   <p className="text-sm text-gray-500">{testimonial.position}</p>
                 </div>
               </div>
-              <blockquote className="mt-2 ml-16 text-sm text-gray-700">{testimonial.quote}</blockquote>
+              <blockquote className="mt-2 font-light ml-16 text-base text-gray-700">{testimonial.quote}</blockquote>
             </div>
 
             <div className="ml-16 mt-4">
-              <h4 className="text-md font-medium">Comments:</h4>
+              <h5 className="font-medium">Replies:</h5>
               {testimonial.comments.map((comment) => (
-                <div key={comment.commentId} className="mt-2 p-2 border-l-4 border-blue-500 bg-blue-50">
-                  <p className="font-semibold">{comment.author} - <span className="text-gray-500">{comment.position}</span></p>
-                  <p>{comment.comment}</p>
+                <div key={comment.commentId} className="mt-2 p-2 border-l-2 border-blue-500 bg-white/50 py-10 pt-4">
                   {comment.replies && comment.replies.length > 0 && (
-                    <div className="mt-2 pl-4 border-l-2 border-gray-300">
-                      <h5 className="font-medium">Replies:</h5>
-                      {comment.replies.map((reply) => (
-                        <div key={reply.replyId} className="mt-1">
-                          <p className="font-semibold">{reply.author} - <span className="text-gray-500">{reply.position}</span></p>
-                          <p>{reply.reply}</p>
-                        </div>
-                      ))}
+                    <div className="pl-4">
+                      <div className='grid grid-cols-1 gap-5'>
+                        {comment.replies.map((reply) => (
+                          <div key={reply.replyId} className="mt-1">
+                            <p className="font-semibold text-base text-gray-700">{reply.author} - <span className="font-normal text-sm text-gray-700">{reply.position}</span></p>
+                            <p className='text-base font-light'>{reply.reply}</p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>

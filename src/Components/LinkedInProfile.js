@@ -6,27 +6,38 @@ const EmployeeProfile = ({ employee }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("console.log(URL);")
     const fetchData = async () => {
       const data = await GetProfileDetail(employee.linkedInProfile);
-      if(data){
-        console.log(data)
-      }
       setProfileData(data);
       setLoading(false);
+      
     };
-    console.log("console.log(URL);")
     if (employee.linkedInProfile) {
       fetchData();
     } else {
       setLoading(false); // No profile to fetch
     }
   }, [employee.linkedInProfile]);
-console.log(profileData)
+
   return (
     <>
         {loading ? (
-        <p>Loading profile data...</p>
+        <div className="w-full items-end overflow-hidden rounded-[2.5rem] border bg-white p-2 shadow-md shadow-gray-950/5">
+          <div className="space-y-1.5 rounded-[2rem] border bg-white p-1.5 sm:w-full">
+            <div className="space-y-3 overflow-hidden rounded-b-lg rounded-t-[1.625rem] bg-white flex gap-5 min-h-36">
+              <div role="status" className="animate-pulse w-full">
+                  <div className="bg-gray-200 dark:bg-gray-700 w-full h-full mb-4"></div>
+                  <span className="sr-only">Loading...</span>
+              </div>
+            </div>
+            <div className="space-y-3 overflow-hidden rounded-t-lg rounded-b-[1.625rem] bg-white flex gap-5 min-h-10">
+              <div role="status" className="animate-pulse w-full">
+                  <div className="bg-gray-200 dark:bg-gray-700 w-full h-full mb-4"></div>
+                  <span className="sr-only">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </div>
       ) : (
         <>
         {profileData ? <>
@@ -38,7 +49,7 @@ console.log(profileData)
             </span>
             <div className="flex-1">
               <h3 class="text-lg font-medium text-gray-700">{profileData.title}</h3>
-              <p className="text-sm text-gray-700">{profileData.description}dg</p>
+              <p className="text-sm text-gray-700">{profileData.description}</p>
             </div>
           </div>
         </> : <>
@@ -51,7 +62,11 @@ console.log(profileData)
               <div className="flex-1">
                 <h3 class="text-lg font-medium text-gray-700">{employee.name} </h3>
                 <p className="text-sm text-gray-700">{employee.companyName}</p>
-                  <a
+                 
+              </div>
+            </div>
+            <div className="rounded-b-[1.625rem] rounded-t-lg bg-white p-4 text-sm text-end">
+            <a
                     href={employee.linkedInProfile}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -59,10 +74,6 @@ console.log(profileData)
                   >
                     View LinkedIn Profile
                   </a>
-              </div>
-            </div>
-            <div className="rounded-b-[1.625rem] rounded-t-lg bg-white p-4 text-sm text-end">
-              View LinkedIn Profile
             </div>
           </div>
         </div>
