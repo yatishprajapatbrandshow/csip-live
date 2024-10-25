@@ -339,6 +339,141 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
     }
   ]
 
+    const commentData = [
+      {
+        id: "Testimonial 04",
+        name : "Michael Ross",
+        username : "@michjack",
+        comment : "Simple lives up to its name in every way. It's incredibly easy to use yet powerful enough to handle all my tasks effortlessly. It's become an essential part of my daily routine.",
+        date : "Jan 15, 2027"
+      },
+      {
+        id: "Testimonial 01",
+        name : "Peter Lowe",
+        username : "@peterlowex",
+        comment : "As a founder, having a visually appealing and user-friendly website is essential. This tool not only helped me achieve that but also improved my site's performance and SEO.",
+        date : "May 19, 2027"
+      },
+      {
+        id: "Testimonial 02",
+        name: "Rodri Alba",
+        username: "@rodri_spn",
+        comment: "Simple has revolutionized the way I manage my work. Its intuitive interface and seamless functionality make staying organized effortless. I can't imagine my life without it.Simple has revolutionized the way I manage my work. Its intuitive interface and seamless functionality make staying organized effortless. I can't imagine my life without it. Simple has revolutionized the way I manage my work. Its intuitive interface and seamless functionality make staying organized effortless. I can't imagine my life without it.Simple has revolutionized the way I manage my work. Its intuitive interface and seamless functionality make staying organized effortless. I can't imagine my life without it.",
+        date: "Apr 12, 2027"
+      },
+      {
+        id: "Testimonial 03",
+        name : "Michele Lex",
+        username : "@MikyBrown",
+        comment : "I've tried several website builders before, but none were as user-friendly and versatile as this one. From design to functionality, it exceeded my expectations!",
+        date : "Mar 04, 2027"
+      },
+      {
+        id: "Testimonial 04",
+        name : "Michael Ross",
+        username : "@michjack",
+        comment : "Simple lives up to its name in every way. It's incredibly easy to use yet powerful enough to handle all my tasks effortlessly. It's become an essential part of my daily routine.",
+        date : "Jan 15, 2027"
+      },
+      {
+        id: "Testimonial 01",
+        name : "Peter Lowe",
+        username : "@peterlowex",
+        comment : "As a founder, having a visually appealing and user-friendly website is essential. This tool not only helped me achieve that but also improved my site's performance and SEO. As a founder, having a visually appealing and user-friendly website is essential. This tool not only helped me achieve that but also improved my site's performance and SEO. As a founder, having a visually appealing and user-friendly website is essential. This tool not only helped me achieve that but also improved my site's performance and SEO.",
+        date : "May 19, 2027"
+      },
+      {
+        id: "Testimonial 02",
+        name: "Rodri Alba",
+        username: "@rodri_spn",
+        comment: "Simple has revolutionized the way I manage my work. Its intuitive interface and seamless functionality make staying organized effortless. I can't imagine my life without it. " ,
+        date: "Apr 12, 2027"
+      },
+      {
+        id: "Testimonial 03",
+        name : "Michele Lex",
+        username : "@MikyBrown",
+        comment : "I've tried several website builders before, but none were as user-friendly and versatile as this one. From design to functionality, it exceeded my expectations!",
+        date : "Mar 04, 2027"
+      }
+    ]
+  const NewMap = [
+    {
+      "name": "Guillermo Rauch",
+      "role": "CEO",
+      "company": "Vercel",
+      "testimonial": "The best practices built-in to their <SignIn/> and <UserProfile/> components would take months to implement in-house, yet no sacrifice is made in terms of Enterprise extensibility or customization to your brand.",
+      "logo": "/_next/static/media/vercel.c626b66f.svg",
+      "profileImage": "/_next/static/media/guillermo-rauch.e3b14d41.png"
+    },
+    {
+      "name": "Theo Browne",
+      "role": "CEO",
+      "company": "Ping Labs",
+      "testimonial": "Clerk feels like the first time I booted my computer with an SSD. It’s so much faster and simpler that it changed how I do things.",
+      "profileImage": "/_next/static/media/theo-browne.af0a9d79.png"
+    }
+  ]
+  const testimonialsData = {
+    testimonials: [
+      {
+        id: "Testimonial 03",
+        name: "Mary Christopher",
+        position: "Designer Lead at Inventa Inc.",
+        quote: "Working with James on projects is a breath of fresh air. He is an extremely talented dev, with an outstanding work ethic, eye for detail, and speed. James doesn't just execute and deliver incredible codes but works with you to challenge the product or flow at hand to create the best possible solution.",
+        comments: [
+          {
+            commentId: "c01",
+            author: "John Doe",
+            position: "Project Manager",
+            comment: "I agree with Mary. James’s ability to challenge product flow added great value to our project.",
+            replies: [
+              {
+                replyId: "r01",
+                author: "Mary Christopher",
+                position: "Designer Lead at Inventa Inc.",
+                reply: "Exactly, John! He consistently pushed for improvements."
+              },
+              {
+                replyId: "r02",
+                author: "Sarah Lee",
+                position: "UX Lead",
+                reply: "I had a similar experience working with James, he really helped us rethink our UI."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "Testimonial 04",
+        name: "Harry Kastelli",
+        position: "CEO & Founder Mark Corp.",
+        quote: "James is an excellent developer. He is not just quick to evaluate and translate ideas into high-fidelity codes, but he's also well-versed in UX strategy. While working together, James handled our external partnership with Design Agencies, and delivered weekly progress reports with fresh ideas.",
+        comments: [
+          {
+            commentId: "c02",
+            author: "David Kim",
+            position: "CTO Mark Corp.",
+            comment: "Harry is right. James’s technical expertise and UX understanding made our product much more cohesive.",
+            replies: [
+              {
+                replyId: "r03",
+                author: "Harry Kastelli",
+                position: "CEO & Founder Mark Corp.",
+                reply: "Absolutely, David. His UX insights were a game-changer."
+              },
+              {
+                replyId: "r04",
+                author: "James Williams",
+                position: "Lead Developer",
+                reply: "Thanks, Harry! It was a pleasure working with such a visionary team."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  };
 
   console.log(data);
 
@@ -364,14 +499,14 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
         {data['virtual-scenario'] && (
           <div>
             <h2 className='text-lg mt-5 text-gray-800 font-bold'>{data['virtual-scenario'].case_scenario_title}</h2>
-            <p className='text-base text-justify font-light mt-5 text-gray-700'>{data['virtual-scenario'].case_scenario}</p>
+            <p className='text-base text-justify font-light mt-5 text-gray-700' dangerouslySetInnerHTML={{__html: data['virtual-scenario'].case_scenario}} />
             {/* You can also render description or note if needed */}
             {data['virtual-scenario'].description && (
               <p className="text-base text-justify font-light mt-5 text-gray-700"
                 dangerouslySetInnerHTML={{ __html: data['virtual-scenario'].description }} />
             )}
             {data['virtual-scenario'].note && (
-              <p className='text-base text-justify font-light mt-5 text-gray-700'>{data['virtual-scenario'].note}</p>
+              <p className='text-base text-justify font-light mt-5 text-gray-700' dangerouslySetInnerHTML={{__html: data['virtual-scenario'].note}} />
             )}
           </div>
         )}
@@ -461,34 +596,36 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
                       </tbody>
                     </table>
                   </div> */}
-            {data.tools.tools_used.map((tool) => (
-              <div className="w-fit items-end overflow-hidden rounded-[2.5rem] border bg-white p-2 shadow-md shadow-gray-950/5">
-                <div className="space-y-1.5 rounded-[2rem] border bg-gray-200/50 p-1.5 sm:w-[16rem]">
-                  <div className="space-y-3 rounded-b-lg rounded-t-[1.625rem] bg-white p-4">
-                    <div className="flex flex-col items-start justify-between">
-                      <div className='w-10 h-10 bg-gray-200 rounded-lg overflow-hidden mb-2'>
-                        <img src={`https://csip-image.blr1.digitaloceanspaces.com/csip-image/img/content/${tool.image}`} />
-                      </div>
-                      <div className="space-y-1">
-                        <div className="text-sm font-medium">{tool.name}</div>
-                        <p className='text-xs text-justify' dangerouslySetInnerHTML={{ __html: tool.description }} />
+             <div className='flex gap-5 flex-wrap'>
+              {data.tools.tools_used.map((tool) => (
+                <div className="w-fit items-end overflow-hidden rounded-[2.5rem] border bg-white p-2 shadow-md shadow-gray-950/5">
+                  <div className="space-y-1.5 rounded-[2rem] border bg-gray-200/50 p-1.5 sm:w-[16rem]">
+                    <div className="space-y-3 rounded-b-lg rounded-t-[1.625rem] bg-white p-4">
+                      <div className="flex flex-col items-start justify-between">
+                        <div className='w-10 h-10 bg-gray-200 rounded-lg overflow-hidden mb-2'>
+                          <img src={`https://csip-image.blr1.digitaloceanspaces.com/csip-image/img/content/${tool.image}`} />
+                        </div>
+                        <div className="space-y-1">
+                          <div className="text-sm font-medium">{tool.name}</div>
+                          <p className='text-xs text-justify' dangerouslySetInnerHTML={{ __html: tool.description }} />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="rounded-b-[1.625rem] rounded-t-lg bg-white p-4">
-                    <div className="flex justify-between items-center">
-                      <p className="flex gap-1.5 justify-start items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>
-                        <span className="text-sm">Show all snapshot</span>
-                      </p>
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="text-placeholder size-4">
-                        <path fillRule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd"></path>
-                      </svg>
+                    <div className="rounded-b-[1.625rem] rounded-t-lg bg-white p-4">
+                      <div className="flex justify-between items-center">
+                        <p className="flex gap-1.5 justify-start items-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>
+                          <span className="text-sm">Go to official site</span>
+                        </p>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="text-placeholder size-4">
+                          <path fillRule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd"></path>
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+              </div>     
           </>
         )}
         {data['jobs-and-role'] && (
@@ -546,7 +683,7 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
                   </button>
                 </div>
               ))}
-              {/* {studyMaterials.map((material) => (
+              {studyMaterials.map((material) => (
                 <div key={material.id} className="bg-white rounded-lg overflow-hidden">
                   <div className="relative">
                     <Image
@@ -562,19 +699,19 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
                       <div className="flex-1 min-w-0">
                         <h3 className="text-sm font-semibold line-clamp-2">{material.title}</h3>
                         <p className="text-xs text-gray-600 mt-1">{material.description}</p>
-                        <p className="text-xs text-gray-600 mt-1">Duration: {material.duration}</p>
-                        <p className="text-xs text-gray-600 mt-1">What you will learn:</p>
+                        {/* <p className="text-xs text-gray-600 mt-1">Duration: {material.duration}</p> */}
+                        {/* <p className="text-xs text-gray-600 mt-1">What you will learn:</p>
                         <ul className="text-xs text-gray-600 mt-1">
                           {material.skills.map((skill, index) => (
                             <li key={index}>• {skill}</li>
                           ))}
-                        </ul>
+                        </ul> */}
                         <a href={material.link} className="text-sm mt-3 block text-blue-500 hover:underline">Start Learning</a>
                       </div>
                     </div>
                   </div>
                 </div>
-              ))} */}
+              ))}
             </div>
           </div>
         )}
@@ -633,6 +770,80 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
             </div>
 
           </div>
+        )}
+        {data['comment-student'] && (
+          <div className="mx-auto w-full">
+            <p className='text-xl font-bold capitalize mb-4'>Student</p>
+            <div className="container mx-auto pt-2">
+              <div className="grid grid-cols-3 gap-2">
+                {commentData.map((testimonial, index) => (
+                index === 0 ? 
+                <div
+                key={testimonial.id}
+                className={`bg-blue-500 border border-rose-100 rounded-lg p-6 row-span-2`}
+              >
+                <h3 className="text-3xl mb-4 font-bold capitalize text-white">
+                Student Feedback Highlights
+                </h3>
+                <p className="text-white text-sm mb-4">See what our students have to say about their experience with our platform. Their success stories reflect the power of intuitive design and seamless functionality.</p>
+                <img className='block -mb-10' src='/images/student_review.png' />
+              </div>
+               : 
+                <div
+                  key={testimonial.id}
+                  className={`bg-gray-50 border border-gray-200 rounded-lg p-6 ${testimonial.comment.length >= 200 ? "row-span-2" : null}`}
+                >
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {testimonial.name}
+                  </h3>
+                  <p className="text-sm text-gray-500 mb-4">{testimonial.username}</p>
+                  <p className="text-gray-700 text-sm text-justify mb-4">{testimonial.comment}</p>
+                  <p className="text-sm text-gray-400">{testimonial.date}</p>
+                </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+        {data['forum-for-corporate-discussion'] && (
+        <div className="">
+        <h2 className="text-2xl font-bold mb-6">Forum for corporate discussion</h2>
+        {testimonialsData.testimonials.map((testimonial) => (
+          <div key={testimonial.id} className="mb-8 p-4 relative after:absolute after:w-1 after:h-full after:bg-gray-100 after:top-0 after:left-10 after:hidden">
+            <div className=''>
+              <div className='flex gap-4'>
+                <img className='rounded-full w-16 h-16' src='https://preview.cruip.com/devspace/images/testimonial-03.jpg' alt='Coportae' />
+                <div className='flex-1'>
+                  <h3 className="text-lg font-semibold">{testimonial.name}</h3>
+                  <p className="text-sm text-gray-500">{testimonial.position}</p>
+                </div>
+              </div>
+              <blockquote className="mt-2 ml-16 text-sm text-gray-700">{testimonial.quote}</blockquote>
+            </div>
+
+            <div className="ml-16 mt-4">
+              <h4 className="text-md font-medium">Comments:</h4>
+              {testimonial.comments.map((comment) => (
+                <div key={comment.commentId} className="mt-2 p-2 border-l-4 border-blue-500 bg-blue-50">
+                  <p className="font-semibold">{comment.author} - <span className="text-gray-500">{comment.position}</span></p>
+                  <p>{comment.comment}</p>
+                  {comment.replies && comment.replies.length > 0 && (
+                    <div className="mt-2 pl-4 border-l-2 border-gray-300">
+                      <h5 className="font-medium">Replies:</h5>
+                      {comment.replies.map((reply) => (
+                        <div key={reply.replyId} className="mt-1">
+                          <p className="font-semibold">{reply.author} - <span className="text-gray-500">{reply.position}</span></p>
+                          <p>{reply.reply}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
         )}
 
 

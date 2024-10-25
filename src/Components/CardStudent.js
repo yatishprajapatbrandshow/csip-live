@@ -29,17 +29,18 @@ const CardStudent = ({ activity, theme, type }) => {
     // const { initiatePayment } = useRazorpay();
     const [showPopup, setShowPopup] = useState(false);
     const OrderDet = useSelector((state) => state.orderId.orderId);
+    const { triggerRazorpay } = useRazorpay();
     const favouriteActivities = useSelector(
         (state) => state.favouriteActivity.favouriteActivities
     );
-    const { triggerRazorpay } = useRazorpay();
     let OrderDetNew;
+    console.log(activity);
     const toggleHeart = async (activity) => {
         if (!activity) {
             return
         }
         setIsToggled(!isToggled);
-        console.log(activity?.sid);
+        
 
         try {
             const response = await fetch(`${API_URL}favourite-activity/`, {
