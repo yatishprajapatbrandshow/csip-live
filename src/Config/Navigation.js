@@ -18,6 +18,7 @@ import {
   ReceiptRefundIcon,
   SquaresPlusIcon,
   ViewfinderCircleIcon,
+  ClipboardDocumentCheckIcon
 } from '@heroicons/react/24/outline'
 
 
@@ -71,7 +72,7 @@ export const MenuItemLinks = [
         color: 'purple-500'  // Assign color for this icon
       }
     ],
-    
+
     subMenuType: "multiple"
   },
   // {
@@ -161,6 +162,13 @@ export const MenuItemLinks = [
         href: 'PaymentPending',
         icon: CurrencyRupeeIcon,
         color: 'teal-500'  // Assign color for this icon
+      },
+      {
+        name: 'Transaction List',
+        description: 'All completed transaction list.',
+        href: 'TransactionList',
+        icon: ClipboardDocumentCheckIcon,
+        color: 'green-500'  // Assign color for this icon
       }
     ],
     subMenuType: "single"

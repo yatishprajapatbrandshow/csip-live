@@ -10,6 +10,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { PlusIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
 import { MenuItemLinks, MenuItemLinksForCorporate } from '@/Config/Navigation'
 import TopicModal from "./TopicModal";
+import TrackUserTime from "./TrackUserTime";
 
 const user = {
     name: 'Tom Cook',
@@ -45,12 +46,11 @@ const Header = ({ session = false }) => {
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
     const LogOut = () => {
+        window.location.reload();
         localStorage.removeItem("userData");
         router.replace('/login')
     }
-
     useEffect(() => {
-
         const userData = getLocalStorageItem("userData")
         if (userData) {
             setUserDataShow(userData)
@@ -96,7 +96,7 @@ const Header = ({ session = false }) => {
     };
     return (
         <>
-
+            <TrackUserTime />
             <Disclosure as="nav" className=" sticky top-0 z-10 bg-white/10 backdrop-blur-lg border-b border-b-white shadow-2xl shadow-black/10">
                 <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
