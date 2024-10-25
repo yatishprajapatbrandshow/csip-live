@@ -26,6 +26,7 @@ const Edit = () => {
     const [caseScenarioTitle, setCaseScenarioTitle] = useState('');
     const [description, setDescription] = useState('');
     const [note, setNote] = useState('');
+    const [videoUrl, setvideoUrl] = useState("");
     const [corporateHierarchyOverview, setCorporateHierarchyOverview] = useState('');
     const [snapShot, setSnapShot] = useState('');
     const [imageAssc, setImageAssc] = useState('');
@@ -113,7 +114,6 @@ const Edit = () => {
             }
 
             const responseData = await response.json();
-            console.log(responseData);
 
             if (responseData.status === true) {
                 const data = responseData.data;
@@ -122,6 +122,7 @@ const Edit = () => {
                 setObjective(data?.objective);
                 setShortDesc(data?.short_desc);
                 setCaseScenario(data?.case_scenario);
+                setvideoUrl(data?.video_url)
                 setCaseScenarioTitle(data?.case_scenario_title);
                 setDescription(data?.description);
                 setNote(data?.note);
@@ -394,7 +395,8 @@ const Edit = () => {
             payload.case_scenario = caseScenario,
                 payload.case_scenario_title = caseScenarioTitle,
                 payload.description = description,
-                payload.note = note
+                payload.note = note,
+                payload.video_url = videoUrl
         }
         if (step === 2) {
             payload.corporate_hierarchy_overview = corporateHierarchyOverview,
@@ -742,6 +744,30 @@ const Edit = () => {
                             {step === 1 && (
                                 <form>
                                     <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700">
+                                            Case Scenario Title
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="case_scenario_title"
+                                            value={caseScenarioTitle || ""}
+                                            onChange={(e) => setCaseScenarioTitle(e.target.value)}
+                                            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                        />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700">
+                                            Video Url
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="case_scenario_title"
+                                            value={videoUrl || ""}
+                                            onChange={(e) => setvideoUrl(e.target.value)}
+                                            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                        />
+                                    </div>
+                                    <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Case Scenario</label>
                                         <JoditEditor
                                             value={caseScenario || ""}
@@ -751,10 +777,6 @@ const Edit = () => {
                                             }}
                                             onBlur={(newContent) => setCaseScenario(newContent)}
                                         />
-                                    </div>
-                                    <div className="mb-4">
-                                        <label className="block text-sm font-medium text-gray-700">Case Scenario Title</label>
-                                        <input type="text" name="case_scenario_title" value={caseScenarioTitle || ''} onChange={(e) => setCaseScenarioTitle(e.target.value)} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Description</label>
