@@ -34,7 +34,7 @@ const CardStudent = ({ activity, theme, type }) => {
         (state) => state.favouriteActivity.favouriteActivities
     );
     let OrderDetNew;
-    console.log(activity);
+    
     const toggleHeart = async (activity) => {
         if (!activity) {
             return

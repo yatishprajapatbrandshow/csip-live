@@ -26,7 +26,6 @@ const AboutSlug = () => {
         activityid: ActId,
         type :"menu"
     }
-    console.log(datatoSend);
     const APIURL =`${API_URL}activity-progress`
 
     try{
@@ -67,7 +66,6 @@ const AboutSlug = () => {
                     body: JSON.stringify(datatoSend)
                 })
                 const data = await response.json();
-                console.log(data);
                 if(data.status === true){
                     setActivityDetails(data.data)
                 }else{

@@ -1,6 +1,8 @@
 'use client';
 import React from 'react';
 import Image from 'next/image'
+import { API_URL } from '@/Config/Config';
+import EmployeeProfile from '@/Components/LinkedInProfile'
 
 
 const CommentsSlider = ({ data = "inProcess", slug }) => {
@@ -397,23 +399,7 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
         date : "Mar 04, 2027"
       }
     ]
-  const NewMap = [
-    {
-      "name": "Guillermo Rauch",
-      "role": "CEO",
-      "company": "Vercel",
-      "testimonial": "The best practices built-in to their <SignIn/> and <UserProfile/> components would take months to implement in-house, yet no sacrifice is made in terms of Enterprise extensibility or customization to your brand.",
-      "logo": "/_next/static/media/vercel.c626b66f.svg",
-      "profileImage": "/_next/static/media/guillermo-rauch.e3b14d41.png"
-    },
-    {
-      "name": "Theo Browne",
-      "role": "CEO",
-      "company": "Ping Labs",
-      "testimonial": "Clerk feels like the first time I booted my computer with an SSD. It’s so much faster and simpler that it changed how I do things.",
-      "profileImage": "/_next/static/media/theo-browne.af0a9d79.png"
-    }
-  ]
+
   const testimonialsData = {
     testimonials: [
       {
@@ -475,7 +461,6 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
     ]
   };
 
-  console.log(data);
 
 
   return (
@@ -750,22 +735,10 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
           <div className="mx-auto w-full">
             <p className='text-xl font-bold capitalize mb-4'>top employees</p>
             <div className="container mx-auto pt-2">
-              <div className="flex gap-4 flex-wrap">
-                {data['top-employees'].top_employees.map((employee, index) => (
-                  <div key={index} className="border p-4 rounded-lg shadow-md flex flex-col justify-center items-start min-w-60">
-                    {/* <img src={employee.image} alt={employee.name} className="rounded-full w-24 h-24 mb-2" /> */}
-                    <h2 className="text-sm text-left font-semibold">Name: {employee.name}</h2>
-                    <h2 className="text-sm text-left font-semibold">Company Name: {employee.companyName}</h2>
-                    <a
-                      href={employee.linkedInProfile}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 text-xs mt-4"
-                    >
-                      View LinkedIn Profile
-                    </a>
-                  </div>
-                ))}
+              <div className='grid grid-cols-2 gap-5'>
+              {data['top-employees'].top_employees.map((employee, index) => (
+                <EmployeeProfile key={index} employee={employee} />
+              ))}
               </div>
             </div>
 

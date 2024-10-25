@@ -10,7 +10,6 @@ import { useRouter } from 'next/router';
 import { decrypt, encrypt } from '@/utils/cryptoUtils';
  
 const CommentsSlider = ({ data }) => {
-    console.log("Data In Comments Slider", data);
 
     const router = useRouter();
     const [activeIndex, setActiveIndex] = useState(0);
