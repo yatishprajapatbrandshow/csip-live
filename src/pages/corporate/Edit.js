@@ -63,7 +63,7 @@ const Edit = () => {
     // Function to update a comment using POST API
     const fetchComments = async (activity) => {
         try {
-            const response = await fetch(`${API_URL_LOCAL}new-comments?activity_id=${activity}`, { // Use the POST API for updating
+            const response = await fetch(`${API_URL}new-comments?activity_id=${activity}`, { // Use the POST API for updating
                 method: 'GET', // Using POST for updating
                 headers: {
                     'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ const Edit = () => {
     const updateCommentAPI = async (commentId) => {
 
         try {
-            const response = await fetch(`${API_URL_LOCAL}new-comments/update-comment`, { // Use the POST API for updating
+            const response = await fetch(`${API_URL}new-comments/update-comment`, { // Use the POST API for updating
                 method: 'POST', // Using POST for updating
                 headers: {
                     'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ const Edit = () => {
             activity_id: id
         }
         try {
-            const response = await fetch(`${API_URL_LOCAL}new-comments/add-comment`, { // Use the POST API for updating
+            const response = await fetch(`${API_URL}new-comments/add-comment`, { // Use the POST API for updating
                 method: 'POST', // Using POST for updating
                 headers: {
                     'Content-Type': 'application/json',
