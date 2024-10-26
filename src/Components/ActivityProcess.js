@@ -3,9 +3,10 @@ import React from 'react';
 import Image from 'next/image'
 import { API_URL } from '@/Config/Config';
 import EmployeeProfile from '@/Components/LinkedInProfile'
+import StudentComments from '@/Components/StudentComments'
 
 
-const CommentsSlider = ({ data = "inProcess", slug }) => {
+const CommentsSlider = ({ data = "inProcess", itemID }) => {
   const Text = [
     {
       title: "Executive Sponsor",
@@ -341,64 +342,6 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
     }
   ]
 
-    const commentData = [
-      {
-        id: "Testimonial 04",
-        name : "Michael Ross",
-        username : "@michjack",
-        comment : "Simple lives up to its name in every way. It's incredibly easy to use yet powerful enough to handle all my tasks effortlessly. It's become an essential part of my daily routine.",
-        date : "Jan 15, 2027"
-      },
-      {
-        id: "Testimonial 01",
-        name : "Peter Lowe",
-        username : "@peterlowex",
-        comment : "As a founder, having a visually appealing and user-friendly website is essential. This tool not only helped me achieve that but also improved my site's performance and SEO.",
-        date : "May 19, 2027"
-      },
-      {
-        id: "Testimonial 02",
-        name: "Rodri Alba",
-        username: "@rodri_spn",
-        comment: "Simple has revolutionized the way I manage my work. Its intuitive interface and seamless functionality make staying organized effortless. I can't imagine my life without it.Simple has revolutionized the way I manage my work. Its intuitive interface and seamless functionality make staying organized effortless. I can't imagine my life without it. Simple has revolutionized the way I manage my work. Its intuitive interface and seamless functionality make staying organized effortless. I can't imagine my life without it.Simple has revolutionized the way I manage my work. Its intuitive interface and seamless functionality make staying organized effortless. I can't imagine my life without it.",
-        date: "Apr 12, 2027"
-      },
-      {
-        id: "Testimonial 03",
-        name : "Michele Lex",
-        username : "@MikyBrown",
-        comment : "I've tried several website builders before, but none were as user-friendly and versatile as this one. From design to functionality, it exceeded my expectations!",
-        date : "Mar 04, 2027"
-      },
-      {
-        id: "Testimonial 04",
-        name : "Michael Ross",
-        username : "@michjack",
-        comment : "Simple lives up to its name in every way. It's incredibly easy to use yet powerful enough to handle all my tasks effortlessly. It's become an essential part of my daily routine.",
-        date : "Jan 15, 2027"
-      },
-      {
-        id: "Testimonial 01",
-        name : "Peter Lowe",
-        username : "@peterlowex",
-        comment : "As a founder, having a visually appealing and user-friendly website is essential. This tool not only helped me achieve that but also improved my site's performance and SEO. As a founder, having a visually appealing and user-friendly website is essential. This tool not only helped me achieve that but also improved my site's performance and SEO. As a founder, having a visually appealing and user-friendly website is essential. This tool not only helped me achieve that but also improved my site's performance and SEO.",
-        date : "May 19, 2027"
-      },
-      {
-        id: "Testimonial 02",
-        name: "Rodri Alba",
-        username: "@rodri_spn",
-        comment: "Simple has revolutionized the way I manage my work. Its intuitive interface and seamless functionality make staying organized effortless. I can't imagine my life without it. " ,
-        date: "Apr 12, 2027"
-      },
-      {
-        id: "Testimonial 03",
-        name : "Michele Lex",
-        username : "@MikyBrown",
-        comment : "I've tried several website builders before, but none were as user-friendly and versatile as this one. From design to functionality, it exceeded my expectations!",
-        date : "Mar 04, 2027"
-      }
-    ]
 
   const testimonialsData = {
     testimonials: [
@@ -461,8 +404,6 @@ const CommentsSlider = ({ data = "inProcess", slug }) => {
     ]
   };
 
-
-console.log(data);
   return (
     <section className='mt-5 pb-56 '>
       {data === "inProcess" ? <>
@@ -788,33 +729,7 @@ console.log(data);
           <div className="mx-auto w-full">            
             <h2 className='text-4xl mt-5 text-gray-700 font-bold mb-4'>Student Comments</h2>
             <div className="container mx-auto pt-2">
-              <div className="grid grid-cols-3 gap-2">
-                {commentData.map((testimonial, index) => (
-                index === 0 ? 
-                <div
-                key={testimonial.id}
-                className={`bg-blue-500 border border-rose-100 rounded-lg p-6 row-span-2`}
-              >
-                <h3 className="text-3xl mb-4 font-bold capitalize text-white">
-                Student Feedback Highlights
-                </h3>
-                <p className="text-white text-sm mb-4">See what our students have to say about their experience with our platform. Their success stories reflect the power of intuitive design and seamless functionality.</p>
-                <img className='block -mb-10' src='/images/student_review.png' />
-              </div>
-               : 
-                <div
-                  key={testimonial.id}
-                  className={`bg-gray-50 border border-gray-200 rounded-lg p-6 ${testimonial.comment.length >= 200 ? "row-span-2" : null}`}
-                >
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    {testimonial.name}
-                  </h3>
-                  <p className="text-sm text-gray-500 mb-4">{testimonial.username}</p>
-                  <p className="text-gray-700 text-sm text-justify mb-4">{testimonial.comment}</p>
-                  <p className="text-sm text-gray-400">{testimonial.date}</p>
-                </div>
-                ))}
-              </div>
+              <StudentComments itemID={itemID} />
             </div>
           </div>
         )}

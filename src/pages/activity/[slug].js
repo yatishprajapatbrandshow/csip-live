@@ -8,7 +8,7 @@ import { decrypt } from '@/utils/cryptoUtils';
 
 const AboutSlug = () => {
     const router = useRouter();
-    const { slug } = router.query;
+    const { slug, item } = router.query;
     const [ActivityList, setActivityList] = useState("inProcess");
     const [ActivityDetails, setActivityDetails] = useState("inProcess");
 
@@ -89,7 +89,7 @@ const AboutSlug = () => {
             <div className="relative max-w-[1500px] mx-auto w-full">
                 <ActivityHeader data={ActivityList} />
                 <div class="relative flex h-full flex-col px-4 pt-14 sm:px-6 lg:px-8 lg:ml-72 xl:ml-80">
-                    <ActivityProcess data={ActivityDetails} />
+                    <ActivityProcess data={ActivityDetails} itemID={item} />
                 </div>
             </div>
         </div>

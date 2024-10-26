@@ -8,12 +8,31 @@ import { Navigation, Autoplay } from "swiper/modules";
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { decrypt, encrypt } from '@/utils/cryptoUtils';
+import { getLocalStorageItem } from "@/Config/localstorage";
+import { setUserData, setUserType } from '../../redux/actions/sessionSlice';
+import { useDispatch, useSelector } from 'react-redux';
+
  
 const CommentsSlider = ({ data }) => {
-
     const router = useRouter();
     const [activeIndex, setActiveIndex] = useState(0);
     const [ParamId, setParamId] = useState("");
+    const dispatch = useDispatch();
+
+
+    useEffect(() => {
+        const userData = getLocalStorageItem("userData")
+        if (userData) {
+            
+            dispatch(setUserData(userData));
+            dispatch(setUserType(userData?.type));
+        } else {
+            router.push('/')
+        }
+    }, []);
+
+
+
 
     useEffect(() => {
         if (router.query.item) {
