@@ -46,15 +46,15 @@ const Add = () => {
   const [id, setId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");
-  const [AllComments, setAllComments] = useState([]);
   const [activityId, setActivityId] = useState(null);
+  const [AllComments, setAllComments] = useState([]);
   const [comment, setComment] = useState({
     commentId: null,
     name: '',
     email: '',
     designation: '',
     companyName: '',
-    commentText: '',
+    comment: '',
     profilePic: '',
     parentId: 0,
     pageUrl: '',
@@ -75,6 +75,8 @@ const Add = () => {
       }
 
       const responseData = await response.json();
+      console.log(responseData);
+
       if (responseData.status) {
         setAllComments(responseData.data);
       }
@@ -85,11 +87,6 @@ const Add = () => {
       alert('Error updating comment: ' + error.message);
     }
   };
-  // useEffect(() => {
-  //   if (activityId) {
-  //     fetchComments(activityId);
-  //   }
-  // }, [activityId])
   const updateCommentAPI = async (commentId) => {
 
     try {
@@ -121,18 +118,18 @@ const Add = () => {
     }
   };
   const addCommentAPI = async () => {
-    console.log(comment);
     const payload = {
       name: comment.name,
       email: comment.email,
       designation: comment.designation,
       companyName: comment.companyName,
-      comment: comment.commentText,
+      comment: comment.comment,
       profilePic: comment.profilePic,
       parentId: comment.parentId,
       pageUrl: comment.pageUrl,
       activity_id: id
     }
+
     try {
       const response = await fetch(`${API_URL_LOCAL}new-comments/add-comment`, { // Use the POST API for updating
         method: 'POST', // Using POST for updating
@@ -154,7 +151,17 @@ const Add = () => {
           item.commentId === newComment.data.commentId ? newComment.data : item
         )
       );
-
+      setComment({
+        commentId: null,
+        name: '',
+        email: '',
+        designation: '',
+        companyName: '',
+        comment: '',
+        profilePic: '',
+        parentId: 0,
+        pageUrl: '',
+      })
       fetchComments(id)
       alert('Comment updated successfully!');
     } catch (error) {
@@ -165,7 +172,7 @@ const Add = () => {
   const [isAddingNewComment, setIsAddingNewComment] = useState(true); // Always true when no comments
   const [isEditing, setIsEditing] = useState(false);
   const [editCommentIndex, setEditCommentIndex] = useState(null);
-
+  const [editReplyIndex, setEditReplyIndex] = useState(null);     // New state to track reply editing
   // Handle input change in the comment form
   const handleCommentChange = (e) => {
     const { name, value } = e.target;
@@ -183,14 +190,34 @@ const Add = () => {
     setIsAddingNewComment(true); // Show the form when editing
     setEditCommentIndex(index);
   };
+  // Handle click on Edit for a reply
+  const onEditReply = (replyIndex, commentIndex) => {
+    // Get the specific reply from the parent comment
+    const selectedReply = AllComments[commentIndex].replies[replyIndex];
 
-  // Handle click on Reply
-  const onReply = (item) => {
-    setIsAddingNewComment(true);
-    setIsEditing(false);
-    setComment({ ...comment, parentId: item.parentId });
+    // Pre-fill the form with the reply data
+    setComment(selectedReply); // Fill the form with the selected reply data
+    setIsEditing(true);        // Set to edit mode
+    setIsAddingNewComment(true); // Show the form when editing
+    setEditCommentIndex(commentIndex); // Track the parent comment index
+    setEditReplyIndex(replyIndex); // Track the reply index for editing
   };
-
+  // Handle click on Reply
+  const onReply = async (item) => {
+    setIsEditing(false);
+    setIsAddingNewComment(true);
+    setComment({
+      commentId: null,
+      name: '',
+      email: '',
+      designation: '',
+      companyName: '',
+      comment: '',
+      profilePic: '',
+      parentId: item.commentId,
+      pageUrl: '',
+    });
+  };
   // Add new comment button
   const handleAddNewComment = () => {
     setIsAddingNewComment(true);
@@ -200,7 +227,7 @@ const Add = () => {
       email: '',
       designation: '',
       companyName: '',
-      commentText: '',
+      comment: '',
       profilePic: '',
       parentId: 0,
       pageUrl: '',
@@ -264,7 +291,7 @@ const Add = () => {
   //   email: '',
   //   designation: '',
   //   companyName: '',
-  //   commentText: '', // Renamed to commentText to avoid confusion with state name
+  //   comment: '', // Renamed to comment to avoid confusion with state name
   //   profilePic: '',
   //   parentId: 0,
   //   pageUrl: '',
@@ -1936,7 +1963,7 @@ const Add = () => {
                                     {item.designation} at {item.companyName}
                                   </p>
                                 </div>
-                                <p className="text-base text-gray-700 mt-1">{item.commentText}</p>
+                                <p className="text-base text-gray-700 mt-1">{item.comment}</p>
                               </div>
                               <div className="flex gap-2">
                                 <button
@@ -1954,12 +1981,57 @@ const Add = () => {
                               </div>
                             </div>
                           </div>
+
+                          {/* Replies Section */}
+                          {item.replies && item.replies.length > 0 && (
+                            <div className="mt-4 pl-10">
+                              <h3 className="text-md font-semibold text-gray-700 mb-2">Replies</h3>
+                              {item.replies.map((reply, replyIndex) => (
+                                <div
+                                  key={replyIndex}
+                                  className="flex items-start mb-3"
+                                >
+                                  <img
+                                    src={reply.profilePic}
+                                    alt={reply.name}
+                                    className="w-10 h-10 rounded-full border border-gray-200 mr-4"
+                                  />
+                                  <div className="w-full flex justify-between">
+                                    <div className="flex flex-col">
+                                      <div className="flex justify-start items-center gap-2">
+                                        <h4 className="text-md font-semibold text-gray-800">{reply.name}</h4>
+                                        <p className="text-sm text-gray-600">
+                                          {reply.designation} at {reply.companyName}
+                                        </p>
+                                      </div>
+                                      <p className="text-base text-gray-700 mt-1">{reply.comment}</p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                      <button
+                                        onClick={() => onEditReply(replyIndex, index)} // Separate function for editing replies
+                                        className="px-3 text-sm text-blue-600 border border-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition duration-200 h-max py-1"
+                                      >
+                                        Edit
+                                      </button>
+                                      <button
+                                        onClick={() => onReply(reply)} // Reply to a reply
+                                        className="px-3 text-sm text-blue-600 border border-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition duration-200 h-max py-1"
+                                      >
+                                        Reply
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       ))}
 
+
                       <button
                         onClick={handleAddNewComment}
-                        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md"
+                        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md mb-5"
                       >
                         Add New Comment
                       </button>
@@ -2007,8 +2079,8 @@ const Add = () => {
                       />
                       <label className="block text-sm font-medium text-gray-700">Comment</label>
                       <textarea
-                        name="commentText"
-                        value={comment.commentText}
+                        name="comment"
+                        value={comment.comment}
                         onChange={handleCommentChange}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                         required
@@ -2027,6 +2099,7 @@ const Add = () => {
                         name="parentId"
                         value={comment.parentId}
                         onChange={handleCommentChange}
+                        readOnly
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                       />
                       <label className="block text-sm font-medium text-gray-700">Page URL</label>
@@ -2057,6 +2130,16 @@ const Add = () => {
                       </button>
                     </form>
                   ) : null}
+                  <div className='flex gap-4'>
+                    <button onClick={(e) => {
+                      e.preventDefault()
+                      setStep((pre) => pre -= 1)
+                    }} type="button" className="mt-4 p-2 bg-blue-600 text-white rounded ">Back</button>
+                    <button onClick={(e) => {
+                      e.preventDefault()
+                      addActivityAPI(10)
+                    }} type="button" className="mt-4 p-2 bg-blue-600 text-white rounded">Next</button>
+                  </div>
                 </div>
               )}
               {step === 11 && (

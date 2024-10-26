@@ -46,6 +46,194 @@ const Edit = () => {
     const [selectedTopic, setSelectedTopic] = useState('');
     const [youtubeVideoLink, setYoutubeVideoLink] = useState(['']);
     const [isSession, setIsSession] = useState(false);
+
+    const [AllComments, setAllComments] = useState([]);
+    const [comment, setComment] = useState({
+        commentId: null,
+        name: '',
+        email: '',
+        designation: '',
+        companyName: '',
+        comment: '',
+        profilePic: '',
+        parentId: 0,
+        pageUrl: '',
+    });
+
+    // Function to update a comment using POST API
+    const fetchComments = async (activity) => {
+        try {
+            const response = await fetch(`${API_URL_LOCAL}new-comments?activity_id=${activity}`, { // Use the POST API for updating
+                method: 'GET', // Using POST for updating
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update comment');
+            }
+
+            const responseData = await response.json();
+
+            if (responseData.status) {
+                setAllComments(responseData.data);
+            }
+        } catch (error) {
+            console.error('Error updating comment:', error);
+            alert('Error Fetch comment: ' + error.message);
+        }
+    };
+    useEffect(() => {
+        if (id) {
+            fetchComments(id);
+        }
+    }, [id])
+    const updateCommentAPI = async (commentId) => {
+
+        try {
+            const response = await fetch(`${API_URL_LOCAL}new-comments/update-comment`, { // Use the POST API for updating
+                method: 'POST', // Using POST for updating
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ...comment, commentId }), // Include the commentId in0 the body
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update comment');
+            }
+
+            const updatedComment = await response.json();
+
+            // Update the AllComments state with the new updated comment data
+            setAllComments((prevComments) =>
+                prevComments.map((item) =>
+                    item.commentId === updatedComment.data.commentId ? updatedComment.data : item
+                )
+            );
+
+            alert('Comment updated successfully!');
+        } catch (error) {
+            console.error('Error updating comment:', error);
+            alert('Error updating comment: ' + error.message);
+        }
+    };
+    const addCommentAPI = async () => {
+        const payload = {
+            name: comment.name,
+            email: comment.email,
+            designation: comment.designation,
+            companyName: comment.companyName,
+            comment: comment.comment,
+            profilePic: comment.profilePic,
+            parentId: comment.parentId,
+            pageUrl: comment.pageUrl,
+            activity_id: id
+        }
+        try {
+            const response = await fetch(`${API_URL_LOCAL}new-comments/add-comment`, { // Use the POST API for updating
+                method: 'POST', // Using POST for updating
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ...payload }), // Include the commentId in0 the body
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update comment');
+            }
+
+            const newComment = await response.json();
+
+            // Update the AllComments state with the new updated comment data
+            setAllComments((prevComments) =>
+                prevComments.map((item) =>
+                    item.commentId === newComment.data.commentId ? newComment.data : item
+                )
+            );
+            setComment({
+                commentId: null,
+                name: '',
+                email: '',
+                designation: '',
+                companyName: '',
+                comment: '',
+                profilePic: '',
+                parentId: 0,
+                pageUrl: '',
+            })
+            fetchComments(id)
+            alert('Comment updated successfully!');
+        } catch (error) {
+            console.error('Error updating comment:', error);
+            alert('Error updating comment: ' + error.message);
+        }
+    };
+    const [isAddingNewComment, setIsAddingNewComment] = useState(true); // Always true when no comments
+    const [isEditing, setIsEditing] = useState(false);
+    const [editCommentIndex, setEditCommentIndex] = useState(null);
+    const [editReplyIndex, setEditReplyIndex] = useState(null);     // New state to track reply editing
+    // Handle input change in the comment form
+    const handleCommentChange = (e) => {
+        const { name, value } = e.target;
+        setComment((prevComment) => ({
+            ...prevComment,
+            [name]: value,
+        }));
+    };
+    // Handle click on Edit
+    const onEdit = (index) => {
+        setComment(AllComments[index]); // Pre-fill the form with selected comment data
+        setIsEditing(true);
+        setIsAddingNewComment(true); // Show the form when editing
+        setEditCommentIndex(index);
+    };
+    // Handle click on Edit for a reply
+    const onEditReply = (replyIndex, commentIndex) => {
+        // Get the specific reply from the parent comment
+        const selectedReply = AllComments[commentIndex].replies[replyIndex];
+
+        // Pre-fill the form with the reply data
+        setComment(selectedReply); // Fill the form with the selected reply data
+        setIsEditing(true);        // Set to edit mode
+        setIsAddingNewComment(true); // Show the form when editing
+        setEditCommentIndex(commentIndex); // Track the parent comment index
+        setEditReplyIndex(replyIndex); // Track the reply index for editing
+    };
+    // Handle click on Reply
+    const onReply = async (item) => {
+        setIsAddingNewComment(true);
+        setIsEditing(false);
+        setComment({
+            commentId: null,
+            name: '',
+            email: '',
+            designation: '',
+            companyName: '',
+            comment: '',
+            profilePic: '',
+            parentId: item.commentId,
+            pageUrl: '',
+        });
+    };
+    // Add new comment button
+    const handleAddNewComment = () => {
+        setIsAddingNewComment(true);
+        setIsEditing(false); // Reset editing state
+        setComment({
+            name: '',
+            email: '',
+            designation: '',
+            companyName: '',
+            comment: '',
+            profilePic: '',
+            parentId: 0,
+            pageUrl: '',
+        });
+    };
+
+
     useEffect(() => {
         const userData = getLocalStorageItem("userData");
         if (userData) {
@@ -59,7 +247,7 @@ const Edit = () => {
         }
     }, []);
 
-    const dataFormStepData = ['Basic Information', 'Scenario and Description', 'Corporate Information', 'Tools Used', 'Video Podcast Link', 'Job Roles And Description', "Related Topic News", 'Activity Details', 'Participant and Approval', 'Activity and Submission Dates', "Empty", 'Top Employees'];
+    const dataFormStepData = ['Basic Information', 'Scenario and Description', 'Corporate Information', 'Tools Used', 'Video Podcast Link', 'Job Roles And Description', "Related Topic News", 'Activity Details', 'Participant and Approval', 'Activity and Submission Dates', "Comments", 'Top Employees'];
 
     const router = useRouter();
 
@@ -1373,7 +1561,197 @@ const Edit = () => {
                                 </form>
                             )}
                             {step === 10 && (
-                                <form>
+                                <>
+                                    <div>
+                                        {AllComments.length > 0 ? (
+                                            <div>
+                                                {AllComments.map((item, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="p-4 border border-gray-300 rounded-lg shadow-md mb-4 transition-transform duration-200 hover:shadow-lg"
+                                                    >
+                                                        <div className="flex items-start">
+                                                            <img
+                                                                src={item.profilePic}
+                                                                alt={item.name}
+                                                                className="w-12 h-12 rounded-full border border-gray-200 mr-4"
+                                                            />
+                                                            <div className="w-full flex justify-between">
+                                                                <div className="flex flex-col">
+                                                                    <div className="flex justify-start items-center gap-2">
+                                                                        <h4 className="text-lg font-semibold text-gray-800">{item.name}</h4>
+                                                                        <p className="text-sm text-gray-600">
+                                                                            {item.designation} at {item.companyName}
+                                                                        </p>
+                                                                    </div>
+                                                                    <p className="text-base text-gray-700 mt-1">{item.comment}</p>
+                                                                </div>
+                                                                <div className="flex gap-2">
+                                                                    <button
+                                                                        onClick={() => onEdit(index)}
+                                                                        className="px-3 text-sm text-blue-600 border border-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition duration-200 h-max py-1"
+                                                                    >
+                                                                        Edit
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => onReply(item)}
+                                                                        className="px-3 text-sm text-blue-600 border border-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition duration-200 h-max py-1"
+                                                                    >
+                                                                        Reply
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Replies Section */}
+                                                        {item.replies && item.replies.length > 0 && (
+                                                            <div className="mt-4 pl-10">
+                                                                <h3 className="text-md font-semibold text-gray-700 mb-2">Replies</h3>
+                                                                {item.replies.map((reply, replyIndex) => (
+                                                                    <div
+                                                                        key={replyIndex}
+                                                                        className="flex items-start mb-3"
+                                                                    >
+                                                                        <img
+                                                                            src={reply.profilePic}
+                                                                            alt={reply.name}
+                                                                            className="w-10 h-10 rounded-full border border-gray-200 mr-4"
+                                                                        />
+                                                                        <div className="w-full flex justify-between">
+                                                                            <div className="flex flex-col">
+                                                                                <div className="flex justify-start items-center gap-2">
+                                                                                    <h4 className="text-md font-semibold text-gray-800">{reply.name}</h4>
+                                                                                    <p className="text-sm text-gray-600">
+                                                                                        {reply.designation} at {reply.companyName}
+                                                                                    </p>
+                                                                                </div>
+                                                                                <p className="text-base text-gray-700 mt-1">{reply.comment}</p>
+                                                                            </div>
+                                                                            <div className="flex gap-2">
+                                                                                <button
+                                                                                    onClick={() => onEditReply(replyIndex, index)} // Separate function for editing replies
+                                                                                    className="px-3 text-sm text-blue-600 border border-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition duration-200 h-max py-1"
+                                                                                >
+                                                                                    Edit
+                                                                                </button>
+                                                                                <button
+                                                                                    onClick={() => onReply(reply)} // Reply to a reply
+                                                                                    className="px-3 text-sm text-blue-600 border border-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition duration-200 h-max py-1"
+                                                                                >
+                                                                                    Reply
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+
+
+                                                <button
+                                                    onClick={handleAddNewComment}
+                                                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md mb-5"
+                                                >
+                                                    Add New Comment
+                                                </button>
+                                            </div>
+                                        ) : null}
+                                        {AllComments.length === 0 && <div className="w-full py-2 bg-gray-100 px-2 rounded-md mb-4">
+                                            No Comments Here ? Add Comments
+                                        </div>}
+                                        {/* Show form if there are no comments or the "Add/Edit" button is clicked */}
+                                        {AllComments.length === 0 || isAddingNewComment ? (
+                                            <form>
+                                                <label className="block text-sm font-medium text-gray-700">Name</label>
+                                                <input
+                                                    type="text"
+                                                    name="name"
+                                                    value={comment.name}
+                                                    onChange={handleCommentChange}
+                                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                                    required
+                                                />
+                                                <label className="block text-sm font-medium text-gray-700">Email</label>
+                                                <input
+                                                    type="email"
+                                                    name="email"
+                                                    value={comment.email}
+                                                    onChange={handleCommentChange}
+                                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                                    required
+                                                />
+                                                <label className="block text-sm font-medium text-gray-700">Designation</label>
+                                                <input
+                                                    type="text"
+                                                    name="designation"
+                                                    value={comment.designation}
+                                                    onChange={handleCommentChange}
+                                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                                />
+                                                <label className="block text-sm font-medium text-gray-700">Company Name</label>
+                                                <input
+                                                    type="text"
+                                                    name="companyName"
+                                                    value={comment.companyName}
+                                                    onChange={handleCommentChange}
+                                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                                />
+                                                <label className="block text-sm font-medium text-gray-700">Comment</label>
+                                                <textarea
+                                                    name="comment"
+                                                    value={comment.comment}
+                                                    onChange={handleCommentChange}
+                                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                                    required
+                                                />
+                                                <label className="block text-sm font-medium text-gray-700">Profile Picture URL</label>
+                                                <input
+                                                    type="text"
+                                                    name="profilePic"
+                                                    value={comment.profilePic}
+                                                    onChange={handleCommentChange}
+                                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                                />
+                                                <label className="block text-sm font-medium text-gray-700">Parent ID</label>
+                                                <input
+                                                    type="number"
+                                                    name="parentId"
+                                                    value={comment.parentId}
+                                                    onChange={handleCommentChange}
+                                                    readOnly
+                                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                                />
+                                                <label className="block text-sm font-medium text-gray-700">Page URL</label>
+                                                <input
+                                                    type="text"
+                                                    name="pageUrl"
+                                                    value={comment.pageUrl}
+                                                    onChange={handleCommentChange}
+                                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                                    required
+                                                />
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        {
+                                                            console.log(isEditing);
+                                                        }
+                                                        if (isEditing) {
+                                                            updateCommentAPI(comment?.commentId); // Update the comment using POST
+                                                        } else {
+                                                            addCommentAPI(); // Add a new comment
+                                                        }
+                                                    }}
+                                                    type="button"
+                                                    className="mt-4 p-2 bg-blue-600 text-white rounded"
+                                                >
+                                                    {isEditing ? 'Update Comment' : 'Submit'}
+                                                </button>
+                                            </form>
+                                        ) : null}
+                                    </div>
                                     <div className='flex gap-4'>
                                         <button onClick={(e) => {
                                             e.preventDefault()
@@ -1384,7 +1762,7 @@ const Edit = () => {
                                             addActivityAPI(10)
                                         }} type="button" className="mt-4 p-2 bg-blue-600 text-white rounded">Next</button>
                                     </div>
-                                </form>
+                                </>
                             )}
                             {step === 11 && (
                                 <form>
